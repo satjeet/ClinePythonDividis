@@ -1,227 +1,215 @@
 <template>
-  <div class="min-h-screen bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <h2 class="mt-6 text-center text-3xl font-bold text-cosmic-100">
-        Comienza tu Viaje Cósmico
-      </h2>
-      <p class="mt-2 text-center text-sm text-slate-400">
-        ¿Ya tienes una cuenta?
-        <RouterLink 
-          to="/login" 
-          class="font-medium text-cosmic-400 hover:text-cosmic-300">
-          Inicia Sesión
-        </RouterLink>
-      </p>
-    </div>
+  <div class="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+    <Card class="w-full max-w-md">
+      <template #header>
+        <div class="text-center">
+          <h1 class="text-2xl font-bold text-cosmic-100">Únete a la aventura</h1>
+          <p class="text-slate-400 mt-2">Crea tu cuenta para comenzar tu viaje</p>
+        </div>
+      </template>
 
-    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div class="card-cosmic py-8 px-4 sm:px-10">
-        <form class="space-y-6" @submit.prevent="handleSubmit">
-          <!-- Username field -->
-          <div>
-            <label 
-              for="username" 
-              class="block text-sm font-medium text-slate-300">
-              Usuario
-            </label>
-            <div class="mt-1">
-              <input 
-                id="username" 
-                v-model="form.username"
-                name="username" 
-                type="text" 
-                required 
-                class="input-cosmic w-full"
-                :disabled="loading">
-            </div>
-          </div>
+      <!-- Register form -->
+      <form @submit.prevent="handleSubmit" class="space-y-6">
+        <!-- Username -->
+        <FormInput
+          id="username"
+          v-model="form.username"
+          label="Usuario"
+          type="text"
+          required
+          :error="errors.username"
+          @blur="validateUsername"
+        />
 
-          <!-- Email field -->
-          <div>
-            <label 
-              for="email" 
-              class="block text-sm font-medium text-slate-300">
-              Email
-            </label>
-            <div class="mt-1">
-              <input 
-                id="email" 
-                v-model="form.email"
-                name="email" 
-                type="email" 
-                required 
-                class="input-cosmic w-full"
-                :disabled="loading">
-            </div>
-          </div>
+        <!-- Email -->
+        <FormInput
+          id="email"
+          v-model="form.email"
+          label="Email"
+          type="email"
+          required
+          :error="errors.email"
+          @blur="validateEmail"
+        />
 
-          <!-- Password fields -->
-          <div>
-            <label 
-              for="password" 
-              class="block text-sm font-medium text-slate-300">
-              Contraseña
-            </label>
-            <div class="mt-1">
-              <input 
-                id="password" 
-                v-model="form.password"
-                name="password" 
-                type="password" 
-                required 
-                class="input-cosmic w-full"
-                :disabled="loading">
-            </div>
-          </div>
+        <!-- Password -->
+        <FormInput
+          id="password"
+          v-model="form.password"
+          label="Contraseña"
+          type="password"
+          required
+          :error="errors.password"
+          @blur="validatePassword"
+        />
 
-          <div>
-            <label 
-              for="password2" 
-              class="block text-sm font-medium text-slate-300">
-              Confirmar Contraseña
-            </label>
-            <div class="mt-1">
-              <input 
-                id="password2" 
-                v-model="form.password2"
-                name="password2" 
-                type="password" 
-                required 
-                class="input-cosmic w-full"
-                :disabled="loading">
-            </div>
-          </div>
+        <!-- Password confirmation -->
+        <FormInput
+          id="password_confirmation"
+          v-model="form.password_confirmation"
+          label="Confirmar contraseña"
+          type="password"
+          required
+          :error="errors.password_confirmation"
+          @blur="validatePasswordConfirmation"
+        />
 
-          <!-- Optional fields -->
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label 
-                for="first_name" 
-                class="block text-sm font-medium text-slate-300">
-                Nombre
-              </label>
-              <div class="mt-1">
-                <input 
-                  id="first_name" 
-                  v-model="form.first_name"
-                  name="first_name" 
-                  type="text" 
-                  class="input-cosmic w-full"
-                  :disabled="loading">
-              </div>
-            </div>
-            <div>
-              <label 
-                for="last_name" 
-                class="block text-sm font-medium text-slate-300">
-                Apellido
-              </label>
-              <div class="mt-1">
-                <input 
-                  id="last_name" 
-                  v-model="form.last_name"
-                  name="last_name" 
-                  type="text" 
-                  class="input-cosmic w-full"
-                  :disabled="loading">
-              </div>
-            </div>
-          </div>
+        <!-- Name fields -->
+        <div class="grid grid-cols-2 gap-4">
+          <FormInput
+            id="first_name"
+            v-model="form.first_name"
+            label="Nombre"
+            type="text"
+          />
 
-          <!-- Error display -->
-          <div v-if="error" class="text-red-500 text-sm">
-            {{ error }}
-          </div>
+          <FormInput
+            id="last_name"
+            v-model="form.last_name"
+            label="Apellido"
+            type="text"
+          />
+        </div>
 
-          <!-- Submit button -->
-          <div>
-            <button 
-              type="submit" 
-              class="btn-cosmic w-full flex justify-center py-2 px-4"
-              :disabled="loading || !isFormValid">
-              <svg v-if="loading"
-                   class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" 
-                   xmlns="http://www.w3.org/2000/svg" 
-                   fill="none" 
-                   viewBox="0 0 24 24">
-                <circle 
-                  class="opacity-25" 
-                  cx="12" 
-                  cy="12" 
-                  r="10" 
-                  stroke="currentColor" 
-                  stroke-width="4">
-                </circle>
-                <path 
-                  class="opacity-75" 
-                  fill="currentColor" 
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                </path>
-              </svg>
-              {{ loading ? 'Registrando...' : 'Registrarse' }}
-            </button>
-          </div>
-        </form>
+        <!-- Error message -->
+        <div v-if="error" class="text-red-500 text-sm text-center">
+          {{ error }}
+        </div>
+
+        <!-- Submit button -->
+        <Button 
+          type="submit"
+          :loading="loading"
+          fullWidth>
+          Crear cuenta
+        </Button>
+
+        <!-- Login link -->
+        <p class="text-center text-slate-400">
+          ¿Ya tienes una cuenta?
+          <RouterLink 
+            :to="{ name: 'login' }"
+            class="text-cosmic-400 hover:underline">
+            Inicia sesión
+          </RouterLink>
+        </p>
+      </form>
+
+      <!-- Divider -->
+      <div class="relative my-8">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-cosmic-700/30"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+          <span class="px-2 bg-slate-900 text-slate-400">O</span>
+        </div>
       </div>
-    </div>
+
+      <!-- Back to home -->
+      <div class="text-center">
+        <RouterLink 
+          to="/"
+          class="text-slate-400 hover:text-cosmic-400 transition-colors inline-flex items-center">
+          <i class="fas fa-arrow-left mr-2"></i>
+          Volver al inicio
+        </RouterLink>
+      </div>
+    </Card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useAuthStore } from '@/stores/auth'
+import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import Card from '@/components/ui/Card.vue'
+import Button from '@/components/ui/Button.vue'
+import FormInput from '@/components/ui/FormInput.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const loading = ref(false)
+const error = ref('')
 
-const form = ref({
+// Form state
+const form = reactive({
   username: '',
   email: '',
   password: '',
-  password2: '',
+  password_confirmation: '',
   first_name: '',
   last_name: ''
 })
 
-const loading = ref(false)
-const error = ref('')
-
-const isFormValid = computed(() => {
-  return (
-    form.value.username &&
-    form.value.email &&
-    form.value.password &&
-    form.value.password2 &&
-    form.value.password === form.value.password2
-  )
+const errors = reactive({
+  username: '',
+  email: '',
+  password: '',
+  password_confirmation: ''
 })
 
-async function handleSubmit() {
-  if (!isFormValid.value) {
-    error.value = 'Por favor, completa todos los campos requeridos.'
-    return
+// Validation
+function validateUsername() {
+  errors.username = ''
+  if (!form.username) {
+    errors.username = 'El usuario es requerido'
+  } else if (form.username.length < 3) {
+    errors.username = 'El usuario debe tener al menos 3 caracteres'
   }
+}
 
-  if (form.value.password !== form.value.password2) {
-    error.value = 'Las contraseñas no coinciden.'
+function validateEmail() {
+  errors.email = ''
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!form.email) {
+    errors.email = 'El email es requerido'
+  } else if (!emailRegex.test(form.email)) {
+    errors.email = 'Email inválido'
+  }
+}
+
+function validatePassword() {
+  errors.password = ''
+  if (!form.password) {
+    errors.password = 'La contraseña es requerida'
+  } else if (form.password.length < 8) {
+    errors.password = 'La contraseña debe tener al menos 8 caracteres'
+  }
+  validatePasswordConfirmation()
+}
+
+function validatePasswordConfirmation() {
+  errors.password_confirmation = ''
+  if (!form.password_confirmation) {
+    errors.password_confirmation = 'Confirma tu contraseña'
+  } else if (form.password !== form.password_confirmation) {
+    errors.password_confirmation = 'Las contraseñas no coinciden'
+  }
+}
+
+// Form submission
+async function handleSubmit() {
+  // Reset error
+  error.value = ''
+
+  // Validate all fields
+  validateUsername()
+  validateEmail()
+  validatePassword()
+  validatePasswordConfirmation()
+
+  // Check for validation errors
+  if (Object.values(errors).some(error => error)) {
     return
   }
 
   loading.value = true
-  error.value = ''
-  
+
   try {
-    await authStore.register({
-      username: form.value.username,
-      email: form.value.email,
-      password: form.value.password,
-      first_name: form.value.first_name,
-      last_name: form.value.last_name
-    })
+    await authStore.register(form)
     router.push('/dashboard')
   } catch (err: any) {
-    error.value = err.message || 'Error al registrarse'
+    error.value = err.message || 'Error al crear la cuenta'
   } finally {
     loading.value = false
   }

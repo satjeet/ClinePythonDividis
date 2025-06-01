@@ -1,162 +1,192 @@
 <template>
-  <div class="min-h-screen bg-slate-950 py-16">
-    <!-- Loading state -->
-    <div v-if="loading" class="container mx-auto px-4 py-12 text-center">
-      <div class="animate-cosmic-spin w-16 h-16 border-4 border-cosmic-500 rounded-full border-t-transparent mx-auto"></div>
-      <p class="mt-4 text-slate-400">Cargando módulo...</p>
-    </div>
-
-    <template v-else-if="module">
-      <div class="container mx-auto px-4 py-12">
-        <!-- Module header -->
-        <div class="mb-12">
-          <div class="flex items-center gap-4 mb-6">
+  <div class="min-h-screen bg-slate-950">
+    <!-- Navigation -->
+    <nav class="py-4 px-4 sm:px-6 lg:px-8 cosmic-bg">
+      <div class="container mx-auto">
+        <div class="flex items-center justify-between">
+          <!-- Back button and title -->
+          <div class="flex items-center space-x-4">
             <button 
-              @click="router.go(-1)"
+              @click="router.back()"
               class="text-slate-400 hover:text-cosmic-400 transition-colors">
-              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
+              <i class="fas fa-arrow-left"></i>
             </button>
-            <h1 class="text-4xl md:text-5xl font-bold text-cosmic-100">
-              {{ module.name }}
+            <h1 class="text-xl font-bold text-cosmic-100">
+              {{ module?.name }}
             </h1>
           </div>
-          <p class="text-xl text-slate-400">
-            {{ module.description }}
-          </p>
-        </div>
 
-        <!-- Module progress -->
-        <div class="card-cosmic mb-12">
-          <h2 class="text-2xl font-bold text-cosmic-100 mb-6">Progreso del Módulo</h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <h3 class="text-lg font-medium text-slate-300 mb-2">Estado</h3>
-              <p class="text-3xl font-bold text-cosmic-400 capitalize">
-                {{ module.state }}
-              </p>
+          <!-- Module stats -->
+          <div class="flex items-center space-x-6 text-sm">
+            <div class="flex items-center space-x-2">
+              <i class="fas fa-star text-cosmic-400"></i>
+              <span class="text-slate-400">{{ moduleXP }} XP</span>
             </div>
-            <div>
-              <h3 class="text-lg font-medium text-slate-300 mb-2">Misiones Completadas</h3>
-              <p class="text-3xl font-bold text-cosmic-400">
-                {{ completedMissionsCount }}/{{ moduleMissions.length }}
-              </p>
-            </div>
-            <div>
-              <h3 class="text-lg font-medium text-slate-300 mb-2">Racha Actual</h3>
-              <p class="text-3xl font-bold text-cosmic-400">
-                {{ streak?.current_streak || 0 }} días
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Module missions -->
-        <div>
-          <h2 class="text-2xl font-bold text-cosmic-100 mb-6">Misiones</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div v-for="mission in moduleMissions" 
-                 :key="mission.id"
-                 :class="[
-                   'card-cosmic transform transition-transform duration-300',
-                   mission.state !== 'completed' ? 'hover:-translate-y-1' : ''
-                 ]">
-              <div class="flex justify-between items-start mb-4">
-                <h3 class="text-lg font-medium text-cosmic-300">{{ mission.title }}</h3>
-                <span class="text-sm text-cosmic-400">+{{ mission.xp_reward }} XP</span>
-              </div>
-              <p class="text-slate-400 mb-4">{{ mission.description }}</p>
-              
-              <!-- Mission actions -->
-              <div v-if="mission.state !== 'completed'"
-                   class="flex justify-end">
-                <button 
-                  @click="handleCompleteMission(mission.id)"
-                  class="btn-cosmic"
-                  :disabled="loading">
-                  Completar Misión
-                </button>
-              </div>
-              <div v-else class="flex justify-between items-center">
-                <span class="text-sm text-cosmic-400">Completada</span>
-                <svg class="w-6 h-6 text-cosmic-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
+            <div class="flex items-center space-x-2">
+              <i class="fas fa-fire text-cosmic-400"></i>
+              <span class="text-slate-400">{{ currentStreak }} días</span>
             </div>
           </div>
         </div>
       </div>
-    </template>
+    </nav>
 
-    <!-- Module not found -->
-    <div v-else class="container mx-auto px-4 py-12 text-center">
-      <h2 class="text-2xl font-bold text-cosmic-100 mb-4">
-        Módulo no encontrado
-      </h2>
-      <p class="text-slate-400 mb-8">
-        El módulo que buscas parece no existir o no tienes acceso a él.
-      </p>
-      <RouterLink 
-        to="/dashboard"
-        class="btn-cosmic">
-        Volver al Panel Principal
-      </RouterLink>
-    </div>
+    <!-- Main content -->
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Loading state -->
+      <div v-if="loading" class="flex justify-center py-12">
+        <div class="animate-cosmic-spin w-12 h-12 border-2 border-cosmic-500 rounded-full border-t-transparent"></div>
+      </div>
+
+      <template v-else-if="module">
+        <!-- Module progress -->
+        <div class="cosmic-bg rounded-lg p-6 mb-8">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-medium text-cosmic-100">Progreso del módulo</h2>
+            <div class="text-sm text-slate-400">
+              {{ completedMissions.length }}/{{ availableMissions.length }} misiones completadas
+            </div>
+          </div>
+
+          <!-- Progress bar -->
+          <div class="w-full bg-slate-800 rounded-full h-2">
+            <div 
+              class="bg-cosmic-500 h-2 rounded-full transition-all duration-500"
+              :style="{
+                width: `${(completedMissions.length / availableMissions.length) * 100}%`
+              }">
+            </div>
+          </div>
+        </div>
+
+        <!-- Available missions -->
+        <section>
+          <h2 class="text-2xl font-bold text-cosmic-100 mb-6">
+            Misiones disponibles
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <MissionCard
+              v-for="mission in availableMissions"
+              :key="mission.id"
+              :mission="mission"
+              :userLevel="authStore.userLevel"
+              :loading="completingMission === mission.id"
+              @complete="handleCompleteMission"
+              @retry="handleRetryMission"
+            />
+          </div>
+        </section>
+
+        <!-- Module completion message -->
+        <div 
+          v-if="isModuleCompleted"
+          class="mt-12 cosmic-bg rounded-lg p-8 text-center animate-cosmic-float">
+          <div class="w-16 h-16 mx-auto mb-4 text-cosmic-400">
+            <i class="fas fa-trophy text-4xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-cosmic-100 mb-2">
+            ¡Módulo completado!
+          </h3>
+          <p class="text-slate-400 mb-6">
+            Has completado todas las misiones de este módulo. ¡Sigue así!
+          </p>
+          <Button @click="router.push('/dashboard')">
+            Volver al Dashboard
+          </Button>
+        </div>
+      </template>
+
+      <!-- Error state -->
+      <template v-else>
+        <div class="text-center py-12">
+          <p class="text-red-500">Error al cargar el módulo</p>
+          <Button 
+            class="mt-4"
+            @click="loadModule">
+            Reintentar
+          </Button>
+        </div>
+      </template>
+    </main>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import { useModulesStore } from '@/stores/modules'
+import type { Mission } from '@/types'
+import Button from '@/components/ui/Button.vue'
+import MissionCard from '@/components/missions/MissionCard.vue'
 
 const route = useRoute()
 const router = useRouter()
-const modulesStore = useModulesStore()
-const loading = ref(false)
+const authStore = useAuthStore()
+const moduleStore = useModulesStore()
 
+const loading = ref(true)
+const completingMission = ref<string | null>(null)
+
+// Computed properties
 const moduleId = computed(() => route.params.id as string)
 
 const module = computed(() => 
-  modulesStore.modules.find(m => m.id === moduleId.value)
+  moduleStore.modules.find(m => m.id === moduleId.value)
 )
 
-const moduleMissions = computed(() =>
-  modulesStore.missions.filter(m => m.module.id === moduleId.value)
+const availableMissions = computed(() => 
+  moduleStore.missions.filter(m => m.module.id === moduleId.value)
 )
 
-const completedMissionsCount = computed(() =>
-  moduleMissions.value.filter(m => m.state === 'completed').length
+const completedMissions = computed(() => 
+  availableMissions.value.filter(m => m.state === 'completed')
 )
 
-const streak = computed(() =>
-  module.value ? modulesStore.getModuleStreak(module.value.id) : null
+const isModuleCompleted = computed(() => 
+  availableMissions.value.length > 0 &&
+  completedMissions.value.length === availableMissions.value.length
 )
 
-async function handleCompleteMission(missionId: string) {
+const moduleXP = computed(() => 
+  module.value?.progress?.experience_points || 0
+)
+
+const currentStreak = computed(() => 
+  module.value?.streak?.current_streak || 0
+)
+
+// Actions
+async function loadModule() {
   loading.value = true
   try {
-    await modulesStore.completeMission(missionId)
-  } catch (err) {
-    console.error('Error completing mission:', err)
-  } finally {
-    loading.value = false
-  }
-}
-
-onMounted(async () => {
-  loading.value = true
-  try {
-    await Promise.all([
-      modulesStore.fetchModules(),
-      modulesStore.fetchMissions()
-    ])
+    await moduleStore.setCurrentModule(moduleId.value)
   } catch (err) {
     console.error('Error loading module:', err)
   } finally {
     loading.value = false
   }
+}
+
+async function handleCompleteMission(missionId: string) {
+  completingMission.value = missionId
+  try {
+    await moduleStore.completeMission(missionId)
+  } catch (err) {
+    console.error('Error completing mission:', err)
+  } finally {
+    completingMission.value = null
+  }
+}
+
+async function handleRetryMission(missionId: string) {
+  // Reset mission progress and start over
+  handleCompleteMission(missionId)
+}
+
+// Initialize
+onMounted(() => {
+  loadModule()
 })
 </script>

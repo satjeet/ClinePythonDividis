@@ -1,38 +1,35 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { ref, computed } from 'vue'
+import type { Module, Mission, ModuleProgress, MissionProgress } from '@/types'
+import { moduleApi, missionApi } from '@/services/api'
+import { useAuthStore } from './auth'
 
-interface Module {
-  id: string
-  name: string
-  description: string
-  icon: string
-  order: number
-  xp_required: number
-  state: 'locked' | 'unlocked' | 'completed'
-}
-
-interface Mission {
-  id: string
-  module: Module
-  title: string
-  description: string
-  xp_reward: number
-  required_level: number
-  created_at: string
+interface ModuleWithProgress extends Module {
+  progress?: ModuleProgress
+  missions?: Mission[]
+  streak?: {
+    current_streak: number
+    longest_streak: number
+  }
 }
 
 export const useModulesStore = defineStore('modules', () => {
+  const authStore = useAuthStore()
+  
   // State
-  const modules = ref<Module[]>([])
+  const modules = ref<ModuleWithProgress[]>([])
   const missions = ref<Mission[]>([])
-  const currentModule = ref<Module | null>(null)
+  const currentModule = ref<ModuleWithProgress | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
 
   // Getters
   const unlockedModules = computed(() => 
     modules.value.filter(m => m.state === 'unlocked' || m.state === 'completed')
+  )
+
+  const activeModules = computed(() => 
+    modules.value.filter(m => m.state === 'unlocked')
   )
 
   const availableMissions = computed(() => 
@@ -42,8 +39,11 @@ export const useModulesStore = defineStore('modules', () => {
   )
 
   const nextModule = computed(() => {
-    const locked = modules.value.find(m => m.state === 'locked')
-    return locked || null
+    const userLevel = authStore.userLevel
+    return modules.value.find(m => 
+      m.state === 'locked' && 
+      m.xp_required <= (authStore.userXP || 0)
+    )
   })
 
   // Actions
@@ -51,10 +51,11 @@ export const useModulesStore = defineStore('modules', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await axios.get('/api/modules/')
+      const response = await moduleApi.getAll()
       modules.value = response.data
     } catch (err: any) {
       error.value = err.response?.data?.detail || 'Error al cargar módulos'
+      throw error.value
     } finally {
       loading.value = false
     }
@@ -64,10 +65,11 @@ export const useModulesStore = defineStore('modules', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await axios.get('/api/missions/')
+      const response = await missionApi.getAll()
       missions.value = response.data
     } catch (err: any) {
       error.value = err.response?.data?.detail || 'Error al cargar misiones'
+      throw error.value
     } finally {
       loading.value = false
     }
@@ -77,14 +79,18 @@ export const useModulesStore = defineStore('modules', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await axios.post(`/api/modules/${moduleId}/unlock/`)
+      const response = await moduleApi.unlock(moduleId)
       const index = modules.value.findIndex(m => m.id === moduleId)
       if (index !== -1) {
-        modules.value[index] = response.data
+        modules.value[index] = {
+          ...modules.value[index],
+          ...response.data
+        }
       }
       await fetchMissions() // Refresh missions after unlock
     } catch (err: any) {
       error.value = err.response?.data?.detail || 'Error al desbloquear módulo'
+      throw error.value
     } finally {
       loading.value = false
     }
@@ -94,14 +100,42 @@ export const useModulesStore = defineStore('modules', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await axios.post(`/api/missions/${missionId}/complete/`)
+      const response = await missionApi.complete(missionId)
       const index = missions.value.findIndex(m => m.id === missionId)
       if (index !== -1) {
-        missions.value[index] = response.data
+        missions.value[index] = {
+          ...missions.value[index],
+          ...response.data
+        }
       }
-      await fetchModules() // Refresh modules after mission completion
+      await Promise.all([
+        fetchModules(), // Refresh modules after mission completion
+        authStore.fetchUserProfile() // Refresh user XP and level
+      ])
     } catch (err: any) {
       error.value = err.response?.data?.detail || 'Error al completar misión'
+      throw error.value
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function loadModuleProgress(moduleId: string) {
+    loading.value = true
+    error.value = null
+    try {
+      const response = await moduleApi.getProgress(moduleId)
+      const index = modules.value.findIndex(m => m.id === moduleId)
+      if (index !== -1) {
+        modules.value[index] = {
+          ...modules.value[index],
+          ...response.data
+        }
+      }
+      return response.data
+    } catch (err: any) {
+      error.value = err.response?.data?.detail || 'Error al cargar progreso del módulo'
+      throw error.value
     } finally {
       loading.value = false
     }
@@ -111,6 +145,10 @@ export const useModulesStore = defineStore('modules', () => {
     const module = modules.value.find(m => m.id === moduleId)
     if (module) {
       currentModule.value = module
+      // Load detailed progress if module is unlocked
+      if (module.state !== 'locked') {
+        await loadModuleProgress(moduleId)
+      }
     }
   }
 
@@ -124,6 +162,7 @@ export const useModulesStore = defineStore('modules', () => {
 
     // Getters
     unlockedModules,
+    activeModules,
     availableMissions,
     nextModule,
 
@@ -132,6 +171,7 @@ export const useModulesStore = defineStore('modules', () => {
     fetchMissions,
     unlockModule,
     completeMission,
-    setCurrentModule
+    setCurrentModule,
+    loadModuleProgress
   }
 })
