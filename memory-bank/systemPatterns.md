@@ -1,0 +1,248 @@
+# Dividis System Patterns
+
+## System Architecture
+
+### Overall Architecture
+```mermaid
+graph TD
+    Client[Browser/Client] -- HTTPS --> FE[Frontend Vue.js]
+    FE -- API Calls --> BE[Backend Django]
+    BE -- SQL --> DB[(PostgreSQL)]
+    
+    subgraph Frontend
+        FE --> Landing[Landing Page]
+        Landing --> Auth[Auth Store]
+        Auth --> Dashboard[Galactic Dashboard]
+        Dashboard --> ModuleSystem[Module System]
+        
+        ModuleSystem --> State[Pinia State]
+        State --> UnlockStore[Unlock Progress]
+        State --> MissionStore[Mission System]
+        
+        ModuleSystem --> Router[Vue Router]
+    end
+    
+    subgraph Backend
+        BE --> REST[DRF Views]
+        BE --> Models[Django Models]
+        BE --> Auth2[JWT Auth]
+        BE --> Progress[Progress Tracking]
+        Progress --> Unlocks[Module Unlocks]
+        Progress --> Missions[Mission Management]
+    end
+```
+
+## Key Components
+
+### 1. Frontend Architecture
+```mermaid
+graph TD
+    App[App.vue] --> Router[Vue Router]
+    Router --> Landing[Landing Page]
+    Router --> Auth[Auth Views]
+    Router --> Dashboard[Galactic Dashboard]
+    
+    Landing --> Welcome[Welcome View]
+    Welcome --> Login[Login Form]
+    
+    Dashboard --> CosmicUI[Cosmic Interface]
+    CosmicUI --> ConstellationMap[Constellation Map]
+    ConstellationMap --> UnlockedModules[Unlocked Modules]
+    ConstellationMap --> LockedModules[Locked Modules]
+    
+    UnlockedModules --> Salud[Salud/First Module]
+    Salud --> Mission[Initial Mission]
+    
+    subgraph State Management
+        Pinia[Pinia Store] --> AuthStore[Auth Store]
+        Pinia --> UserStore[User Store]
+        Pinia --> ModuleStore[Module Store]
+        Pinia --> UnlockStore[Unlock Progress]
+        Pinia --> MissionStore[Mission System]
+    end
+
+    subgraph Module System
+        ModuleGrid[Constellation Grid]
+        ModuleGrid --> M1[Salud - Unlocked]
+        ModuleGrid --> M2[Personalidad - Locked]
+        ModuleGrid --> M3[Intelecto - Locked]
+        ModuleGrid --> M4[Carrera - Locked]
+        ModuleGrid --> M5[Finanzas - Locked]
+        ModuleGrid --> M6[Calidad - Locked]
+        ModuleGrid --> M7[Emocionalidad - Locked]
+        ModuleGrid --> M8[Relaciones - Locked]
+        ModuleGrid --> M9[Visión - Locked]
+    end
+```
+
+### 2. Backend Architecture
+```mermaid
+graph TD
+    URLs[URLs] --> Views[ViewSets]
+    Views --> Serializers[Serializers]
+    Serializers --> Models[Models]
+    
+    subgraph Authentication
+        JWT[JWT Auth] --> CustomUser[Custom User]
+    end
+    
+    subgraph Models
+        User[User] --> Profile[Profile]
+        Profile --> ModuleData[Module Data]
+        Profile --> UnlockProgress[Unlock Progress]
+        Profile --> MissionProgress[Mission Progress]
+        
+        ModuleData --> Declarations[Declarations]
+        ModuleData --> Achievements[Achievements]
+        ModuleData --> Tools[Unlocked Tools]
+    end
+
+    subgraph Progress System
+        UnlockProgress --> ModuleUnlocks[Module Unlocks]
+        UnlockProgress --> ToolUnlocks[Tool Unlocks]
+        MissionProgress --> ActiveMissions[Active Missions]
+        MissionProgress --> CompletedMissions[Completed Missions]
+    end
+```
+
+## Design Patterns
+
+### 1. Frontend Patterns
+- **Composables**: Reusable logic across components
+- **Store Pattern**: Centralized state management with Pinia
+- **Route Guards**: Protected routes requiring authentication
+- **Component Composition**: Modular, reusable components
+- **API Service Layer**: Centralized API communication
+- **Unlocking System**: Progressive module access based on achievements
+- **Mission System**: Guided user progression through tasks
+- **Cosmic Theme**: Space-themed UI components and animations
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
+
+### 2. Backend Patterns
+- **ViewSet Pattern**: CRUD operations via DRF ViewSets
+- **Service Layer**: Business logic separation
+- **Repository Pattern**: Data access abstraction
+- **JWT Authentication**: Token-based auth flow
+- **Serializer Pattern**: Data transformation and validation
+- **Progress Tracking**: User advancement monitoring
+- **Mission Management**: Task assignment and completion tracking
+- **Module Unlocking**: Achievement-based feature access
+- **State Machine**: Module and tool unlock progression
+
+### 3. Data Models
+```mermaid
+erDiagram
+    User ||--|| Profile : has
+    Profile ||--o{ ModuleData : contains
+    Profile ||--o{ UnlockProgress : tracks
+    Profile ||--o{ MissionProgress : manages
+    
+    ModuleData ||--o{ Progress : tracks
+    ModuleData ||--o{ Declarations : stores
+    ModuleData ||--o{ Tools : unlocks
+    
+    UnlockProgress ||--|| ModuleState : reflects
+    MissionProgress ||--o{ Mission : completes
+```
+
+## Critical Implementation Paths
+
+### 1. Authentication Flow
+```mermaid
+sequenceDiagram
+    Client->>Frontend: Visit Landing
+    Frontend->>Client: Show Welcome
+    Client->>Frontend: Login Request
+    Frontend->>Backend: Auth Request
+    Backend->>Frontend: JWT Token
+    Frontend->>LocalStorage: Store Token
+    Frontend->>Backend: Get User Progress
+    Backend->>Frontend: Module States & Missions
+    Frontend->>Client: Redirect to Galactic Dashboard
+```
+
+### 2. Module Loading
+```mermaid
+sequenceDiagram
+    Dashboard->>ModuleStore: Request Module States
+    ModuleStore->>Backend: Get User Progress
+    Backend->>Database: Query Progress
+    Database->>Backend: Return Progress
+    Backend->>ModuleStore: Module States
+    ModuleStore->>Dashboard: Update Constellation Map
+    
+    Dashboard->>MissionStore: Get Active Missions
+    MissionStore->>Backend: Request Missions
+    Backend->>Database: Query Missions
+    Database->>Backend: Return Missions
+    Backend->>MissionStore: Active Missions
+    MissionStore->>Dashboard: Show Initial Mission
+```
+
+## Technical Decisions
+
+### 1. Frontend
+- Vue 3 Composition API with TypeScript
+- Pinia for state management
+- Vue Router with navigation guards
+- Axios for API requests
+- Tailwind CSS for cosmic theme and styling
+- Vite for development and building
+- Custom animations for cosmic effects
+- Mobile-first responsive design
+
+### 2. Backend
+- Django REST Framework for API
+- SimpleJWT for authentication
+- PostgreSQL for database
+- Docker for containerization
+- Fly.io for deployment
+
+### 3. Development Workflow
+- Docker Compose for local development
+- Environment-specific configuration
+- Automated deployment via Fly.io
+- Consistent code formatting
+- API documentation with DRF Spectacular
+
+## Security Patterns
+
+### 1. Authentication
+- JWT-based authentication
+- Token refresh mechanism
+- Secure cookie storage
+- CSRF protection
+- Rate limiting
+
+### 2. Data Security
+- HTTPS only
+- Environment variables
+- Password hashing
+- Input validation
+- SQL injection prevention
+
+### 3. CORS Configuration
+- Whitelist approach
+- Specific origins only
+- Controlled methods
+- Credential handling
+
+## Scalability Considerations
+
+### 1. Infrastructure
+- Containerized deployment
+- Independent scaling
+- Load balancing ready
+- Cache-friendly architecture
+
+### 2. Code Organization
+- Modular structure
+- Lazy loading
+- Code splitting
+- Efficient bundling
+
+### 3. Performance
+- Database optimization
+- API response caching
+- Asset optimization
+- Lazy module loading

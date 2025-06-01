@@ -1,0 +1,16 @@
+{
+  "name": "dividis",
+  "version": "1.0.0",
+  "description": "Personal development platform with cosmic theme",
+  "scripts": {
+    "frontend": "cd frontend && npm run dev",
+    "backend": "cd backend && python manage.py runserver",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "install:all": "cd frontend && npm install && cd ../backend && pip install -r requirements.txt",
+    "build": "cd frontend && npm run build",
+    "test": "cd frontend && npm run test && cd ../backend && python manage.py test"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

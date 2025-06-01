@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-950 text-slate-100;
+  }
+}
+
+@layer components {
+  .btn-cosmic {
+    @apply px-4 py-2 bg-cosmic-600 hover:bg-cosmic-700 text-white rounded-lg 
+    transition-colors duration-200 ease-in-out shadow-lg hover:shadow-cosmic-500/20;
+  }
+
+  .card-cosmic {
+    @apply bg-slate-900/80 backdrop-blur-sm rounded-lg border border-cosmic-700/30 
+    shadow-lg shadow-cosmic-500/10 p-6;
+  }
+
+  .input-cosmic {
+    @apply bg-slate-800/50 border border-cosmic-700/30 rounded-lg px-4 py-2 
+    focus:outline-none focus:ring-2 focus:ring-cosmic-500/50 text-white placeholder-slate-400;
+  }
+
+  .nav-link {
+    @apply text-slate-300 hover:text-cosmic-400 transition-colors duration-200;
+  }
+
+  .module-card {
+    @apply card-cosmic hover:border-cosmic-500/50 transition-all duration-300 
+    hover:shadow-cosmic-500/20 cursor-pointer;
+  }
+
+  .module-locked {
+    @apply opacity-50 cursor-not-allowed filter grayscale;
+  }
+
+  .cosmic-glow {
+    @apply relative;
+  }
+
+  .cosmic-glow::before {
+    @apply content-[''] absolute -inset-0.5 bg-gradient-to-r from-cosmic-500 to-cosmic-700 
+    rounded-lg blur opacity-30 transition-opacity duration-300 -z-10;
+  }
+
+  .cosmic-glow:hover::before {
+    @apply opacity-75;
+  }
+}
+
+/* Animations */
+.fade-enter-active,
+.fade-leave-active {
+  @apply transition-opacity duration-300;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  @apply opacity-0;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-cosmic-700 rounded-full hover:bg-cosmic-600;
+}

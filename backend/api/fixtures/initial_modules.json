@@ -1,0 +1,110 @@
+[
+    {
+        "model": "api.module",
+        "pk": "salud",
+        "fields": {
+            "name": "Salud",
+            "description": "Desarrolla hábitos saludables y mantén un seguimiento de tu progreso con la Serpiente de Hábitos.",
+            "icon": "heart",
+            "order": 1,
+            "xp_required": 0,
+            "state": "unlocked"
+        }
+    },
+    {
+        "model": "api.module",
+        "pk": "personalidad",
+        "fields": {
+            "name": "Personalidad",
+            "description": "Explora tu personalidad a través de diálogos socráticos guiados.",
+            "icon": "user",
+            "order": 2,
+            "xp_required": 500,
+            "state": "locked"
+        }
+    },
+    {
+        "model": "api.module",
+        "pk": "intelecto",
+        "fields": {
+            "name": "Intelecto",
+            "description": "Analiza y simplifica tus creencias, construye árboles lógicos.",
+            "icon": "brain",
+            "order": 3,
+            "xp_required": 1000,
+            "state": "locked"
+        }
+    },
+    {
+        "model": "api.module",
+        "pk": "carrera",
+        "fields": {
+            "name": "Carrera",
+            "description": "Gestiona tu tiempo y tareas con Box Time Manager.",
+            "icon": "briefcase",
+            "order": 4,
+            "xp_required": 1500,
+            "state": "locked"
+        }
+    },
+    {
+        "model": "api.module",
+        "pk": "finanzas",
+        "fields": {
+            "name": "Finanzas",
+            "description": "Colecciona y aplica estrategias financieras efectivas.",
+            "icon": "money",
+            "order": 5,
+            "xp_required": 2000,
+            "state": "locked"
+        }
+    },
+    {
+        "model": "api.module",
+        "pk": "calidad-vida",
+        "fields": {
+            "name": "Calidad de Vida",
+            "description": "Cultiva la gratitud y observa cómo mejora tu vida.",
+            "icon": "star",
+            "order": 6,
+            "xp_required": 2500,
+            "state": "locked"
+        }
+    },
+    {
+        "model": "api.module",
+        "pk": "emocionalidad",
+        "fields": {
+            "name": "Emocionalidad",
+            "description": "Practica la meditación y gestiona tus emociones.",
+            "icon": "peace",
+            "order": 7,
+            "xp_required": 3000,
+            "state": "locked"
+        }
+    },
+    {
+        "model": "api.module",
+        "pk": "relaciones",
+        "fields": {
+            "name": "Relaciones",
+            "description": "Gestiona tus relaciones y mejora tus conexiones sociales.",
+            "icon": "people",
+            "order": 8,
+            "xp_required": 3500,
+            "state": "locked"
+        }
+    },
+    {
+        "model": "api.module",
+        "pk": "vision",
+        "fields": {
+            "name": "Visión General",
+            "description": "Visualiza y planifica tus metas en la Pizarra de Sueños.",
+            "icon": "telescope",
+            "order": 9,
+            "xp_required": 4000,
+            "state": "locked"
+        }
+    }
+]

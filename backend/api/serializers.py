@@ -1,0 +1,135 @@
+"""
+Serializers for the Dividis API.
+"""
+from rest_framework import serializers
+from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
+from .models import (
+    Profile, Module, ModuleProgress, Mission, MissionProgress,
+    Achievement, UserAchievement, Streak
+)
+
+class UserSerializer(serializers.ModelSerializer):
+    """Serializer for User model."""
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'first_name', 'last_name')
+        read_only_fields = ('id',)
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    """Serializer for user registration."""
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = User
+        fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name')
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
+        return attrs
+
+    def create(self, validated_data):
+        validated_data.pop('password2')
+        user = User.objects.create_user(**validated_data)
+        return user
+
+class ProfileSerializer(serializers.ModelSerializer):
+    """Serializer for user profiles."""
+    user = UserSerializer(read_only=True)
+    
+    class Meta:
+        model = Profile
+        fields = ('user', 'experience_points', 'current_level', 'created_at', 'updated_at')
+        read_only_fields = ('created_at', 'updated_at')
+
+class ModuleSerializer(serializers.ModelSerializer):
+    """Serializer for modules."""
+    class Meta:
+        model = Module
+        fields = ('id', 'name', 'description', 'icon', 'order', 'xp_required', 'state')
+
+class ModuleProgressSerializer(serializers.ModelSerializer):
+    """Serializer for module progress."""
+    module = ModuleSerializer(read_only=True)
+    
+    class Meta:
+        model = ModuleProgress
+        fields = ('module', 'state', 'experience_points', 'last_activity')
+        read_only_fields = ('last_activity',)
+
+class MissionSerializer(serializers.ModelSerializer):
+    """Serializer for missions."""
+    module = ModuleSerializer(read_only=True)
+    
+    class Meta:
+        model = Mission
+        fields = ('id', 'module', 'title', 'description', 'xp_reward', 'required_level', 'created_at')
+        read_only_fields = ('id', 'created_at')
+
+class MissionProgressSerializer(serializers.ModelSerializer):
+    """Serializer for mission progress."""
+    mission = MissionSerializer(read_only=True)
+    
+    class Meta:
+        model = MissionProgress
+        fields = ('mission', 'state', 'started_at', 'completed_at')
+        read_only_fields = ('started_at', 'completed_at')
+
+class AchievementSerializer(serializers.ModelSerializer):
+    """Serializer for achievements."""
+    class Meta:
+        model = Achievement
+        fields = ('id', 'name', 'description', 'icon', 'xp_reward')
+
+class UserAchievementSerializer(serializers.ModelSerializer):
+    """Serializer for user achievements."""
+    achievement = AchievementSerializer(read_only=True)
+    
+    class Meta:
+        model = UserAchievement
+        fields = ('achievement', 'unlocked_at')
+        read_only_fields = ('unlocked_at',)
+
+class StreakSerializer(serializers.ModelSerializer):
+    """Serializer for activity streaks."""
+    module = ModuleSerializer(read_only=True)
+    
+    class Meta:
+        model = Streak
+        fields = ('module', 'current_streak', 'longest_streak', 'last_activity')
+        read_only_fields = ('last_activity',)
+
+class UserProfileDetailSerializer(serializers.ModelSerializer):
+    """Detailed serializer for user profile with related data."""
+    user = UserSerializer(read_only=True)
+    module_progress = ModuleProgressSerializer(many=True, read_only=True, source='moduleprogressset')
+    achievements = UserAchievementSerializer(many=True, read_only=True, source='userachievement_set')
+    streaks = StreakSerializer(many=True, read_only=True, source='streak_set')
+    active_missions = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Profile
+        fields = (
+            'user', 'experience_points', 'current_level', 'created_at',
+            'updated_at', 'module_progress', 'achievements', 'streaks',
+            'active_missions'
+        )
+        read_only_fields = ('created_at', 'updated_at')
+
+    def get_active_missions(self, obj):
+        active_missions = MissionProgress.objects.filter(
+            user=obj.user,
+            state='active'
+        ).select_related('mission')
+        return MissionProgressSerializer(active_missions, many=True).data
+
+class ProgressOverviewSerializer(serializers.Serializer):
+    """Serializer for user's overall progress."""
+    total_xp = serializers.IntegerField()
+    level = serializers.IntegerField()
+    modules_unlocked = serializers.IntegerField()
+    missions_completed = serializers.IntegerField()
+    achievements_earned = serializers.IntegerField()
+    current_streaks = serializers.DictField()
