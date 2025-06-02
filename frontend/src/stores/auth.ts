@@ -45,13 +45,15 @@ export const useAuthStore = defineStore('auth', () => {
     username: string
     password: string
     email: string
-    first_name?: string
-    last_name?: string
   }) {
     loading.value = true
     error.value = null
     try {
-      await authApi.register(userData)
+      await authApi.register({
+        username: userData.username,
+        password: userData.password,
+        email: userData.email
+      })
       await login(userData.username, userData.password)
     } catch (err: any) {
       error.value = err.response?.data?.detail || 'Error en el registro'

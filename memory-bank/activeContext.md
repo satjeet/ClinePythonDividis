@@ -15,6 +15,7 @@ We are currently focusing on:
 - Defined project architecture and cosmic narrative
 - Updated documentation to reflect onboarding flow
 - Established module unlocking system
+- Implemented authentication views and dashboard view
 
 ## Active Decisions
 
@@ -59,12 +60,16 @@ We are currently focusing on:
    - Create initial mission system
    - Design progress visualization
 
-3. Setup Docker environment:
+3. Implement user authentication flow
+4. Build Galactic Dashboard base
+5. Implement initial mission system
+
+4. Setup Docker environment:
    - Create Dockerfiles
    - Configure docker-compose.yml
    - Test local development setup
 
-4. Configure deployment:
+5. Configure deployment:
    - Create fly.toml files
    - Set up environment variables
    - Configure domains

@@ -28,7 +28,11 @@
           required
           :error="errors.password"
           @blur="validatePassword"
-        />
+        >
+          <template #help>
+            <span class="text-xs text-slate-400">Mínimo 8 caracteres</span>
+          </template>
+        </FormInput>
 
         <!-- Error message -->
         <div v-if="error" class="text-red-500 text-sm text-center">
@@ -108,7 +112,13 @@ function validateUsername() {
 }
 
 function validatePassword() {
-  errors.password = form.password ? '' : 'La contraseña es requerida'
+  if (!form.password) {
+    errors.password = 'La contraseña es requerida'
+  } else if (form.password.length < 8) {
+    errors.password = 'La contraseña debe tener al menos 8 caracteres'
+  } else {
+    errors.password = ''
+  }
 }
 
 // Form submission
@@ -131,7 +141,16 @@ async function handleSubmit() {
     const redirectTo = route.query.redirect?.toString() || '/dashboard'
     router.push(redirectTo)
   } catch (err: any) {
-    error.value = err.message || 'Error al iniciar sesión'
+    // Mostrar mensajes claros según el error del backend
+    if (err?.response?.data?.detail) {
+      if (err.response.data.detail === "No active account found with the given credentials") {
+        error.value = "Usuario o contraseña incorrectos."
+      } else {
+        error.value = err.response.data.detail
+      }
+    } else {
+      error.value = err.message || 'Error al iniciar sesión'
+    }
   } finally {
     loading.value = false
   }

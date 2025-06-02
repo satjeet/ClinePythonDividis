@@ -35,7 +35,7 @@
     <!-- Main content -->
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Loading state -->
-      <div v-if="loading" class="flex justify-center py-12">
+      <div v-if="loading || !authStore.user" class="flex justify-center py-12">
         <div class="animate-cosmic-spin w-12 h-12 border-2 border-cosmic-500 rounded-full border-t-transparent"></div>
       </div>
 

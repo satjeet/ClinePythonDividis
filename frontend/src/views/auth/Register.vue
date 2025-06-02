@@ -41,7 +41,11 @@
           required
           :error="errors.password"
           @blur="validatePassword"
-        />
+        >
+          <template #help>
+            <span class="text-xs text-slate-400">Mínimo 8 caracteres</span>
+          </template>
+        </FormInput>
 
         <!-- Password confirmation -->
         <FormInput
@@ -52,24 +56,12 @@
           required
           :error="errors.password_confirmation"
           @blur="validatePasswordConfirmation"
-        />
+        >
+          <template #help>
+            <span class="text-xs text-slate-400">Debe coincidir con la contraseña</span>
+          </template>
+        </FormInput>
 
-        <!-- Name fields -->
-        <div class="grid grid-cols-2 gap-4">
-          <FormInput
-            id="first_name"
-            v-model="form.first_name"
-            label="Nombre"
-            type="text"
-          />
-
-          <FormInput
-            id="last_name"
-            v-model="form.last_name"
-            label="Apellido"
-            type="text"
-          />
-        </div>
 
         <!-- Error message -->
         <div v-if="error" class="text-red-500 text-sm text-center">
@@ -136,9 +128,7 @@ const form = reactive({
   username: '',
   email: '',
   password: '',
-  password_confirmation: '',
-  first_name: '',
-  last_name: ''
+  password_confirmation: ''
 })
 
 const errors = reactive({
@@ -209,7 +199,22 @@ async function handleSubmit() {
     await authStore.register(form)
     router.push('/dashboard')
   } catch (err: any) {
-    error.value = err.message || 'Error al crear la cuenta'
+    // Mostrar mensajes claros según el error del backend
+    if (err?.response?.data) {
+      // Si el backend devuelve errores de campo
+      const data = err.response.data
+      if (typeof data === 'object') {
+        // Mostrar el primer error de campo encontrado
+        const firstField = Object.keys(data)[0]
+        error.value = Array.isArray(data[firstField]) ? data[firstField][0] : data[firstField]
+      } else if (typeof data === 'string') {
+        error.value = data
+      } else {
+        error.value = err.message || 'Error al crear la cuenta'
+      }
+    } else {
+      error.value = err.message || 'Error al crear la cuenta'
+    }
   } finally {
     loading.value = false
   }
