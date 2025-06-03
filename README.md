@@ -11,6 +11,108 @@ Plataforma de desarrollo personal con tema cósmico. Gestiona tu crecimiento per
 - API RESTful con Django
 - Frontend moderno con Vue 3
 
+## ⚙️ Requisitos Previos
+
+Antes de comenzar, asegúrate de tener instalado lo siguiente:
+
+- **Python:** [Python 3.11+](https://www.python.org/downloads/)
+- **Node.js y npm:** [Node.js 18+](https://nodejs.org/en/download/) (npm se instala con Node.js)
+- **PostgreSQL:** [PostgreSQL 15+](https://www.postgresql.org/download/)
+- **Git:** [Git](https://git-scm.com/downloads)
+
+(Opcional: Docker y Docker Compose)
+
+## 🏗️ Instalación
+
+1. **Clonar el repositorio:**
+```bash
+git clone https://github.com/tuusuario/dividis.git
+cd dividis
+```
+
+2. **Instalación del Backend:**
+
+```bash
+cd backend
+```
+
+   a. **Crear y activar el entorno virtual:**
+
+   *   **Windows:**
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate
+   ```
+
+   *   **Linux/Mac:**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+   b. **Instalar dependencias:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+   c. **Configurar variables de entorno:**
+   Copia el archivo `.env.example` a `.env` y edita las variables según sea necesario:
+   ```bash
+   cp .env.example .env
+   nano .env  # o tu editor de texto preferido
+   ```
+
+   d. **Configurar la base de datos:**
+
+   *   Crea una base de datos llamada `dividis` en PostgreSQL. Puedes usar la línea de comandos o una herramienta GUI como pgAdmin.
+
+   e. **Ejecutar migraciones y cargar datos iniciales:**
+   ```bash
+   python manage.py migrate
+   python manage.py loaddata api/fixtures/initial_modules.json
+   python manage.py loaddata api/fixtures/initial_missions.json
+   ```
+
+   f. **Crear superusuario:**
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+3. **Instalación del Frontend:**
+
+```bash
+cd ../frontend
+```
+
+   a. **Instalar dependencias:**
+   ```bash
+   npm install
+   ```
+
+   b. **Configurar variables de entorno:**
+   Copia el archivo `.env.example` a `.env` y edita las variables según sea necesario:
+   ```bash
+   cp .env.example .env
+   nano .env  # o tu editor de texto preferido
+   ```
+
+## 🚀 Desarrollo
+
+Consulta la sección "Instalación" para configurar el entorno de desarrollo.
+
+## 🐛 Solución de Problemas Comunes
+
+*   **"python" o "pip" no se reconocen:** Asegúrate de que Python esté instalado y añadido al PATH de tu sistema.
+*   **Error de conexión a la base de datos:** Verifica que PostgreSQL esté corriendo y que las credenciales en el archivo `.env` sean correctas.
+*   **Error al activar el entorno virtual:** Revisa que el comando de activación sea el correcto para tu sistema operativo (ver sección "Instalación").
+
+## 📚 Recursos Adicionales
+
+*   **Documentación de Python:** [https://www.python.org/doc/](https://www.python.org/doc/)
+*   **Documentación de Node.js:** [https://nodejs.org/en/docs/](https://nodejs.org/en/docs/)
+*   **Documentación de PostgreSQL:** [https://www.postgresql.org/docs/](https://www.postgresql.org/docs/)
+*   **Memory Bank del proyecto:** (Enlace al Memory Bank)
+
 ## 🛠️ Tecnologías
 
 ### Backend
@@ -27,62 +129,6 @@ Plataforma de desarrollo personal con tema cósmico. Gestiona tu crecimiento per
 - Pinia
 - Vue Router
 - GSAP (animaciones)
-
-## 🏗️ Instalación
-
-1. **Clonar el repositorio:**
-```bash
-git clone https://github.com/tuusuario/dividis.git
-cd dividis
-```
-
-2. **Instalar dependencias:**
-```bash
-# Instalar todas las dependencias (frontend y backend)
-npm run install:all
-```
-
-3. **Configurar variables de entorno:**
-```bash
-# Backend
-cp backend/.env.example backend/.env
-# Frontend
-cp frontend/.env.example frontend/.env
-```
-
-4. **Configurar la base de datos:**
-```bash
-cd backend
-python manage.py migrate
-python manage.py loaddata api/fixtures/initial_modules.json
-python manage.py loaddata api/fixtures/initial_missions.json
-```
-
-5. **Crear superusuario:**
-```bash
-python manage.py createsuperuser
-```
-
-## 🚀 Desarrollo
-
-Ejecutar los servidores de desarrollo:
-
-```bash
-# Ejecutar ambos servidores (frontend + backend)
-npm run dev
-
-# Ejecutar solo el frontend
-npm run frontend
-
-# Ejecutar solo el backend
-npm run backend
-```
-
-### URLs de desarrollo:
-- Frontend: http://localhost:3000
-- Backend: http://localhost:8000
-- API Docs: http://localhost:8000/api/schema/swagger-ui/
-- Admin: http://localhost:8000/admin/
 
 ## 📚 Documentación
 

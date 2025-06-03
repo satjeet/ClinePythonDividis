@@ -16,6 +16,7 @@
 ✅ Development patterns established
 ✅ Cosmic narrative documented
 ✅ Module unlocking system designed
+✅ Updated installation instructions in README.md
 
 ### Infrastructure
 ✅ Development database configured
