@@ -28,8 +28,7 @@
 
     /* Vue specific */
     "types": [
-      "vite/client",
-      "vue/ref-macros"
+      "vite/client"
     ]
   },
   "include": [

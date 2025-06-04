@@ -32,7 +32,7 @@ app.use(createPinia())
 app.use(router)
 
 // Global error handler
-app.config.errorHandler = (err, instance, info) => {
+app.config.errorHandler = (err, _instance, info) => {
   console.error('Global error:', err)
   console.error('Error info:', info)
 

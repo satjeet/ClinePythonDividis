@@ -117,7 +117,6 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useModulesStore } from '@/stores/modules'
-import type { Mission } from '@/types'
 import Button from '@/components/ui/Button.vue'
 import MissionCard from '@/components/missions/MissionCard.vue'
 

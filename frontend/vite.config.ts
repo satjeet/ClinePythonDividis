@@ -12,5 +12,8 @@ export default defineConfig({
   },
   css: {
     postcss: './postcss.config.cjs'
+  },
+  server: {
+    port: Number(process.env.VITE_PORT) || 3000
   }
 })

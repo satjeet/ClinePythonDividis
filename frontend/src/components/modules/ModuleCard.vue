@@ -86,7 +86,7 @@ interface Props {
   module: Module
   progress?: ModuleProgress
   missions?: Mission[]
-  streak?: Streak
+  streak?: Partial<Streak>
   userXP?: number
   loading?: boolean
 }

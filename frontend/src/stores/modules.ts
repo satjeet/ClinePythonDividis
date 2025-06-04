@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { Module, Mission, ModuleProgress, MissionProgress } from '@/types'
+import type { Module, Mission, ModuleProgress } from '@/types'
 import { moduleApi, missionApi } from '@/services/api'
 import { useAuthStore } from './auth'
 
@@ -39,7 +39,6 @@ export const useModulesStore = defineStore('modules', () => {
   )
 
   const nextModule = computed(() => {
-    const userLevel = authStore.userLevel
     return modules.value.find(m => 
       m.state === 'locked' && 
       m.xp_required <= (authStore.userXP || 0)

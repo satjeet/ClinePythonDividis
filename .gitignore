@@ -44,6 +44,7 @@ coverage
 
 # Environment variables
 .env
+.env.*
 .venv
 env/
 venv/
@@ -52,6 +53,27 @@ env.bak/
 venv.bak/
 .env.local
 .env.*.local
+.env.docker
+
+# Security: private keys and certs
+*.pem
+*.key
+*.crt
+*.pfx
+*.p12
+
+# Database (other engines)
+*.sqlite3
+*.sqlite
+*.db
+*.db-journal
+*.bak
+*.sql
+
+# Docker
+**/docker-compose.override.yml
+.docker/
+docker-data/
 
 # Editor directories and files
 .idea

@@ -46,7 +46,7 @@
           :level="authStore.userLevel"
           :xp="authStore.userXP"
           :stats="stats"
-          :longestStreak="longestStreak"
+          :longest-streak="longestStreak"
         />
 
         <!-- Available modules -->
