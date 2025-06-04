@@ -16,6 +16,9 @@ We are currently focusing on:
 - Updated documentation to reflect onboarding flow
 - Established module unlocking system
 - Implemented authentication views and dashboard view
+- Added Docker configuration for backend and frontend (Dockerfile, docker-compose.yml)
+- Initialized frontend with Vite, Vue 3, TypeScript, and Tailwind CSS
+- Added Vite config files and improved frontend build setup
 
 ## Active Decisions
 
@@ -65,9 +68,9 @@ We are currently focusing on:
 5. Implement initial mission system
 
 4. Setup Docker environment:
-   - Create Dockerfiles
-   - Configure docker-compose.yml
-   - Test local development setup
+   - Dockerfiles for backend y frontend creados
+   - docker-compose.yml configurado para desarrollo local
+   - Probada la construcción y levantamiento de servicios con Docker
 
 5. Configure deployment:
    - Create fly.toml files
@@ -167,8 +170,13 @@ flyctl deploy
 - Infrastructure setup
 - Deployment configuration
 
+### Completed (último commit)
+- Docker configuration (backend y frontend)
+- Vite + Vue 3 + TypeScript + Tailwind en frontend
+- Vite config files y scripts de build
+- docker-compose.yml funcional para desarrollo local
+
 ### Upcoming
 - Backend implementation
 - Frontend implementation
-- Docker configuration
 - Initial deployment

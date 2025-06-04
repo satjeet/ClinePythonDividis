@@ -22,6 +22,62 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
 
 (Opcional: Docker y Docker Compose)
 
+## 🐳 Instalación y uso con Docker (recomendado para principiantes)
+
+### 1. Instalar Docker Desktop
+
+- Descarga e instala Docker Desktop desde: https://www.docker.com/products/docker-desktop/
+- Sigue las instrucciones del instalador y asegúrate de reiniciar tu PC si es necesario.
+- Verifica la instalación abriendo una terminal y ejecutando:
+  ```bash
+  docker --version
+  docker-compose --version
+  ```
+
+### 2. Clonar el repositorio
+
+```bash
+git clone https://github.com/tuusuario/dividis.git
+cd dividis
+```
+
+### 3. Copiar archivos de entorno
+
+- Copia los archivos de ejemplo:
+  ```bash
+  cp backend/.env.example backend/.env
+  cp frontend/.env.example frontend/.env
+  ```
+- Edita los archivos `.env` si necesitas personalizar variables (por defecto funcionan para desarrollo local).
+
+### 4. Levantar el proyecto
+
+- En la raíz del proyecto, ejecuta:
+  ```bash
+  docker-compose up --build
+  ```
+- Esto descargará las dependencias y levantará tanto el backend (Django) como el frontend (Vue) automáticamente.
+
+### 5. Acceder a la aplicación
+
+- Backend: http://localhost:8000
+- Frontend: http://localhost:3000
+
+### 6. Comandos útiles
+
+- Detener los servicios:
+  ```bash
+  docker-compose down
+  ```
+- Reconstruir si cambias dependencias:
+  ```bash
+  docker-compose build
+  ```
+
+> **Nota:** No necesitas instalar Python, Node.js ni PostgreSQL localmente si usas Docker.
+
+---
+
 ## 🏗️ Instalación
 
 1. **Clonar el repositorio:**

@@ -22,7 +22,7 @@
 ✅ Development database configured
 ✅ Development server running
 🔄 PostgreSQL setup pending
-🔄 Docker setup pending
+✅ Docker setup (backend y frontend, docker-compose funcional)
 
 ### Backend
 ✅ Django project initialized
@@ -43,6 +43,7 @@
 ✅ Dashboard view
 ✅ Module view
 ✅ Local frontend server with cosmic theme
+✅ Vite + TypeScript + configuración inicial de build
 🔄 Testing pending
 
 ### Deployment
@@ -181,7 +182,7 @@
 - [x] Local backend server with mission system
 - [x] Local frontend server with cosmic theme
 - [x] Local database with initial missions
-- [ ] Docker containers with hot-reload
+- [x] Docker containers con backend y frontend (docker-compose)
 
 ### Production Environment
 - [ ] Backend deployment with SSL
