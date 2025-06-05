@@ -9,12 +9,50 @@ Dividis impulsa a los usuarios a estructurar y alcanzar metas personales organiz
 - **Alcance global**: Con énfasis en usuarios hispanohablantes que desean diseñar su vida a través de declaraciones y una experiencia visual cósmica.
 
 ## User Experience Goals
+- **Mobile-first**: Toda la experiencia está diseñada priorizando dispositivos móviles, asegurando una interfaz limpia, táctil y responsiva, optimizada para cualquier tamaño de pantalla.
+- **Accesible y en tiempo real**: La plataforma es usable para todos los usuarios, incluyendo personas con discapacidades, y garantiza sincronización instantánea de datos entre frontend y backend mediante WebSockets o polling eficiente.
+- **Comunidad y pertenencia**: La interacción social (reacciones, compartir avances, ver progresos de otros) fortalece el sentido de pertenencia y motivación, fomentando el apoyo entre viajeros cósmicos.
 - **Inmersiva y motivadora**: Los usuarios se sentirán como viajeros estelares en una odisea cósmica, con el Galactic Dashboard como centro de mando, promoviendo la interacción diaria mediante una interfaz visualmente impactante y temática.
 - **Estructurada e intuitiva**: El sistema de categorías y pilares debe ser claro y fácil de navegar, permitiendo crear declaraciones y visualizar el progreso sin fricción, aprovechando rutas dinámicas en Vue.js.
 - **Gamificada y gratificante**: Completar misiones diarias/semanales y ganar XP por declaración debe sentirse significativo, con mensajes motivacionales personalizados (“¡Tu visión de Salud brilla como una supernova!”) y visualizaciones de progreso llamativas.
-- **Comunidad y pertenencia**: La interacción social (reacciones y compartir avances) debe fortalecer el sentido de pertenencia y motivación, fomentando el apoyo entre viajeros cósmicos.
-- **Fiable y en tiempo real**: Sincronización instantánea de datos entre frontend y backend mediante WebSockets o polling eficiente, garantizando acceso inmediato a información y misiones.
-- **Mobile-first**: Experiencia priorizada para móviles, con interfaz limpia, táctil y responsiva, construida íntegramente con Tailwind CSS.
+
+---
+
+## Galactic Dashboard: Experiencia y Componentes
+
+El **Galactic Dashboard** es el centro de mando del usuario, diseñado para ofrecer una experiencia inmersiva, motivadora y visualmente impactante. Su estructura y componentes refuerzan la narrativa de exploración estelar y el progreso personal gamificado.
+
+### Barra de Experiencia, Nivel y Título
+- En la parte superior, el usuario encuentra una **barra de experiencia** que muestra su progreso hacia el siguiente nivel, junto con su **nivel actual** y un **título cósmico** (por ejemplo, "Explorador Intergaláctico").
+- El sistema de niveles y títulos refuerza la motivación y el sentido de avance, permitiendo que cada usuario vea su crecimiento reflejado de manera tangible.
+- El usuario puede personalizar su título al alcanzar ciertos hitos, reforzando la identidad de viajero cósmico.
+
+### Mensaje Motivador de la Visión Estelar
+- Debajo de la barra de experiencia, se despliega un **mensaje motivacional** generado dinámicamente, relacionado con el avance del usuario en sus áreas vitales.
+- Este mensaje, firmado por el "Guía Cósmico", reconoce logros recientes y anima a seguir explorando nuevas constelaciones.
+- Ejemplo: “Tu constelación de Salud brilla con intensidad. Has completado 3 declaraciones esta semana. ¡Continúa tu viaje y descubre nuevas estrategias para fortalecer tu bienestar!”
+
+### Mapa de Progreso Vital (Radar Chart)
+- El **Mapa de Progreso Vital** utiliza un gráfico radar para mostrar el avance del usuario en las ocho áreas fundamentales (Salud, Personalidad, Intelecto, Carrera, Finanzas, Calidad de Vida, Emocionalidad y Relaciones).
+- Cada eje representa un área y su valor depende de los pilares completados y las declaraciones escritas.
+- Visualización clara de fortalezas y áreas de oportunidad, con colores temáticos para cada área.
+
+### Constelaciones Vitales (Áreas Desbloqueables)
+- Las **Constelaciones Vitales** se presentan como nodos circulares conectados, cada uno representando un área de la vida.
+- Solo la primera constelación (Salud) está activa al inicio; las siguientes se desbloquean secuencialmente al completar los 4 pilares (Visión, Propósito, Creencias, Estrategias) de la anterior.
+- El usuario debe escribir declaraciones en los cuatro pilares de un área para desbloquear la siguiente.
+- Indicadores visuales: Las áreas bloqueadas muestran un estado atenuado o con candado, y las activas brillan con color neón.
+- Líneas conectan las constelaciones, sugiriendo el camino de avance.
+
+### Últimas Declaraciones y Misiones Activas
+- En la parte inferior, se listan las **últimas declaraciones** realizadas por el usuario, junto con las **misiones activas** para la semana.
+- Esto fomenta la constancia y permite un acceso rápido a la bitácora personal y a los retos diarios/semanales.
+
+---
+
+## Resumen de la experiencia
+
+El dashboard no solo informa, sino que **motiva y guía** al usuario en su viaje de autodescubrimiento. Cada elemento visual y funcional está pensado para reforzar la narrativa cósmica, el sentido de progreso y la claridad en los próximos pasos, haciendo de Dividis una plataforma única y envolvente para el desarrollo personal.
 
 ---
 
