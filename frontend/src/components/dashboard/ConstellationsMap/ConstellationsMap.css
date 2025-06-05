@@ -1,0 +1,8 @@
+/* ConstellationsMap.css
+   Estilos scoped para la visualización de constelaciones vitales.
+   Personaliza aquí el layout y fondo del mapa.
+*/
+
+.constellations-map-root {
+  @apply w-full flex items-center justify-center bg-slate-900/50 backdrop-blur-sm border border-cosmic-700/30 rounded-lg p-6;
+}

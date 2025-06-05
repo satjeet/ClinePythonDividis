@@ -1,0 +1,8 @@
+/* MotivationalMessage.css
+   Estilos scoped para el mensaje motivacional del Guía Cósmico.
+   Personaliza aquí la tipografía, colores y layout del mensaje.
+*/
+
+.motivational-message-root {
+  @apply w-full text-center text-cosmic-300 text-lg font-semibold py-4 bg-slate-900/50 backdrop-blur-sm border border-cosmic-700/30 rounded-lg p-6;
+}

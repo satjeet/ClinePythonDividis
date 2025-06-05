@@ -1,0 +1,8 @@
+/* Dashboard.css
+   Estilos scoped para el layout general del Galactic Dashboard.
+   Personaliza aquí la disposición y fondo del dashboard.
+*/
+
+.dashboard-root {
+  @apply min-h-screen w-full flex flex-col gap-8 bg-slate-950 px-2 py-4;
+}

@@ -40,14 +40,8 @@
       </div>
 
       <template v-else>
-        <!-- User progress card -->
-        <UserProgress
-          :username="authStore.user?.username || ''"
-          :level="authStore.userLevel"
-          :xp="authStore.userXP"
-          :stats="stats"
-          :longest-streak="longestStreak"
-        />
+        <!-- Galactic Dashboard modular (nuevo) -->
+        <DashboardModular />
 
         <!-- Available modules -->
         <section class="mt-12">
@@ -80,31 +74,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useModulesStore } from '@/stores/modules'
-import UserProgress from '@/components/user/UserProgress.vue'
 import ModuleCard from '@/components/modules/ModuleCard.vue'
+import DashboardModular from '@/components/dashboard/DashboardModular.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const moduleStore = useModulesStore()
 const loading = ref(true)
-
-// Computed stats based on module store
-const stats = computed(() => ({
-  modules_unlocked: moduleStore.unlockedModules.length,
-  missions_completed: moduleStore.missions.filter(m => m.state === 'completed').length,
-  achievements_earned: 0 // TODO: Implement achievements
-}))
-
-const longestStreak = computed(() => {
-  return Math.max(
-    ...moduleStore.modules
-      .map(m => m.streak?.longest_streak || 0)
-  )
-})
 
 // Load initial data
 async function loadDashboard() {

@@ -1,0 +1,8 @@
+/* ExperienceBar.css
+   Estilos scoped para la barra de experiencia cósmica.
+   Personaliza aquí el fondo, colores y layout de la barra.
+*/
+
+.experience-bar-root {
+  @apply w-full flex items-center justify-between bg-cosmic-900 rounded-lg px-4 py-2 shadow;
+}
