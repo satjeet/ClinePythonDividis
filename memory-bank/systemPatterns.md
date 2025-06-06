@@ -110,6 +110,7 @@ graph TD
 ### 1. Frontend Patterns
 - **Composables**: Reusable logic across components
 - **Store Pattern**: Centralized state management with Pinia
+- **Component Separation**: Script, template, and styles in separate files (SOLID)
 - **Route Guards**: Protected routes requiring authentication
 - **Component Composition**: Modular, reusable components
 - **API Service Layer**: Centralized API communication

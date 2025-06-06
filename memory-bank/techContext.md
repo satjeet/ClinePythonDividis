@@ -54,7 +54,9 @@ django-fsm==2.8.1  # For module unlock state machine
     "gsap": "^3.12",
     "tailwindcss": "^3.3",
     "@heroicons/vue": "^2.0",
-    "tippy.js": "^6.3"
+    "tippy.js": "^6.3",
+    "echarts": "^5.6",
+    "vue-echarts": "^6.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5",

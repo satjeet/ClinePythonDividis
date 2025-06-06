@@ -36,6 +36,9 @@ El **Galactic Dashboard** es el centro de mando del usuario, diseñado para ofre
 - El **Mapa de Progreso Vital** utiliza un gráfico radar para mostrar el avance del usuario en las ocho áreas fundamentales (Salud, Personalidad, Intelecto, Carrera, Finanzas, Calidad de Vida, Emocionalidad y Relaciones).
 - Cada eje representa un área y su valor depende de los pilares completados y las declaraciones escritas.
 - Visualización clara de fortalezas y áreas de oportunidad, con colores temáticos para cada área.
+  - Se migró el componente a ECharts para mejorar la visualización y personalización.
+  - Se corrigieron los colores y estilos para que coincidan con el resto del dashboard.
+  - Se refactorizó el componente para cumplir con los principios SOLID (script y estilo en archivos separados).
 
 ### Constelaciones Vitales (Áreas Desbloqueables)
 - Las **Constelaciones Vitales** se presentan como nodos circulares conectados, cada uno representando un área de la vida.

@@ -200,7 +200,10 @@
 ### Immediate
 1. Pulir detalles visuales y microinteracciones en la landing page
 2. Validar exhaustivamente el flujo de autenticación (errores, edge cases, mobile)
-3. Desarrollar el Galactic Dashboard: mapa de constelaciones, barra de experiencia, radar chart y mensajes motivacionales
+3. [x] Desarrollar el Galactic Dashboard: mapa de constelaciones, barra de experiencia, radar chart y mensajes motivacionales
+   - [x] Migración del VitalRadarChart a ECharts
+   - [x] Se corrigieron los colores y estilos para que coincidan con el resto del dashboard
+   - [x] Se refactorizó el componente para cumplir con los principios SOLID (script y estilo en archivos separados)
 4. Integrar misiones iniciales y sistema de progreso en tiempo real
 
 ### Short Term

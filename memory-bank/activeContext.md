@@ -64,8 +64,10 @@ We are currently focusing on:
    - Design progress visualization
 
 3. Implement user authentication flow
-4. Build Galactic Dashboard base
-5. Implement initial mission system
+4. Implement initial mission system
+5. Migrar VitalRadarChart a ECharts
+   - Se corrigieron los colores y estilos para que coincidan con el resto del dashboard
+   - Se refactorizó el componente para cumplir con los principios SOLID (script y estilo en archivos separados)
 
 4. Setup Docker environment:
    - Dockerfiles for backend y frontend creados
