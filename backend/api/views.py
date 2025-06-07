@@ -74,6 +74,7 @@ class ModuleViewSet(viewsets.ModelViewSet):
 )
 class ModuleUnlockView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ModuleProgressSerializer
     def post(self, request, module_id):
         module = get_object_or_404(Module, id=module_id)
         user = request.user
@@ -123,6 +124,7 @@ class MissionViewSet(viewsets.ModelViewSet):
 )
 class MissionCompleteView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = MissionProgressSerializer
     def post(self, request, mission_id):
         try:
             if not isinstance(mission_id, UUID):
@@ -168,6 +170,7 @@ class MissionCompleteView(APIView):
 @extend_schema(tags=['progress'])
 class ProgressOverviewView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ProgressOverviewSerializer
     def get(self, request):
         user = request.user
         profile = user.profile
@@ -214,6 +217,7 @@ class ProgressOverviewView(APIView):
 )
 class ModuleProgressView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ModuleProgressSerializer
     def get(self, request, module_id):
         module = get_object_or_404(Module, id=module_id)
         user = request.user

@@ -115,7 +115,11 @@ class UserProfileDetailSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ('created_at', 'updated_at')
 
-    def get_active_missions(self, obj):
+    from drf_spectacular.utils import extend_schema_field
+    from typing import Any
+
+    @extend_schema_field(MissionProgressSerializer(many=True))
+    def get_active_missions(self, obj) -> Any:
         active_missions = MissionProgress.objects.filter(
             user=obj.user,
             state='active'

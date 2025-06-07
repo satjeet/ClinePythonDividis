@@ -2,6 +2,10 @@
 
 ## Current Development Focus
 
+### Nota sobre migración FSM
+
+La migración de django-fsm a viewflow.fsm no es posible actualmente porque viewflow.fsm no está disponible como paquete estable en PyPI. El proyecto sigue usando django-fsm==3.0.0. Se recomienda revisar periódicamente la documentación oficial para futuras migraciones.
+
 ### Phase: Constellations & Declarations Management
 We are currently focusing on:
 1. Implementación de la funcionalidad de constelaciones interactivas y gestión de declaraciones.
