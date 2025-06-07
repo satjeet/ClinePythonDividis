@@ -51,6 +51,16 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/constellation/:area',
+      name: 'constellation',
+      component: () => import('@/views/ConstellationView.vue'),
+      meta: { 
+        requiresAuth: true,
+        title: 'Constelación'
+      },
+      props: true
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: () => import('@/views/NotFound.vue'),

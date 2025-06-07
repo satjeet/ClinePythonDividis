@@ -10,6 +10,8 @@ router = DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'modules', views.ModuleViewSet)
 router.register(r'missions', views.MissionViewSet)
+router.register(r'declarations', views.DeclarationViewSet)
+router.register(r'unlocked-pillars', views.UnlockedPillarViewSet)
 
 urlpatterns = [
     # Router URLs

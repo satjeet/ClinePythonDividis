@@ -1,36 +1,7 @@
 <template>
   <div class="min-h-screen bg-slate-950">
     <!-- Navigation -->
-    <nav class="py-4 px-4 sm:px-6 lg:px-8 cosmic-bg">
-      <div class="container mx-auto">
-        <div class="flex items-center justify-between">
-          <!-- Logo -->
-          <div class="flex items-center space-x-4">
-            <RouterLink to="/" class="text-2xl font-bold text-cosmic-100">
-              Dividis
-            </RouterLink>
-            <span class="text-slate-400">|</span>
-            <span class="text-cosmic-400">Dashboard</span>
-          </div>
-
-          <!-- User menu -->
-          <div class="flex items-center space-x-6">
-            <!-- Profile link -->
-            <RouterLink 
-              :to="{ name: 'profile' }"
-              class="text-slate-400 hover:text-cosmic-400 transition-colors">
-              <i class="fas fa-user"></i>
-            </RouterLink>
-            <!-- Logout button -->
-            <button 
-              @click="handleLogout"
-              class="text-slate-400 hover:text-red-400 transition-colors">
-              <i class="fas fa-sign-out-alt"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <AppNavbar sectionTitle="Dashboard" />
 
     <!-- Main content -->
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -42,6 +13,7 @@
       <template v-else>
         <!-- Galactic Dashboard modular (nuevo) -->
         <DashboardModular />
+        <ConstellationsMap />
 
         <!-- Available modules -->
         <section class="mt-12">
@@ -80,6 +52,8 @@ import { useAuthStore } from '@/stores/auth'
 import { useModulesStore } from '@/stores/modules'
 import ModuleCard from '@/components/modules/ModuleCard.vue'
 import DashboardModular from '@/components/dashboard/DashboardModular.vue'
+import ConstellationsMap from '@/components/dashboard/ConstellationsMap/ConstellationsMap.vue'
+import AppNavbar from '@/components/ui/AppNavbar.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -117,9 +91,7 @@ function handleSelectModule(moduleId: string) {
   })
 }
 
-async function handleLogout() {
-  await authStore.logout()
-}
+
 
 // Initialize
 onMounted(() => {

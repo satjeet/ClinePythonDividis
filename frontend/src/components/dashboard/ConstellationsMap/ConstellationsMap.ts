@@ -4,12 +4,12 @@
  * Preparado para recibir datos de estado de áreas como prop en el futuro.
  */
 
-import { defineComponent } from 'vue'
+import { ref } from 'vue'
 
 /**
  * Áreas vitales mock para el mapa de constelaciones.
  */
-const areas = [
+const areas = ref([
   { name: 'Salud', icon: 'fas fa-heartbeat', active: true },
   { name: 'Personalidad', icon: 'fas fa-user-astronaut', active: false },
   { name: 'Intelecto', icon: 'fas fa-brain', active: false },
@@ -18,11 +18,8 @@ const areas = [
   { name: 'Calidad de Vida', icon: 'fas fa-star', active: false },
   { name: 'Emocionalidad', icon: 'fas fa-spa', active: false },
   { name: 'Relaciones', icon: 'fas fa-users', active: false }
-]
+])
 
-export default defineComponent({
-  name: 'ConstellationsMap',
-  data() {
-    return { areas }
-  }
+defineExpose({
+  areas
 })

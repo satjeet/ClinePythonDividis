@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Module, Mission, ModuleProgress } from '@/types'
-import { moduleApi, missionApi } from '@/services/api'
+import { moduleApi, missionApi, declarationApi } from '@/services/api'
 import { useAuthStore } from './auth'
 
 interface ModuleWithProgress extends Module {
@@ -13,6 +13,14 @@ interface ModuleWithProgress extends Module {
   }
 }
 
+interface Declaration {
+  id?: number
+  module: string
+  pillar: string
+  text: string
+  synced?: boolean
+}
+
 export const useModulesStore = defineStore('modules', () => {
   const authStore = useAuthStore()
   
@@ -22,6 +30,9 @@ export const useModulesStore = defineStore('modules', () => {
   const currentModule = ref<ModuleWithProgress | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
+
+  // Declaraciones
+  const declarations = ref<Declaration[]>([])
 
   // Getters
   const unlockedModules = computed(() => 
@@ -44,6 +55,11 @@ export const useModulesStore = defineStore('modules', () => {
       m.xp_required <= (authStore.userXP || 0)
     )
   })
+
+  // Agrupar declaraciones por pilar (para DeclarationList)
+  function getDeclarationsByPillar(pillar: string) {
+    return declarations.value.filter(d => d.pillar === pillar)
+  }
 
   // Actions
   async function fetchModules() {
@@ -151,11 +167,78 @@ export const useModulesStore = defineStore('modules', () => {
     }
   }
 
+  // Declaraciones: cargar desde backend
+  async function fetchDeclarations() {
+    loading.value = true
+    error.value = null
+    try {
+      const response = await declarationApi.getAll()
+      // Mapear a estructura local
+      declarations.value = response.data.map((d: any) => ({
+        id: d.id,
+        module: typeof d.module === 'string' ? d.module : d.module.id,
+        pillar: d.pillar,
+        text: d.text,
+        synced: true
+      }))
+    } catch (err: any) {
+      error.value = err.response?.data?.detail || 'Error al cargar declaraciones'
+      throw error.value
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // Declaraciones: agregar localmente (sincronizar después)
+  function addDeclaration(pillar: string, declaration: string, moduleId?: string) {
+    declarations.value.push({
+      module: moduleId || (currentModule.value?.id ?? ''),
+      pillar,
+      text: declaration,
+      synced: false
+    })
+  }
+
+  // Declaraciones: sincronizar con backend (guardar las no sincronizadas)
+  async function syncDeclarations() {
+    loading.value = true
+    error.value = null
+    try {
+      const unsynced = declarations.value.filter(d => !d.synced)
+      for (const d of unsynced) {
+        try {
+          const response = await declarationApi.create({
+            module: d.module,
+            pillar: d.pillar,
+            text: d.text
+          })
+          d.id = response.data.id
+          d.synced = true
+        } catch (err: any) {
+          // Si es error de unicidad (ya existe), márcala como sincronizada
+          if (err.response && err.response.status === 400 && err.response.data && typeof err.response.data === 'object') {
+            const detail = JSON.stringify(err.response.data)
+            if (detail.includes('unique') || detail.includes('UNIQUE')) {
+              d.synced = true
+              continue
+            }
+          }
+          // Otro error: mostrar mensaje
+          error.value = err.response?.data?.detail || 'Error al guardar declaraciones'
+          throw error.value
+        }
+      }
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     // State
     modules,
     missions,
     currentModule,
+    declarations,
     loading,
     error,
 
@@ -164,6 +247,7 @@ export const useModulesStore = defineStore('modules', () => {
     activeModules,
     availableMissions,
     nextModule,
+    getDeclarationsByPillar,
 
     // Actions
     fetchModules,
@@ -171,6 +255,9 @@ export const useModulesStore = defineStore('modules', () => {
     unlockModule,
     completeMission,
     setCurrentModule,
-    loadModuleProgress
+    loadModuleProgress,
+    addDeclaration,
+    fetchDeclarations,
+    syncDeclarations
   }
 })

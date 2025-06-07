@@ -130,3 +130,17 @@ class ProgressOverviewSerializer(serializers.Serializer):
     missions_completed = serializers.IntegerField()
     achievements_earned = serializers.IntegerField()
     current_streaks = serializers.DictField()
+
+class DeclarationSerializer(serializers.ModelSerializer):
+    """Serializer for user declarations."""
+    class Meta:
+        model = __import__('api.models').models.Declaration
+        fields = ('id', 'user', 'module', 'pillar', 'text', 'created_at', 'updated_at', 'synced')
+        read_only_fields = ('id', 'created_at', 'updated_at', 'user')
+
+class UnlockedPillarSerializer(serializers.ModelSerializer):
+    """Serializer for unlocked pillars."""
+    class Meta:
+        model = __import__('api.models').models.UnlockedPillar
+        fields = ('id', 'user', 'module', 'pillar', 'unlocked_at')
+        read_only_fields = ('id', 'user', 'unlocked_at')

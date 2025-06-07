@@ -65,4 +65,18 @@ export const progressApi = {
     api.get('/progress/overview/')
 }
 
+export const declarationApi = {
+  getAll: (params?: { module?: string; pillar?: string }) =>
+    api.get('/declarations/', { params }),
+  create: (data: { module: string; pillar: string; text: string }) =>
+    api.post('/declarations/', data)
+}
+
+export const unlockedPillarApi = {
+  getAll: (params?: { module?: string }) =>
+    api.get('/unlocked-pillars/', { params }),
+  create: (data: { module: string; pillar: string }) =>
+    api.post('/unlocked-pillars/', data)
+}
+
 export default api
