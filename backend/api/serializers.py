@@ -43,9 +43,22 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class ModuleSerializer(serializers.ModelSerializer):
     """Serializer for modules."""
+    state = serializers.SerializerMethodField()
+
     class Meta:
         model = Module
         fields = ('id', 'name', 'description', 'icon', 'order', 'xp_required', 'state')
+
+    def get_state(self, obj):
+        user = self.context.get('request').user if self.context.get('request') else None
+        if user and user.is_authenticated:
+            from .models import ModuleProgress
+            try:
+                progress = ModuleProgress.objects.get(user=user, module=obj)
+                return progress.state
+            except ModuleProgress.DoesNotExist:
+                pass
+        return obj.state
 
 class ModuleProgressSerializer(serializers.ModelSerializer):
     """Serializer for module progress."""

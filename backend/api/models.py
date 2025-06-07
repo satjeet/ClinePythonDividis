@@ -45,7 +45,8 @@ class Module(models.Model):
         return self.name
     @transition(field=state, source='locked', target='unlocked')
     def unlock(self):
-        pass
+        self.state = 'unlocked'
+        self.save(update_fields=['state'])
     @transition(field=state, source='unlocked', target='completed')
     def complete(self):
         pass
@@ -62,7 +63,8 @@ class ModuleProgress(models.Model):
         return f"{self.user.username}'s progress in {self.module.name}"
     @transition(field=state, source='locked', target='unlocked')
     def unlock(self):
-        pass
+        self.state = 'unlocked'
+        self.save(update_fields=['state'])
     @transition(field=state, source='unlocked', target='completed')
     def complete(self):
         pass
@@ -171,3 +173,54 @@ class UnlockedPillar(models.Model):
         unique_together = ['user', 'module', 'pillar']
     def __str__(self):
         return f"{self.user.username} - {self.module.name} - {self.pillar}"
+
+# --- DESBLOQUEO SECUENCIAL DE CONSTELACIONES ---
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+import logging
+
+@receiver(post_save, sender=Declaration)
+def check_and_unlock_next_module(sender, instance, created, **kwargs):
+    """
+    Cuando el usuario tiene al menos una declaración en cada pilar de un módulo,
+    desbloquea el siguiente módulo (constelación) en orden.
+    """
+    logger = logging.getLogger("api.models")
+    if not created:
+        return
+
+    user = instance.user
+    module = instance.module
+
+    # Obtener todos los pilares requeridos para el módulo actual
+    required_pillars = [choice[0] for choice in Declaration.PILLAR_CHOICES]
+
+    # Verificar si el usuario tiene al menos una declaración en cada pilar de este módulo
+    user_pillars = Declaration.objects.filter(
+        user=user,
+        module=module
+    ).values_list('pillar', flat=True).distinct()
+
+    logger.info(f"[DEBUG] Declaraciones para usuario {user.username} en módulo {module.id}: {list(user_pillars)}")
+    logger.info(f"[DEBUG] Pilares requeridos: {required_pillars}")
+
+    if set(required_pillars).issubset(set(user_pillars)):
+        logger.info(f"[DEBUG] Usuario {user.username} completó todos los pilares de {module.id}. Intentando desbloquear siguiente módulo...")
+        # Buscar el siguiente módulo por orden
+        next_module = Module.objects.filter(order__gt=module.order).order_by('order').first()
+        if next_module:
+            logger.info(f"[DEBUG] Siguiente módulo a desbloquear: {next_module.id}")
+            # Desbloquear el siguiente módulo para el usuario
+            progress, created = ModuleProgress.objects.get_or_create(user=user, module=next_module)
+            logger.info(f"[DEBUG] Estado actual de ModuleProgress: {progress.state}")
+            if progress.state == 'locked':
+                progress.unlock()
+                progress.save()
+                logger.info(f"[DEBUG] Módulo {next_module.id} desbloqueado para {user.username}")
+            else:
+                logger.info(f"[DEBUG] Módulo {next_module.id} ya estaba desbloqueado para {user.username}")
+        else:
+            logger.info(f"[DEBUG] No hay siguiente módulo para desbloquear.")
+    else:
+        logger.info(f"[DEBUG] Usuario {user.username} aún no tiene declaraciones en todos los pilares de {module.id}")

@@ -13,7 +13,6 @@
       <template v-else>
         <!-- Galactic Dashboard modular (nuevo) -->
         <DashboardModular />
-        <ConstellationsMap />
 
         <!-- Available modules -->
         <section class="mt-12">
@@ -52,7 +51,6 @@ import { useAuthStore } from '@/stores/auth'
 import { useModulesStore } from '@/stores/modules'
 import ModuleCard from '@/components/modules/ModuleCard.vue'
 import DashboardModular from '@/components/dashboard/DashboardModular.vue'
-import ConstellationsMap from '@/components/dashboard/ConstellationsMap/ConstellationsMap.vue'
 import AppNavbar from '@/components/ui/AppNavbar.vue'
 
 const router = useRouter()

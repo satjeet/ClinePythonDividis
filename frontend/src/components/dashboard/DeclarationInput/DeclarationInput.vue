@@ -1,7 +1,12 @@
 <template>
   <div class="declaration-input w-full">
     <label for="pillar-select" class="block text-sm font-medium text-cosmic-200">Pilar</label>
-    <select v-model="selectedPillar" id="pillar-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base bg-cosmic-800 border-cosmic-700 text-cosmic-200 focus:outline-none focus:ring-cosmic-500 focus:border-cosmic-500 sm:text-sm rounded-md">
+    <select
+      :value="localSelectedPillar"
+      @change="onSelectPillar"
+      id="pillar-select"
+      class="mt-1 block w-full pl-3 pr-10 py-2 text-base bg-cosmic-800 border-cosmic-700 text-cosmic-200 focus:outline-none focus:ring-cosmic-500 focus:border-cosmic-500 sm:text-sm rounded-md"
+    >
       <option
         v-for="pillar in unlockedPillars"
         :key="pillar"
@@ -27,14 +32,32 @@ const props = defineProps({
   moduleId: {
     type: String,
     required: true
+  },
+  selectedPillar: {
+    type: String,
+    required: true
   }
 });
 
-const emit = defineEmits(['declaration-added']);
+const emit = defineEmits(['declaration-added', 'update:selectedPillar']);
 
 const modulesStore = useModulesStore();
-const selectedPillar = ref(props.unlockedPillars[0] || '');
+const localSelectedPillar = ref(props.selectedPillar);
 const declarationText = ref('');
+
+// Sincronizar localSelectedPillar con el prop
+import { watch } from 'vue';
+watch(
+  () => props.selectedPillar,
+  (val) => {
+    localSelectedPillar.value = val;
+  }
+);
+
+// Emitir update:selectedPillar cuando el usuario cambia el select
+function onSelectPillar(e: Event) {
+  emit('update:selectedPillar', (e.target as HTMLSelectElement).value);
+}
 
 // Etiqueta visible para el select
 function pillarLabel(pillar: string) {
@@ -48,9 +71,9 @@ function pillarLabel(pillar: string) {
 }
 
 const addDeclaration = () => {
-  if (declarationText.value && selectedPillar.value) {
-    modulesStore.addDeclaration(selectedPillar.value, declarationText.value, props.moduleId);
-    emit('declaration-added', { pillar: selectedPillar.value, text: declarationText.value });
+  if (declarationText.value && localSelectedPillar.value) {
+    modulesStore.addDeclaration(localSelectedPillar.value, declarationText.value, props.moduleId);
+    emit('declaration-added', { pillar: localSelectedPillar.value, text: declarationText.value });
     declarationText.value = '';
   }
 };

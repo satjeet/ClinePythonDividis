@@ -20,9 +20,22 @@
         class="origin-top-right absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-cosmic-800 ring-1 ring-cosmic-700 ring-opacity-50 focus:outline-none z-50"
       >
         <div class="py-1">
-          <a href="#" class="block px-4 py-2 text-sm text-cosmic-200 hover:bg-cosmic-700 hover:text-cosmic-100 rounded transition">Salud</a>
-          <a href="#" class="block px-4 py-2 text-sm text-cosmic-200 hover:bg-cosmic-700 hover:text-cosmic-100 rounded transition">Personalidad</a>
-          <a href="#" class="block px-4 py-2 text-sm text-cosmic-200 hover:bg-cosmic-700 hover:text-cosmic-100 rounded transition">Intelecto</a>
+          <template v-for="mod in modulesStore.modules" :key="mod.id">
+            <router-link
+              v-if="mod.state === 'unlocked' || mod.state === 'completed'"
+              :to="`/constellation/${mod.id}`"
+              class="block px-4 py-2 text-sm rounded transition text-cosmic-200 hover:bg-cosmic-700 hover:text-cosmic-100"
+              @click="menuOpen = false"
+            >
+              {{ mod.name }}
+            </router-link>
+            <span
+              v-else
+              class="block px-4 py-2 text-sm rounded transition text-cosmic-500 cursor-not-allowed opacity-60 pointer-events-none"
+            >
+              {{ mod.name }}
+            </span>
+          </template>
         </div>
       </div>
     </div>
@@ -37,11 +50,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { useModulesStore } from '@/stores/modules';
 
-const currentConstellation = ref('Salud');
 const modulesStore = useModulesStore();
+const route = useRoute();
+
+const currentConstellation = computed(() => {
+  // Busca el nombre del módulo activo según la ruta
+  let area = route.params.area;
+  if (Array.isArray(area)) area = area[0];
+  if (!area) return 'Salud';
+  const mod = modulesStore.modules.find(m => m.id === area);
+  return mod ? mod.name : (typeof area === 'string' ? area.charAt(0).toUpperCase() + area.slice(1) : 'Salud');
+});
+
+// Si los módulos aún no están cargados, forzar la recarga al montar o al cambiar la ruta
+onMounted(() => {
+  if (!modulesStore.modules.length) {
+    modulesStore.fetchModules();
+  }
+});
+
+watch(
+  () => route.params.area,
+  () => {
+    if (!modulesStore.modules.length) {
+      modulesStore.fetchModules();
+    }
+  }
+);
 
 const menuOpen = ref(false);
 

@@ -157,3 +157,36 @@ ACTSTREAM_SETTINGS = {
 # Module Settings
 INITIAL_MODULE = os.getenv('INITIAL_MODULE', 'salud')
 DEFAULT_MISSION_POINTS = int(os.getenv('DEFAULT_MISSION_POINTS', '100'))
+
+# Logging config para mostrar logs de api.models a nivel INFO
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[{levelname}] {asctime} {name} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '[{levelname}] {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'api.models': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        '': {  # root logger
+            'handlers': ['console'],
+            'level': 'WARNING',
+        },
+    },
+}

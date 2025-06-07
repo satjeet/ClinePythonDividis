@@ -228,6 +228,8 @@ export const useModulesStore = defineStore('modules', () => {
           throw error.value
         }
       }
+      // Refrescar módulos y declaraciones tras sincronizar (para reflejar desbloqueos)
+      await Promise.all([fetchModules(), fetchDeclarations()])
     } finally {
       loading.value = false
     }
