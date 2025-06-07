@@ -42,7 +42,12 @@
 ✅ Authentication views
 ✅ Dashboard view
 ✅ Module view
-✅ Local frontend server with cosmic theme
+✅ Declaraciones gestionadas con DeclarationInput y DeclarationList
+✅ ConstellationsMap refactorizado para áreas reactivas y navegación
+✅ Nuevos componentes: ConstellationNavBar, UnlockedTools, PillarTabs, ConstellationView
+✅ Rutas protegidas para vistas de constelaciones
+✅ Sincronización de declaraciones y módulos con backend vía API
+✅ Local frontend server con cosmic theme
 ✅ Vite + TypeScript + configuración inicial de build
 🔄 Testing pending
 
@@ -70,11 +75,11 @@
   - [ ] Accessibility validation
 
 ### Phase 2: Galactic Dashboard
-- [ ] Constellation map interface
-  - [ ] Interactive star map
-  - [ ] Module state visualization
-  - [ ] Progress indicators
-  - [ ] Animation effects
+- [x] Constellation map interface
+  - [x] Interactive star map
+  - [x] Module state visualization
+  - [x] Progress indicators
+  - [x] Animation effects
 
 - [ ] Initial "Salud" Module
   - [ ] Module interface

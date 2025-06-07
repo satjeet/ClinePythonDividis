@@ -116,6 +116,9 @@ graph TD
 - **API Service Layer**: Centralized API communication
 - **Unlocking System**: Progressive module access based on achievements
 - **Mission System**: Guided user progression through tasks
+- **Declarations Management**: Declaraciones gestionadas con DeclarationInput y DeclarationList, sincronizadas con backend.
+- **Constellations Navigation**: ConstellationsMap, ConstellationNavBar, UnlockedTools, PillarTabs y ConstellationView para navegación y experiencia de usuario.
+- **Protected Constellation Routes**: Nuevas rutas protegidas para vistas de constelaciones.
 - **Cosmic Theme**: Space-themed UI components and animations
 - **Responsive Design**: Mobile-first approach with Tailwind CSS
 

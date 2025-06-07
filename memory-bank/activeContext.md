@@ -2,23 +2,21 @@
 
 ## Current Development Focus
 
-### Phase: Initial Project Setup & Onboarding Experience
+### Phase: Constellations & Declarations Management
 We are currently focusing on:
-1. Welcoming landing page design
-2. Authentication flow
-3. Galactic Dashboard with initial "Salud" module
-4. First motivational mission implementation
-5. Core infrastructure setup
+1. Implementación de la funcionalidad de constelaciones interactivas y gestión de declaraciones.
+2. Refactorización de ConstellationsMap para áreas reactivas y navegación.
+3. Integración de DeclarationInput, DeclarationList, ConstellationNavBar, UnlockedTools, PillarTabs y ConstellationView.
+4. Nuevas rutas protegidas para vistas de constelaciones.
+5. Sincronización de declaraciones y módulos entre frontend y backend vía nuevo API.
 
 ## Recent Changes
-- Created Memory Bank structure with core documentation files
-- Defined project architecture and cosmic narrative
-- Updated documentation to reflect onboarding flow
-- Established module unlocking system
-- Implemented authentication views and dashboard view
-- Added Docker configuration for backend and frontend (Dockerfile, docker-compose.yml)
-- Initialized frontend with Vite, Vue 3, TypeScript, and Tailwind CSS
-- Added Vite config files and improved frontend build setup
+- Implemented constellations feature with declarations management and interactive navigation.
+- Refactored ConstellationsMap to use reactive areas and router links.
+- Added DeclarationInput, DeclarationList, ConstellationNavBar, UnlockedTools, PillarTabs, and ConstellationView components.
+- Introduced declaration API and expanded modules store for backend synchronization.
+- Added new protected routes for constellation views with authentication.
+- Updated docker-compose version and documented technical decisions in README.md.
 
 ## Active Decisions
 
