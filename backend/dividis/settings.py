@@ -88,6 +88,11 @@ DATABASES = {
     }
 }
 
+print("=== DJANGO DATABASE SETTINGS ===")
+print("DEBUG:", DEBUG)
+print("DATABASE ENGINE:", DATABASES['default']['ENGINE'])
+print("DATABASE NAME:", DATABASES['default']['NAME'])
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -111,8 +116,12 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# WhiteNoise para servir archivos estáticos en producción
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
