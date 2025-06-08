@@ -25,6 +25,14 @@ class Profile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+        # Desbloquear automáticamente el primer módulo (orden 1)
+        from .models import Module, ModuleProgress
+        first_module = Module.objects.order_by('order').first()
+        if first_module:
+            progress, _ = ModuleProgress.objects.get_or_create(user=instance, module=first_module)
+            if progress.state == 'locked':
+                progress.unlock()
+                progress.save()
 
 class Module(models.Model):
     STATES = (

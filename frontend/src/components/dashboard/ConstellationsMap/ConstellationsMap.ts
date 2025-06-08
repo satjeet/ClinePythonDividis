@@ -21,7 +21,7 @@ export function useConstellationsAreas() {
     modulesStore.modules.map(mod => ({
       name: mod.name,
       icon: iconMap[mod.id] || 'fas fa-star',
-      active: mod.state === 'unlocked' || mod.state === 'completed'
+      active: mod.id === 'salud' ? true : (mod.state === 'unlocked' || mod.state === 'completed')
     }))
   );
 

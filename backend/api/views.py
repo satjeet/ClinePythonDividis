@@ -271,4 +271,24 @@ class DeclarationViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(pillar=pillar)
         return queryset
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        # Guardar la declaración con el usuario actual
+        declaration = serializer.save(user=self.request.user)
+        user = self.request.user
+        module = declaration.module
+        pillar = declaration.pillar
+
+        # Verificar si ya existe una declaración previa en este pilar/módulo para este usuario
+        exists = Declaration.objects.filter(
+            user=user,
+            module=module,
+            pillar=pillar
+        ).exclude(id=declaration.id).exists()
+
+        if not exists:
+            # Calcular experiencia: base 20 + 10 * (orden-1)
+            base_xp = 20
+            xp = base_xp + 10 * (module.order - 1)
+            profile = user.profile
+            profile.experience_points += xp
+            profile.calculate_level()
+            profile.save()
