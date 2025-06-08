@@ -51,14 +51,8 @@ class ModuleViewSet(viewsets.ModelViewSet):
     serializer_class = ModuleSerializer
     permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
-        user = self.request.user
-        initial_module = settings.INITIAL_MODULE
-        modules = Module.objects.all()
-        if not ModuleProgress.objects.filter(user=user).exists():
-            return modules.filter(id=initial_module)
-        user_progress = ModuleProgress.objects.filter(user=user)
-        unlocked_modules = user_progress.values_list('module_id', flat=True)
-        return modules.filter(id__in=list(unlocked_modules) + [initial_module])
+        # Devuelve todos los módulos para el usuario autenticado
+        return Module.objects.all()
 
 @extend_schema(
     tags=['modules'],

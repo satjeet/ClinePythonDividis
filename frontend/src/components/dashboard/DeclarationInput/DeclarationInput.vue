@@ -70,9 +70,10 @@ function pillarLabel(pillar: string) {
   }
 }
 
-const addDeclaration = () => {
+const addDeclaration = async () => {
   if (declarationText.value && localSelectedPillar.value) {
     modulesStore.addDeclaration(localSelectedPillar.value, declarationText.value, props.moduleId);
+    await modulesStore.syncDeclarations();
     emit('declaration-added', { pillar: localSelectedPillar.value, text: declarationText.value });
     declarationText.value = '';
   }

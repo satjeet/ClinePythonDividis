@@ -1,25 +1,29 @@
-/**
- * ConstellationsMap.ts
- * Lógica y props para la visualización de constelaciones vitales.
- * Preparado para recibir datos de estado de áreas como prop en el futuro.
- */
+import { computed } from 'vue';
+import { useModulesStore } from '@/stores/modules';
 
-import { ref } from 'vue'
+// Mapeo de id de módulo a icono FontAwesome
+export const iconMap: Record<string, string> = {
+  salud: 'fas fa-heartbeat',
+  personalidad: 'fas fa-user-astronaut',
+  intelecto: 'fas fa-brain',
+  carrera: 'fas fa-rocket',
+  finanzas: 'fas fa-coins',
+  'calidad-vida': 'fas fa-star',
+  emocionalidad: 'fas fa-spa',
+  relaciones: 'fas fa-users',
+  vision: 'fas fa-eye'
+};
 
-/**
- * Áreas vitales mock para el mapa de constelaciones.
- */
-const areas = ref([
-  { name: 'Salud', icon: 'fas fa-heartbeat', active: true },
-  { name: 'Personalidad', icon: 'fas fa-user-astronaut', active: false },
-  { name: 'Intelecto', icon: 'fas fa-brain', active: false },
-  { name: 'Carrera', icon: 'fas fa-rocket', active: false },
-  { name: 'Finanzas', icon: 'fas fa-coins', active: false },
-  { name: 'Calidad de Vida', icon: 'fas fa-star', active: false },
-  { name: 'Emocionalidad', icon: 'fas fa-spa', active: false },
-  { name: 'Relaciones', icon: 'fas fa-users', active: false }
-])
+export function useConstellationsAreas() {
+  const modulesStore = useModulesStore();
 
-defineExpose({
-  areas
-})
+  const areas = computed(() =>
+    modulesStore.modules.map(mod => ({
+      name: mod.name,
+      icon: iconMap[mod.id] || 'fas fa-star',
+      active: mod.state === 'unlocked' || mod.state === 'completed'
+    }))
+  );
+
+  return { areas };
+}
