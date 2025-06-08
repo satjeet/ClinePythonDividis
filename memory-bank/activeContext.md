@@ -21,6 +21,7 @@ We are currently focusing on:
 - Introduced declaration API and expanded modules store for backend synchronization.
 - Added new protected routes for constellation views with authentication.
 - Updated docker-compose version and documented technical decisions in README.md.
+- **EXPERIENCE SYSTEM REAL:** El sistema de experiencia y nivel ahora refleja el progreso real del usuario, no es mock. Declaraciones solo otorgan XP la primera vez por pilar/módulo, con XP incremental por constelación. Salud siempre aparece desbloqueada en el dashboard/menu. El streak diario se actualiza correctamente al realizar actividades.
 
 ## Active Decisions
 

@@ -17,6 +17,7 @@
 ✅ Cosmic narrative documented
 ✅ Module unlocking system designed
 ✅ Updated installation instructions in README.md
+✅ Sistema de experiencia real: XP y nivel reflejan progreso real, declaraciones solo otorgan XP la primera vez por pilar/módulo, XP incremental por constelación, salud siempre desbloqueada, streak diario funcional.
 
 ### Infrastructure
 ✅ Development database configured
@@ -152,6 +153,7 @@
 - Balance initial mission difficulty
 - Clear unlock progression path
 - Optimize cosmic theme performance
+- Verificar que la lógica de experiencia, desbloqueo de salud y streak diario sigan funcionando tras cambios futuros.
 
 ## Project Evolution
 
