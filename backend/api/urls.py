@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 URL patterns for the API app.
 """
@@ -13,19 +14,23 @@ router.register(r'missions', views.MissionViewSet)
 router.register(r'declarations', views.DeclarationViewSet)
 router.register(r'unlocked-pillars', views.UnlockedPillarViewSet)
 
+# Rutas personalizadas primero para evitar conflictos con el router DRF
 urlpatterns = [
-    # Router URLs
-    path('', include(router.urls)),
-    
     # Auth endpoints
     path('auth/register/', views.UserRegistrationView.as_view(), name='register'),
     path('auth/me/', views.UserProfileView.as_view(), name='me'),
-    
+
     # Module specific endpoints
     path('modules/<str:module_id>/unlock/', views.ModuleUnlockView.as_view(), name='module-unlock'),
     path('missions/<uuid:mission_id>/complete/', views.MissionCompleteView.as_view(), name='mission-complete'),
-    
+
+    # Global missions endpoint
+    path('missions/global/', views.GlobalMissionListView.as_view(), name='global-missions'),
+
     # Progress endpoints
     path('progress/overview/', views.ProgressOverviewView.as_view(), name='progress-overview'),
     path('progress/module/<str:module_id>/', views.ModuleProgressView.as_view(), name='module-progress'),
+
+    # Router URLs (dejar al final)
+    path('', include(router.urls)),
 ]

@@ -23,6 +23,13 @@ We are currently focusing on:
 - Updated docker-compose version and documented technical decisions in README.md.
 - **EXPERIENCE SYSTEM REAL:** El sistema de experiencia y nivel ahora refleja el progreso real del usuario, no es mock. Declaraciones solo otorgan XP la primera vez por pilar/módulo, con XP incremental por constelación. Salud siempre aparece desbloqueada en el dashboard/menu. El streak diario se actualiza correctamente al realizar actividades.
 
+## Separation: Module Unlock vs. Constellation Access
+
+- **Desbloqueo de módulos:** Lógica en backend, basada en XP, misiones y otros requisitos futuros. El estado funcional del módulo depende de estos criterios.
+- **Acceso a constelaciones:** Lógica visual separada en frontend. La constelación de salud siempre aparece activa, independiente del estado del módulo. Otras constelaciones pueden seguir reglas visuales distintas.
+
+Esta separación permite evolucionar los requisitos de desbloqueo de módulos sin afectar la navegación ni la experiencia visual de las constelaciones.
+
 ## Active Decisions
 
 ### Architecture Decisions

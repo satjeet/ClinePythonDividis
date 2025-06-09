@@ -7,7 +7,7 @@
             "description": "Desarrolla hábitos saludables y mantén un seguimiento de tu progreso con la Serpiente de Hábitos.",
             "icon": "heart",
             "order": 1,
-            "xp_required": 0,
+            "xp_required": 80,
             "state": "unlocked"
         }
     },

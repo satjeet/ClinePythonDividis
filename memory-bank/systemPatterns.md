@@ -107,6 +107,35 @@ graph TD
 
 ## Design Patterns
 
+---
+
+### Desacoplamiento de lógica de desbloqueo: módulos vs constelaciones
+
+**Motivación:**  
+Permitir que el acceso visual a las constelaciones (navegación, UI) sea independiente de los requisitos funcionales para desbloquear módulos (XP, misiones, etc.), facilitando la evolución de reglas y la experiencia de usuario.
+
+**Implementación:**  
+- El backend controla el estado de los módulos (locked/unlocked/completed) según XP, misiones y otros criterios.
+- El frontend puede mostrar constelaciones como accesibles aunque el módulo esté bloqueado, permitiendo onboarding, previews o rutas educativas.
+- Ejemplo: Salud siempre visible como constelación, pero su módulo requiere XP/misiones para desbloquearse.
+
+**Beneficio:**  
+- Permite reglas de progresión complejas sin sacrificar la navegación ni la motivación visual.
+- Facilita la introducción de requisitos adicionales (misiones, logros, etc.) para módulos sin romper la experiencia de exploración.
+
+**Ejemplo de código (pseudo):**
+```js
+// Frontend: constelación siempre visible
+const isConstellationActive = (id) => id === 'salud' ? true : backendState[id].visible;
+
+// Backend: módulo requiere XP y misiones
+if (user.xp >= module.xp_required && user.has_completed_missions(module)) {
+    module.state = 'unlocked';
+}
+```
+
+---
+
 ### 1. Frontend Patterns
 - **Composables**: Reusable logic across components
 - **Store Pattern**: Centralized state management with Pinia

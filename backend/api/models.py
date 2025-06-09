@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Data models for the Dividis application.
 """
@@ -83,13 +84,20 @@ class Mission(models.Model):
         ('completed', 'Completed'),
         ('failed', 'Failed'),
     )
+    FREQUENCY_CHOICES = [
+        ('global', 'Global'),
+        ('daily', 'Diaria'),
+        ('weekly', 'Semanal'),
+        (None, 'Sin frecuencia'),
+    ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    module = models.ForeignKey(Module, on_delete=models.CASCADE)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=200)
     description = models.TextField()
     xp_reward = models.IntegerField(default=settings.DEFAULT_MISSION_POINTS)
     required_level = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
+    frequency = models.CharField(max_length=20, choices=FREQUENCY_CHOICES, null=True, blank=True, default=None)
     def __str__(self):
         return self.title
 
@@ -150,6 +158,18 @@ class Streak(models.Model):
             self.current_streak = 1
         self.last_activity = now
         self.save()
+
+        # --- Lógica para misión global de racha de 1 día ---
+        if self.current_streak >= 1:
+            try:
+                from .models import Mission, MissionProgress
+                mission = Mission.objects.get(id="46e39fc7-8a77-4e39-9559-283a73655d12")
+                mp, created = MissionProgress.objects.get_or_create(user=self.user, mission=mission)
+                if mp.state != "completed":
+                    mp.complete()
+                    mp.save()
+            except Mission.DoesNotExist:
+                pass
 
 class Declaration(models.Model):
     PILLAR_CHOICES = [

@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from .models import (
     Profile, Module, ModuleProgress, Mission, MissionProgress,
-    Achievement, UserAchievement, Streak
+    Achievement, UserAchievement, Streak, Declaration, UnlockedPillar
 )
 
 class UserSerializer(serializers.ModelSerializer):
@@ -114,7 +114,7 @@ class StreakSerializer(serializers.ModelSerializer):
 class UserProfileDetailSerializer(serializers.ModelSerializer):
     """Detailed serializer for user profile with related data."""
     user = UserSerializer(read_only=True)
-    module_progress = ModuleProgressSerializer(many=True, read_only=True, source='moduleprogressset')
+    module_progress = ModuleProgressSerializer(many=True, read_only=True, source='moduleprogress_set')
     achievements = UserAchievementSerializer(many=True, read_only=True, source='userachievement_set')
     streaks = StreakSerializer(many=True, read_only=True, source='streak_set')
     active_missions = serializers.SerializerMethodField()
@@ -132,7 +132,7 @@ class UserProfileDetailSerializer(serializers.ModelSerializer):
     from typing import Any
 
     @extend_schema_field(MissionProgressSerializer(many=True))
-    def get_active_missions(self, obj) -> Any:
+    def get_active_missions(self, obj) -> 'Any':
         active_missions = MissionProgress.objects.filter(
             user=obj.user,
             state='active'
@@ -151,13 +151,13 @@ class ProgressOverviewSerializer(serializers.Serializer):
 class DeclarationSerializer(serializers.ModelSerializer):
     """Serializer for user declarations."""
     class Meta:
-        model = __import__('api.models').models.Declaration
+        model = Declaration
         fields = ('id', 'user', 'module', 'pillar', 'text', 'created_at', 'updated_at', 'synced')
         read_only_fields = ('id', 'created_at', 'updated_at', 'user')
 
 class UnlockedPillarSerializer(serializers.ModelSerializer):
     """Serializer for unlocked pillars."""
     class Meta:
-        model = __import__('api.models').models.UnlockedPillar
+        model = UnlockedPillar
         fields = ('id', 'user', 'module', 'pillar', 'unlocked_at')
         read_only_fields = ('id', 'user', 'unlocked_at')

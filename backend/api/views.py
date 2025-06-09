@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Views for the Dividis API.
 """
@@ -24,6 +25,37 @@ from .serializers import (
     StreakSerializer, UserProfileDetailSerializer, ProgressOverviewSerializer,
     DeclarationSerializer, UnlockedPillarSerializer
 )
+
+def sync_module_unlocks(user):
+    """
+    Sincroniza el estado de desbloqueo de módulos según XP y requisitos.
+    Desbloquea automáticamente los módulos para los que el usuario cumple los requisitos.
+    """
+    profile = user.profile
+    modules = Module.objects.all()
+    for module in modules:
+        progress, _ = ModuleProgress.objects.get_or_create(user=user, module=module)
+        if progress.state == 'locked':
+            # Lógica de requisitos personalizados
+            can_unlock = False
+            if module.id == "salud":
+                if profile.experience_points >= module.xp_required:
+                    can_unlock = True
+            elif module.id == "personalidad":
+                has_xp = profile.experience_points >= 200
+                try:
+                    mission = Mission.objects.get(id="46e39fc7-8a77-4e39-9559-283a73655d12")
+                    mp = MissionProgress.objects.filter(user=user, mission=mission, state="completed").exists()
+                except Exception:
+                    mp = False
+                if has_xp and mp:
+                    can_unlock = True
+            else:
+                if profile.experience_points >= module.xp_required:
+                    can_unlock = True
+            if can_unlock:
+                progress.unlock()
+                progress.save()
 
 @extend_schema(tags=['users'])
 class UserViewSet(viewsets.ModelViewSet):
@@ -73,11 +105,43 @@ class ModuleUnlockView(APIView):
         module = get_object_or_404(Module, id=module_id)
         user = request.user
         profile = user.profile
-        if profile.experience_points < module.xp_required:
+
+        # Lógica de requisitos personalizados
+        can_unlock = False
+        error_msg = ""
+        if module.id == "salud":
+            if profile.experience_points >= module.xp_required:
+                can_unlock = True
+            else:
+                error_msg = f"Necesitas al menos {module.xp_required} XP para desbloquear Salud."
+        elif module.id == "personalidad":
+            # XP y misión global
+            has_xp = profile.experience_points >= 200
+            try:
+                from .models import Mission, MissionProgress
+                mission = Mission.objects.get(id="46e39fc7-8a77-4e39-9559-283a73655d12")
+                mp = MissionProgress.objects.filter(user=user, mission=mission, state="completed").exists()
+            except Exception:
+                mp = False
+            if has_xp and mp:
+                can_unlock = True
+            elif not has_xp:
+                error_msg = "Necesitas al menos 200 XP para desbloquear Personalidad."
+            elif not mp:
+                error_msg = "Debes completar la misión global de racha de 1 día para desbloquear Personalidad."
+        else:
+            # Otros módulos: solo XP
+            if profile.experience_points >= module.xp_required:
+                can_unlock = True
+            else:
+                error_msg = f"Necesitas al menos {module.xp_required} XP para desbloquear este módulo."
+
+        if not can_unlock:
             return Response(
-                {"error": "Insufficient XP to unlock this module"},
+                {"error": error_msg or "No cumples los requisitos para desbloquear este módulo."},
                 status=status.HTTP_403_FORBIDDEN
             )
+
         progress, created = ModuleProgress.objects.get_or_create(
             user=user,
             module=module
@@ -167,6 +231,8 @@ class ProgressOverviewView(APIView):
     serializer_class = ProgressOverviewSerializer
     def get(self, request):
         user = request.user
+        # --- Sincroniza desbloqueo de módulos antes de devolver el progreso ---
+        sync_module_unlocks(user)
         profile = user.profile
         modules_unlocked = ModuleProgress.objects.filter(
             user=user,
@@ -215,6 +281,8 @@ class ModuleProgressView(APIView):
     def get(self, request, module_id):
         module = get_object_or_404(Module, id=module_id)
         user = request.user
+        # --- Sincroniza desbloqueo de módulos antes de devolver el progreso de uno ---
+        sync_module_unlocks(user)
         progress, _ = ModuleProgress.objects.get_or_create(
             user=user,
             module=module
@@ -292,3 +360,80 @@ class DeclarationViewSet(viewsets.ModelViewSet):
             profile.experience_points += xp
             profile.calculate_level()
             profile.save()
+        # Actualizar streak diario al crear declaración
+        streak, _ = Streak.objects.get_or_create(user=user, module=module)
+        streak.update_streak()
+
+# --- Global Missions APIView ---
+class GlobalMissionListView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        from .models import Mission, MissionProgress, Declaration, ModuleProgress
+        from datetime import timedelta
+
+        global_missions = Mission.objects.filter(module__isnull=True)
+        result = []
+        now = timezone.now()
+        today = now.date()
+        week_start = today - timedelta(days=today.weekday())  # lunes
+        week_end = week_start + timedelta(days=6)
+
+        # Precalcular datos de usuario
+        declarations_today = Declaration.objects.filter(user=user, created_at__date=today).count()
+        declarations_this_week = Declaration.objects.filter(user=user, created_at__date__gte=week_start, created_at__date__lte=week_end)
+        days_with_declaration = declarations_this_week.values_list('created_at__date', flat=True).distinct()
+        modules_unlocked_this_week = ModuleProgress.objects.filter(
+            user=user,
+            state='unlocked',
+            last_activity__date__gte=week_start,
+            last_activity__date__lte=week_end
+        ).count()
+
+        for mission in global_missions:
+            mp = MissionProgress.objects.filter(user=user, mission=mission).first()
+            state = mp.state if mp else "active"
+            progress = None
+            frequency = getattr(mission, "frequency", None)
+            # Progreso personalizado para misiones diarias/semanales
+            if hasattr(mission, "frequency"):
+                frequency = mission.frequency
+            elif hasattr(mission, "fields") and "frequency" in mission.fields:
+                frequency = mission.fields["frequency"]
+            # Daily
+            if frequency == "daily":
+                progress = {
+                    "current": declarations_today,
+                    "target": 1,
+                    "label": f"{declarations_today}/1 declaraciones hoy"
+                }
+                if declarations_today >= 1:
+                    state = "completed"
+            # Weekly streak
+            elif frequency == "weekly" and "racha" in mission.title.lower():
+                progress = {
+                    "current": len(days_with_declaration),
+                    "target": 5,
+                    "label": f"{len(days_with_declaration)}/5 días con declaración esta semana"
+                }
+                if len(days_with_declaration) >= 5:
+                    state = "completed"
+            # Weekly unlock
+            elif frequency == "weekly" and "desbloquea" in mission.title.lower():
+                progress = {
+                    "current": modules_unlocked_this_week,
+                    "target": 1,
+                    "label": f"{modules_unlocked_this_week}/1 módulos desbloqueados esta semana"
+                }
+                if modules_unlocked_this_week >= 1:
+                    state = "completed"
+            result.append({
+                "id": str(mission.id),
+                "title": mission.title,
+                "description": mission.description,
+                "xp_reward": mission.xp_reward,
+                "state": state,
+                "frequency": frequency,
+                "progress": progress,
+            })
+        return Response(result)
