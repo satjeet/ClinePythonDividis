@@ -22,6 +22,7 @@ We are currently focusing on:
 - Added new protected routes for constellation views with authentication.
 - Updated docker-compose version and documented technical decisions in README.md.
 - **EXPERIENCE SYSTEM REAL:** El sistema de experiencia y nivel ahora refleja el progreso real del usuario, no es mock. Declaraciones solo otorgan XP la primera vez por pilar/módulo, con XP incremental por constelación. Salud siempre aparece desbloqueada en el dashboard/menu. El streak diario se actualiza correctamente al realizar actividades.
+- **INTEGRACIÓN SERPIENTE DE HÁBITOS EN SALUD:** Se implementaron los componentes HabitSnake, HabitList, GrowthRoom, IncubationRoom, RankStars, AttackButton, stores/habitStore.ts y wallStore.ts. La visualización tipo serpiente motiva la constancia y hace tangible el progreso. El streak diario y los logros visuales aumentan la retención. Separar la lógica de hábitos en Pinia stores facilita la escalabilidad y testeo. La integración con misiones y XP refuerza la gamificación.
 
 ## Separation: Module Unlock vs. Constellation Access
 
@@ -29,6 +30,15 @@ We are currently focusing on:
 - **Acceso a constelaciones:** Lógica visual separada en frontend. La constelación de salud siempre aparece activa, independiente del estado del módulo. Otras constelaciones pueden seguir reglas visuales distintas.
 
 Esta separación permite evolucionar los requisitos de desbloqueo de módulos sin afectar la navegación ni la experiencia visual de las constelaciones.
+
+## Aprendizajes y Desafíos de la Serpiente de Hábitos
+
+- El feedback visual inmediato (serpiente y estrellas) es clave para la motivación.
+- El streak diario requiere validaciones robustas para evitar inconsistencias.
+- Separar lógica de hábitos en stores centralizados permite escalar y testear fácilmente.
+- Las animaciones GSAP mejoran el engagement pero requieren optimización en móviles.
+- UX: Se debe informar claramente cuando un hábito falla o se rompe el streak.
+- La integración con el sistema de misiones y XP refuerza la gamificación y el sentido de progreso.
 
 ## Active Decisions
 

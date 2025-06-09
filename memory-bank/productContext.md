@@ -88,7 +88,10 @@ Cada área vital se desbloquea al alcanzar ciertos hitos, y al hacerlo, el usuar
 1. **Salud (Serpiente de Hábitos)**
    - Seguimiento visual de hábitos
    - Marcadores de racha diaria
-   - Visualización de progreso
+   - Visualización de progreso tipo serpiente (HabitSnake) y logros (RankStars)
+   - Feedback visual inmediato que motiva la constancia y refuerza el sentido de avance
+   - Separación de lógica en stores centralizados para escalabilidad y testeo
+   - Integración con misiones y XP para gamificación real
    - *Desbloqueable*: Tras completar el onboarding y primer objetivo de salud
 
 2. **Personalidad (Diálogos Socráticos)**

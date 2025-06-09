@@ -103,10 +103,10 @@
 
 ### Phase 4: Module System
 1. **Salud (Serpiente de Hábitos)** - PRIORITY
-   - [ ] Habit tracking interface
-   - [ ] Visual progress snake
-   - [ ] Streak system
-   - [ ] Initial motivation mission
+   - [x] Habit tracking interface
+   - [x] Visual progress snake
+   - [x] Streak system
+   - [x] Initial motivation mission
 
 2. **Personalidad (Diálogos Socráticos)** - LOCKED
    - [ ] Basic structure (locked state)
@@ -147,6 +147,14 @@
    - [ ] Basic component structure
    - [ ] Route configuration
    - [ ] State management
+
+## Aprendizajes de la integración de la Serpiente de Hábitos
+
+- El feedback visual inmediato (serpiente y estrellas) es clave para la motivación y retención.
+- Separar la lógica de hábitos en stores centralizados facilita la escalabilidad y el testeo.
+- El streak diario requiere validaciones robustas para evitar inconsistencias y frustración.
+- La integración con misiones y XP refuerza la gamificación y el sentido de progreso.
+- Es necesario optimizar las animaciones para móviles y mejorar la UX cuando se rompe el streak.
 
 ## Known Issues
 - Ensure smooth mobile animations
@@ -212,6 +220,10 @@
    - [x] Se corrigieron los colores y estilos para que coincidan con el resto del dashboard
    - [x] Se refactorizó el componente para cumplir con los principios SOLID (script y estilo en archivos separados)
 4. Integrar misiones iniciales y sistema de progreso en tiempo real
+5. [x] Implementar interfaz de hábitos, visualización serpiente, sistema de streak y su integración con misiones/XP en el módulo Salud
+6. [ ] Mejorar accesibilidad y feedback visual ante streak roto o hábitos fallidos
+7. [ ] Optimizar animaciones y performance en móviles
+8. [ ] Recoger feedback de usuarios sobre la experiencia de hábitos
 
 ### Short Term
 1. Pruebas de accesibilidad y responsividad en landing y autenticación

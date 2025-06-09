@@ -145,6 +145,7 @@ if (user.xp >= module.xp_required && user.has_completed_missions(module)) {
 - **API Service Layer**: Centralized API communication
 - **Unlocking System**: Progressive module access based on achievements
 - **Mission System**: Guided user progression through tasks
+- **Habit Snake Integration**: Lógica de hábitos desacoplada en stores (habitStore.ts, wallStore.ts) y componentes visuales (HabitSnake, GrowthRoom, RankStars, etc.), comunicados vía eventos y Pinia. El store centraliza el estado y lógica de hábitos, mientras los componentes visualizan el progreso, streak y logros. Animaciones GSAP para feedback inmediato y motivación.
 - **Declarations Management**: Declaraciones gestionadas con DeclarationInput y DeclarationList, sincronizadas con backend.
 - **Constellations Navigation**: ConstellationsMap, ConstellationNavBar, UnlockedTools, PillarTabs y ConstellationView para navegación y experiencia de usuario.
 - **Protected Constellation Routes**: Nuevas rutas protegidas para vistas de constelaciones.
