@@ -23,7 +23,8 @@ from .serializers import (
     ModuleSerializer, ModuleProgressSerializer, MissionSerializer,
     MissionProgressSerializer, AchievementSerializer, UserAchievementSerializer,
     StreakSerializer, UserProfileDetailSerializer, ProgressOverviewSerializer,
-    DeclarationSerializer, UnlockedPillarSerializer
+    DeclarationSerializer, UnlockedPillarSerializer,
+    HabitSerializer, ComfortWallSerializer
 )
 
 def sync_module_unlocks(user):
@@ -321,6 +322,28 @@ class UnlockedPillarViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        hp_actual = request.data.get('hp_actual')
+        updated = False
+        if hp_actual is not None:
+            try:
+                hp_actual = int(hp_actual)
+            except Exception:
+                pass
+            if hp_actual <= 0:
+                # Subir de nivel el muro
+                instance.nivel_muro += 1
+                instance.hp_max += 100
+                instance.hp_actual = instance.hp_max
+                updated = True
+        if not updated:
+            return super().partial_update(request, *args, **kwargs)
+        instance.fecha_ultimo_ataque = request.data.get('fecha_ultimo_ataque', instance.fecha_ultimo_ataque)
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
 # --- Declaraciones ---
 @extend_schema(tags=['declarations'])
 class DeclarationViewSet(viewsets.ModelViewSet):
@@ -363,6 +386,62 @@ class DeclarationViewSet(viewsets.ModelViewSet):
         # Actualizar streak diario al crear declaración
         streak, _ = Streak.objects.get_or_create(user=user, module=module)
         streak.update_streak()
+
+# --- Hábitos (serpiente) ---
+@extend_schema(tags=['habits'])
+class HabitViewSet(viewsets.ModelViewSet):
+    """ViewSet for user habits (serpientes)."""
+    serializer_class = HabitSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = __import__('api.models').models.Habit.objects.all()
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+# --- Muro de confort (zona de confort) ---
+@extend_schema(tags=['comfortwall'])
+class ComfortWallViewSet(viewsets.ModelViewSet):
+    """ViewSet for user's comfort wall (zona de confort)."""
+    serializer_class = ComfortWallSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = __import__('api.models').models.ComfortWall.objects.all()
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        hp_actual = request.data.get('hp_actual')
+        updated = False
+        if hp_actual is not None:
+            try:
+                hp_actual = int(hp_actual)
+            except Exception:
+                pass
+            if hp_actual <= 0:
+                # Subir de nivel el muro
+                instance.nivel_muro += 1
+                instance.hp_max += 100
+                instance.hp_actual = instance.hp_max
+                updated = True
+        if not updated:
+            return super().partial_update(request, *args, **kwargs)
+        instance.fecha_ultimo_ataque = request.data.get('fecha_ultimo_ataque', instance.fecha_ultimo_ataque)
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+# --- Achievements (logros) ---
+class AchievementViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Achievement.objects.all()
+    serializer_class = AchievementSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 # --- Global Missions APIView ---
 class GlobalMissionListView(APIView):

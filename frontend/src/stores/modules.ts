@@ -176,7 +176,7 @@ export const useModulesStore = defineStore('modules', () => {
       // Mapear a estructura local
       declarations.value = response.data.map((d: any) => ({
         id: d.id,
-        module: typeof d.module === 'string' ? d.module : d.module.id,
+        module: typeof d.module === 'string' ? d.module : (d.module?.id || ''),
         pillar: d.pillar,
         text: d.text,
         synced: true
@@ -191,8 +191,16 @@ export const useModulesStore = defineStore('modules', () => {
 
   // Declaraciones: agregar localmente (sincronizar después)
   function addDeclaration(pillar: string, declaration: string, moduleId?: string) {
+    // Buscar el id real del módulo
+    let modId = moduleId
+    if (!modId || typeof modId !== 'string') {
+      modId = currentModule.value?.id || ''
+    }
+    if (typeof modId !== 'string' || !modId) {
+      throw new Error('No se pudo determinar el módulo para la declaración')
+    }
     declarations.value.push({
-      module: moduleId || (currentModule.value?.id ?? ''),
+      module: modId,
       pillar,
       text: declaration,
       synced: false
@@ -207,8 +215,11 @@ export const useModulesStore = defineStore('modules', () => {
       const unsynced = declarations.value.filter(d => !d.synced)
       for (const d of unsynced) {
         try {
+          // Asegurar que module sea string id
+          const moduleId = typeof d.module === 'string' ? d.module : (d.module as any)?.id || ''
+          if (!moduleId) throw new Error('Declaración sin módulo válido')
           const response = await declarationApi.create({
-            module: d.module,
+            module: moduleId,
             pillar: d.pillar,
             text: d.text
           })
@@ -223,9 +234,16 @@ export const useModulesStore = defineStore('modules', () => {
               continue
             }
           }
-          // Otro error: mostrar mensaje
-          error.value = err.response?.data?.detail || 'Error al guardar declaraciones'
-          throw error.value
+          // Otro error: mostrar mensaje real del backend
+          if (err.response && err.response.data) {
+            error.value = JSON.stringify(err.response.data)
+            // eslint-disable-next-line no-console
+            console.error('Error declaración:', err.response.data)
+            throw error.value
+          } else {
+            error.value = err.response?.data?.detail || 'Error al guardar declaraciones'
+            throw error.value
+          }
         }
       }
       // Refrescar módulos y declaraciones tras sincronizar (para reflejar desbloqueos)

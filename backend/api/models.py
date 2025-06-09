@@ -202,6 +202,38 @@ class UnlockedPillar(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.module.name} - {self.pillar}"
 
+class Habit(models.Model):
+    DIFFICULTY_CHOICES = [
+        ('fácil', 'Fácil'),
+        ('media', 'Media'),
+        ('difícil', 'Difícil'),
+    ]
+    STATE_CHOICES = [
+        ('activo', 'Activo'),
+        ('incubando', 'Incubando'),
+        ('inactivo', 'Inactivo'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=64)
+    dificultad = models.CharField(max_length=16, choices=DIFFICULTY_CHOICES)
+    horario_sugerido = models.TimeField(null=True, blank=True)
+    fecha_creacion = models.DateField(auto_now_add=True)
+    dias_activos = models.PositiveIntegerField(default=0)
+    estrellas = models.DecimalField(max_digits=2, decimal_places=1, default=0)
+    nivel = models.PositiveIntegerField(default=1)
+    estado = models.CharField(max_length=16, choices=STATE_CHOICES, default='incubando')
+    def __str__(self):
+        return f"{self.nombre} ({self.user.username})"
+
+class ComfortWall(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    hp_actual = models.PositiveIntegerField(default=100)
+    hp_max = models.PositiveIntegerField(default=100)
+    nivel_muro = models.PositiveIntegerField(default=1)
+    fecha_ultimo_ataque = models.DateField(null=True, blank=True)
+    def __str__(self):
+        return f"Muro de {self.user.username} (Nivel {self.nivel_muro})"
+
 # --- DESBLOQUEO SECUENCIAL DE CONSTELACIONES ---
 from django.db.models.signals import post_save
 from django.dispatch import receiver

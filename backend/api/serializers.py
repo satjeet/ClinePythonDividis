@@ -161,3 +161,24 @@ class UnlockedPillarSerializer(serializers.ModelSerializer):
         model = UnlockedPillar
         fields = ('id', 'user', 'module', 'pillar', 'unlocked_at')
         read_only_fields = ('id', 'user', 'unlocked_at')
+
+class HabitSerializer(serializers.ModelSerializer):
+    """Serializer for Habit (serpiente/hábito)."""
+    user = UserSerializer(read_only=True)
+    class Meta:
+        model = __import__('api.models').models.Habit
+        fields = (
+            'id', 'user', 'nombre', 'dificultad', 'horario_sugerido',
+            'fecha_creacion', 'dias_activos', 'estrellas', 'nivel', 'estado'
+        )
+        read_only_fields = ('id', 'user', 'fecha_creacion', 'dias_activos', 'estrellas', 'nivel', 'estado')
+
+class ComfortWallSerializer(serializers.ModelSerializer):
+    """Serializer for ComfortWall (zona de confort/muro)."""
+    user = UserSerializer(read_only=True)
+    class Meta:
+        model = __import__('api.models').models.ComfortWall
+        fields = (
+            'id', 'user', 'hp_actual', 'hp_max', 'nivel_muro', 'fecha_ultimo_ataque'
+        )
+        read_only_fields = ('id', 'user', 'nivel_muro', 'fecha_ultimo_ataque')

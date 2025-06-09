@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useModulesStore } from '@/stores/modules';
 
 const props = defineProps({
@@ -36,6 +36,12 @@ const props = defineProps({
   selectedPillar: {
     type: String,
     required: true
+  },
+  // Nuevo: lista de módulos disponibles (con id y name)
+  modulesList: {
+    type: Array as () => { id: string, name: string }[],
+    required: false,
+    default: () => []
   }
 });
 
@@ -46,7 +52,6 @@ const localSelectedPillar = ref(props.selectedPillar);
 const declarationText = ref('');
 
 // Sincronizar localSelectedPillar con el prop
-import { watch } from 'vue';
 watch(
   () => props.selectedPillar,
   (val) => {
@@ -70,9 +75,22 @@ function pillarLabel(pillar: string) {
   }
 }
 
+// Obtener el ID real del módulo (por si llega el nombre)
+const moduleIdToUse = computed(() => {
+  // Si el id ya es el formato correcto, úsalo
+  if (props.moduleId && !props.moduleId.includes(' ')) return props.moduleId;
+  // Si hay lista de módulos, buscar por nombre
+  if (props.modulesList && props.modulesList.length > 0) {
+    const found = props.modulesList.find(m => m.name === props.moduleId);
+    if (found) return found.id;
+  }
+  // Fallback: reemplazar espacios por guiones y minúsculas
+  return props.moduleId.replace(/\s+/g, '-').toLowerCase();
+});
+
 const addDeclaration = async () => {
   if (declarationText.value && localSelectedPillar.value) {
-    modulesStore.addDeclaration(localSelectedPillar.value, declarationText.value, props.moduleId);
+    modulesStore.addDeclaration(localSelectedPillar.value, declarationText.value, moduleIdToUse.value);
     await modulesStore.syncDeclarations();
     emit('declaration-added', { pillar: localSelectedPillar.value, text: declarationText.value });
     declarationText.value = '';

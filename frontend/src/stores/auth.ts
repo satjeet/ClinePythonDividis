@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
   const error = ref<string | null>(null)
 
   // Getters
-  const isAuthenticated = computed(() => !!token.value)
+  const isAuthenticated = computed(() => !!token.value && !!user.value)
   const userProfile = computed(() => user.value)
   const userLevel = computed(() => user.value?.profile?.current_level || 1)
   const userXP = computed(() => user.value?.profile?.experience_points || 0)
@@ -35,6 +35,7 @@ export const useAuthStore = defineStore('auth', () => {
     } catch (err: any) {
       error.value = err.response?.data?.detail || 'Error de autenticación'
       token.value = null
+      user.value = null
       localStorage.removeItem('token')
     } finally {
       loading.value = false
@@ -63,12 +64,15 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function fetchUserProfile() {
-    if (!token.value) return
-    
+    if (!token.value) {
+      user.value = null
+      return
+    }
     try {
       const response = await authApi.getProfile()
       user.value = response.data
     } catch (err) {
+      user.value = null
       logout()
     }
   }

@@ -19,6 +19,7 @@ export function useConstellationsAreas() {
 
   const areas = computed(() =>
     modulesStore.modules.map(mod => ({
+      id: mod.id, // <-- AÑADIDO: id real para navegación
       name: mod.name,
       icon: iconMap[mod.id] || 'fas fa-star',
       active: mod.id === 'salud' ? true : (mod.state === 'unlocked' || mod.state === 'completed')

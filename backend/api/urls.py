@@ -13,6 +13,9 @@ router.register(r'modules', views.ModuleViewSet)
 router.register(r'missions', views.MissionViewSet)
 router.register(r'declarations', views.DeclarationViewSet)
 router.register(r'unlocked-pillars', views.UnlockedPillarViewSet)
+router.register(r'habits', views.HabitViewSet)
+router.register(r'comfortwall', views.ComfortWallViewSet)
+router.register(r'achievements', views.AchievementViewSet)  # <-- NUEVO
 
 # Rutas personalizadas primero para evitar conflictos con el router DRF
 urlpatterns = [

@@ -39,62 +39,67 @@
       </div>
 
       <template v-else-if="module">
-        <!-- Module progress -->
-        <div class="cosmic-bg rounded-lg p-6 mb-8">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-medium text-cosmic-100">Progreso del módulo</h2>
-            <div class="text-sm text-slate-400">
-              {{ completedMissions.length }}/{{ availableMissions.length }} misiones completadas
+        <!-- Si es el módulo de salud, mostrar la experiencia gamificada -->
+        <SaludMain v-if="module.id === 'salud'" />
+        <!-- Si no, mostrar el layout de misiones por defecto -->
+        <template v-else>
+          <!-- Module progress -->
+          <div class="cosmic-bg rounded-lg p-6 mb-8">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-medium text-cosmic-100">Progreso del módulo</h2>
+              <div class="text-sm text-slate-400">
+                {{ completedMissions.length }}/{{ availableMissions.length }} misiones completadas
+              </div>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="w-full bg-slate-800 rounded-full h-2">
+              <div 
+                class="bg-cosmic-500 h-2 rounded-full transition-all duration-500"
+                :style="{
+                  width: `${(completedMissions.length / availableMissions.length) * 100}%`
+                }">
+              </div>
             </div>
           </div>
 
-          <!-- Progress bar -->
-          <div class="w-full bg-slate-800 rounded-full h-2">
-            <div 
-              class="bg-cosmic-500 h-2 rounded-full transition-all duration-500"
-              :style="{
-                width: `${(completedMissions.length / availableMissions.length) * 100}%`
-              }">
+          <!-- Available missions -->
+          <section>
+            <h2 class="text-2xl font-bold text-cosmic-100 mb-6">
+              Misiones disponibles
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <MissionCard
+                v-for="mission in availableMissions"
+                :key="mission.id"
+                :mission="mission"
+                :userLevel="authStore.userLevel"
+                :loading="completingMission === mission.id"
+                @complete="handleCompleteMission"
+                @retry="handleRetryMission"
+              />
             </div>
-          </div>
-        </div>
+          </section>
 
-        <!-- Available missions -->
-        <section>
-          <h2 class="text-2xl font-bold text-cosmic-100 mb-6">
-            Misiones disponibles
-          </h2>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <MissionCard
-              v-for="mission in availableMissions"
-              :key="mission.id"
-              :mission="mission"
-              :userLevel="authStore.userLevel"
-              :loading="completingMission === mission.id"
-              @complete="handleCompleteMission"
-              @retry="handleRetryMission"
-            />
+          <!-- Module completion message -->
+          <div 
+            v-if="isModuleCompleted"
+            class="mt-12 cosmic-bg rounded-lg p-8 text-center animate-cosmic-float">
+            <div class="w-16 h-16 mx-auto mb-4 text-cosmic-400">
+              <i class="fas fa-trophy text-4xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-cosmic-100 mb-2">
+              ¡Módulo completado!
+            </h3>
+            <p class="text-slate-400 mb-6">
+              Has completado todas las misiones de este módulo. ¡Sigue así!
+            </p>
+            <Button @click="router.push('/dashboard')">
+              Volver al Dashboard
+            </Button>
           </div>
-        </section>
-
-        <!-- Module completion message -->
-        <div 
-          v-if="isModuleCompleted"
-          class="mt-12 cosmic-bg rounded-lg p-8 text-center animate-cosmic-float">
-          <div class="w-16 h-16 mx-auto mb-4 text-cosmic-400">
-            <i class="fas fa-trophy text-4xl"></i>
-          </div>
-          <h3 class="text-2xl font-bold text-cosmic-100 mb-2">
-            ¡Módulo completado!
-          </h3>
-          <p class="text-slate-400 mb-6">
-            Has completado todas las misiones de este módulo. ¡Sigue así!
-          </p>
-          <Button @click="router.push('/dashboard')">
-            Volver al Dashboard
-          </Button>
-        </div>
+        </template>
       </template>
 
       <!-- Error state -->
@@ -119,6 +124,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useModulesStore } from '@/stores/modules'
 import Button from '@/components/ui/Button.vue'
 import MissionCard from '@/components/missions/MissionCard.vue'
+import SaludMain from '@/components/modules/salud/SaludMain.vue'
 
 const route = useRoute()
 const router = useRouter()

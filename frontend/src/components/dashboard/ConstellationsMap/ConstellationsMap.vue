@@ -6,7 +6,8 @@
       <div class="flex flex-wrap gap-4 justify-center">
         <div v-for="area in areas" :key="area.name" class="flex flex-col items-center">
           <template v-if="area.active">
-            <router-link :to="{ name: 'constellation', params: { area: area.name } }"
+            <router-link
+              :to="{ name: 'constellation', params: { area: area.id } }"
               :class="[
                 'w-14 h-14 flex items-center justify-center rounded-full border-4 text-2xl mb-1 cursor-pointer',
                 area.active

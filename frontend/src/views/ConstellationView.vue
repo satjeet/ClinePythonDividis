@@ -1,13 +1,13 @@
 <template>
   <div class="min-h-screen bg-slate-950">
-    <AppNavbar sectionTitle="Constelaciรณn" />
+    <AppNavbar sectionTitle="Constelación" />
     <ConstellationNavBar />
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="bg-cosmic-900 rounded-lg shadow p-4 mb-8">
         <h1 class="text-cosmic-300 font-bold text-2xl mb-2">
           <i class="fas fa-star"></i> {{ constellationName }}
         </h1>
-        <p class="text-slate-400">Explora y define tu camino en esta รกrea vital.</p>
+        <p class="text-slate-400">Explora y define tu camino en esta área vital.</p>
       </div>
 
       <div class="bg-cosmic-900 rounded-lg shadow p-4">
@@ -15,6 +15,7 @@
           :unlockedPillars="unlockedPillars"
           :module-id="moduleId"
           :selectedPillar="selectedPillar"
+          :modules-list="modulesList"
           @update:selectedPillar="selectedPillar = $event"
           @declaration-added="handleDeclarationAdded"
         />
@@ -61,16 +62,20 @@ const moduleId = computed(() => {
   return area ? area.toLowerCase() : '';
 });
 
+const modulesList = computed(() =>
+  moduleStore.modules.map(m => ({ id: m.id, name: m.name }))
+);
+
 const constellationName = computed(() => {
-  // Busca el nombre del mรณdulo por id
+  // Busca el nombre del módulo por id
   const mod = moduleStore.modules.find(m => m.id === moduleId.value);
   return mod ? mod.name : moduleId.value;
 });
 
 // Pilar backend, para evitar "Purpose"
 const allPillars = [
-  { backend: 'Vision', label: 'Visiรณn' },
-  { backend: 'Proposito', label: 'Propรณsito' },
+  { backend: 'Vision', label: 'Visión' },
+  { backend: 'Proposito', label: 'Propósito' },
   { backend: 'Creencias', label: 'Creencias' },
   { backend: 'Estrategias', label: 'Estrategias' }
 ];
@@ -103,7 +108,7 @@ watch([moduleId, unlockedPillars], () => {
 
 const handleDeclarationAdded = async (declaration: { pillar: string; text: string }) => {
   selectedPillar.value = declaration.pillar;
-  // Desbloquear el siguiente pilar si existe y no estรก desbloqueado aรบn
+  // Desbloquear el siguiente pilar si existe y no está desbloqueado aún
   const currentIndex = allPillars.findIndex(p => p.backend === declaration.pillar);
   if (currentIndex !== -1 && currentIndex < allPillars.length - 1) {
     const nextPillar = allPillars[currentIndex + 1].backend;
@@ -111,7 +116,7 @@ const handleDeclarationAdded = async (declaration: { pillar: string; text: strin
       unlockedPillarsRaw.value.push(nextPillar);
       // Guardar desbloqueo en backend
       if (moduleId.value) {
-        // LOG para depuraciรณn
+        // LOG para depuración
         console.log('[DEBUG] Enviando a unlockedPillarApi.create:', { module: moduleId.value, pillar: nextPillar });
         try {
           await unlockedPillarApi.create({ module: moduleId.value, pillar: nextPillar });
@@ -125,7 +130,7 @@ const handleDeclarationAdded = async (declaration: { pillar: string; text: strin
 
 // Cargar declaraciones y pilares desbloqueados al montar la vista
 const loadData = async () => {
-  // Si los mรณdulos no estรกn listos, espera a que se carguen
+  // Si los módulos no están listos, espera a que se carguen
   if (!moduleStore.modules.length) {
     await moduleStore.fetchModules();
   }
@@ -150,7 +155,7 @@ onMounted(loadData);
 watch(
   () => route.params.area,
   (newVal, oldVal) => {
-    console.log('Cambiando de constelaciรณn:', oldVal, '->', newVal);
+    console.log('Cambiando de constelación:', oldVal, '->', newVal);
     loadData();
   }
 );

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import type { User, Module, Mission, ModuleProgress, MissionProgress } from '@/types'
+import router from '@/router'
 
 // Create axios instance
 const api = axios.create({
@@ -17,6 +18,19 @@ api.interceptors.request.use((config) => {
   }
   return config
 })
+
+// Global 401 handler: redirect to login if unauthorized
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem('token')
+      // Optional: clear other auth data if needed
+      router.push({ name: 'login', query: { redirect: router.currentRoute.value.fullPath } })
+    }
+    return Promise.reject(error)
+  }
+)
 
 // Auth endpoints
 export const authApi = {
