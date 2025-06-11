@@ -79,25 +79,28 @@ const selectedTheme = ref(currentTheme.value);
 const router = useRouter();
 
 const getEmail = () => {
-  if (authStore.userProfile?.value?.email) return authStore.userProfile.value.email;
-  if (authStore.userProfile?.email) return authStore.userProfile.email;
-  if (authStore.user?.email) return authStore.user.email;
-  if (authStore.user?.value?.email) return authStore.user.value.email;
-  return '';
+  return authStore.user?.email || '';
 };
 
 const fetchProfile = async () => {
   loading.value = true;
   try {
     await authStore.fetchUserProfile();
-    console.log('Perfil recibido:', JSON.stringify(authStore.userProfile.value, null, 2));
-    if (authStore.userProfile.value) {
-      console.log('userProfile.value:', authStore.userProfile.value);
-      firstName.value = authStore.userProfile.value.user?.first_name || '';
-      lastName.value = authStore.userProfile.value.user?.last_name || '';
-      email.value = authStore.userProfile.value.user?.email || getEmail();
+    console.log('Perfil recibido:', JSON.stringify(authStore.user, null, 2));
+    if (authStore.user) {
+      console.log('user:', authStore.user);
+      // Si la respuesta tiene un campo "user", usar ese objeto para email y username
+      if (authStore.user.user) {
+        email.value = authStore.user.user.email || '';
+        firstName.value = authStore.user.first_name || '';
+        lastName.value = authStore.user.last_name || '';
+      } else {
+        firstName.value = authStore.user.first_name || '';
+        lastName.value = authStore.user.last_name || '';
+        email.value = authStore.user.email || getEmail();
+      }
     } else {
-      console.warn('userProfile.value es undefined');
+      console.warn('user es undefined');
       email.value = getEmail();
     }
     selectedTheme.value = currentTheme.value;
@@ -116,22 +119,24 @@ onMounted(() => {
   fetchProfile();
 });
 
-const handleSubmit = async () => {
+const handleSubmit = async (e) => {
+  e?.preventDefault?.();
   loading.value = true;
   error.value = null;
   success.value = '';
+  console.log('1. Submit iniciado');
 
   try {
     const data = {
-      first_name: firstName.value,
-      last_name: lastName.value,
       email: email.value,
+      first_name: firstName.value,
+      last_name: lastName.value
     };
     console.log('Payload enviado al guardar:', data);
 
-    if (authStore.userProfile.value && authStore.updateProfile) {
-      const resp = await authStore.updateProfile(data);
-      console.log('Respuesta backend tras guardar:', resp);
+    if (authStore.isAuthenticated && authStore.updateProfile) {
+      console.log("2. Llamando a authStore.updateProfile");
+      await authStore.updateProfile(data);
       await fetchProfile();
       success.value = '¡Perfil guardado exitosamente!';
     } else {

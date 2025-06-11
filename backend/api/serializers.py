@@ -111,9 +111,41 @@ class StreakSerializer(serializers.ModelSerializer):
         fields = ('module', 'current_streak', 'longest_streak', 'last_activity')
         read_only_fields = ('last_activity',)
 
+# NUEVO SERIALIZER SOLO PARA UPDATE DE PERFIL
+class UserProfileUpdateSerializer(serializers.ModelSerializer):
+    """Serializer específico para actualizar datos del perfil de usuario."""
+    email = serializers.EmailField(source='user.email')
+    first_name = serializers.CharField(source='user.first_name', required=False, allow_blank=True)
+    last_name = serializers.CharField(source='user.last_name', required=False, allow_blank=True)
+
+    class Meta:
+        model = Profile
+        fields = ['email', 'first_name', 'last_name']
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', {})
+        user = instance.user
+        for attr, value in user_data.items():
+            setattr(user, attr, value)
+        user.save()
+        return instance
+
+    def to_representation(self, instance):
+        return {
+            'email': instance.user.email,
+            'first_name': instance.user.first_name,
+            'last_name': instance.user.last_name
+        }
+
+class UserWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name')
+
 class UserProfileDetailSerializer(serializers.ModelSerializer):
     """Detailed serializer for user profile with related data."""
     user = UserSerializer(read_only=True)
+    user_write = UserWriteSerializer(write_only=True, required=False)
     module_progress = ModuleProgressSerializer(many=True, read_only=True, source='moduleprogress_set')
     achievements = UserAchievementSerializer(many=True, read_only=True, source='userachievement_set')
     streaks = StreakSerializer(many=True, read_only=True, source='streak_set')
@@ -122,7 +154,7 @@ class UserProfileDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = (
-            'user', 'experience_points', 'current_level', 'created_at',
+            'user', 'user_write', 'experience_points', 'current_level', 'created_at',
             'updated_at', 'module_progress', 'achievements', 'streaks',
             'active_missions'
         )
@@ -138,6 +170,15 @@ class UserProfileDetailSerializer(serializers.ModelSerializer):
             state='active'
         ).select_related('mission')
         return MissionProgressSerializer(active_missions, many=True).data
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user_write', None)
+        if user_data:
+            user = instance.user
+            for attr, value in user_data.items():
+                setattr(user, attr, value)
+            user.save()
+        return super().update(instance, validated_data)
 
 class ProgressOverviewSerializer(serializers.Serializer):
     """Serializer for user's overall progress."""

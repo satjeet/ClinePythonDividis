@@ -15,7 +15,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   // Getters
   const isAuthenticated = computed(() => !!token.value && !!user.value)
-  const userProfile = computed(() => user.value)
+  const userProfile = computed(() => {
+    if (!user.value) return null
+    return user.value
+  })
   const userLevel = computed(() => user.value?.profile?.current_level || 1)
   const userXP = computed(() => user.value?.profile?.experience_points || 0)
 
@@ -70,21 +73,57 @@ export const useAuthStore = defineStore('auth', () => {
     }
     try {
       const response = await authApi.getProfile()
-      user.value = response.data
+      // Si la respuesta es solo {email, first_name, last_name}, actualiza solo esos campos
+      if ('email' in response.data && 'first_name' in response.data && 'last_name' in response.data) {
+        user.value = {
+          ...(user.value ?? {}),
+          email: response.data.email,
+          first_name: response.data.first_name,
+          last_name: response.data.last_name,
+          id: user.value?.id ?? 0,
+          username: user.value?.username ?? '',
+          profile: user.value?.profile ?? {
+            experience_points: 0,
+            current_level: 1,
+            created_at: '',
+            updated_at: ''
+          }
+        }
+      } else {
+        user.value = response.data
+      }
     } catch (err) {
       user.value = null
       logout()
     }
   }
 
-  async function updateProfile(data: Partial<User>) {
+  async function updateProfile(data: any) {
     loading.value = true
     error.value = null
     try {
+      console.log('2. Store: updateProfile llamado con:', data)
       const response = await authApi.updateProfile(data)
-      user.value = response.data
+      console.log('4. Respuesta de PATCH:', response)
+      // Actualiza solo los campos de perfil editables
+      user.value = {
+        ...(user.value ?? {}),
+        email: response.data.email,
+        first_name: response.data.first_name,
+        last_name: response.data.last_name,
+        id: user.value?.id ?? 0,
+        username: user.value?.username ?? '',
+        profile: user.value?.profile ?? {
+          experience_points: 0,
+          current_level: 1,
+          created_at: '',
+          updated_at: ''
+        }
+      }
     } catch (err: any) {
-      error.value = err.response?.data?.detail || 'Error al actualizar perfil'
+      console.error('Error en updateProfile:', err);
+      error.value = err.response?.data?.detail || err.message || 'Error al actualizar perfil'
+      throw err;
     } finally {
       loading.value = false
     }

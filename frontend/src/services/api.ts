@@ -48,8 +48,10 @@ export const authApi = {
   getProfile: () => 
     api.get<User>('/auth/me/'),
 
-  updateProfile: (data: Partial<User>) =>
-    api.patch('/auth/me/', data)
+  updateProfile: (data: any) => {
+    console.log('3. API: enviando PATCH a /auth/me/update/ con:', data);
+    return api.patch('/auth/me/update/', data);
+  }
 }
 
 // Module endpoints

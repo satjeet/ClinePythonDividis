@@ -24,7 +24,8 @@ from .serializers import (
     MissionProgressSerializer, AchievementSerializer, UserAchievementSerializer,
     StreakSerializer, UserProfileDetailSerializer, ProgressOverviewSerializer,
     DeclarationSerializer, UnlockedPillarSerializer,
-    HabitSerializer, ComfortWallSerializer
+    HabitSerializer, ComfortWallSerializer,
+    UserProfileUpdateSerializer
 )
 
 def sync_module_unlocks(user):
@@ -82,13 +83,42 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
         print("PATCH /auth/me/ request.data:", request.data)
         profile = self.get_object()
         user = profile.user
-        print("Email antes de guardar:", user.email)
+        updated = False
+
         email = request.data.get('email')
         if email:
             user.email = email
+            updated = True
+        first_name = request.data.get('first_name')
+        if first_name is not None:
+            user.first_name = first_name
+            updated = True
+        last_name = request.data.get('last_name')
+        if last_name is not None:
+            user.last_name = last_name
+            updated = True
+        if updated:
             user.save()
-        print("Email después de guardar:", user.email)
-        return super().partial_update(request, *args, **kwargs)
+            profile = self.get_object()
+            user.refresh_from_db()
+            print("Usuario actualizado:", user.email, user.first_name, user.last_name)
+        else:
+            print("No se actualizaron campos de usuario.")
+
+        # Devuelve el perfil actualizado con los datos del usuario
+        serializer = self.get_serializer(profile)
+        # Para máxima compatibilidad, devuelve la misma estructura que el GET
+        data = serializer.data
+        return Response(data)
+
+# NUEVA VISTA PARA UPDATE DE PERFIL (SOLO EMAIL, NOMBRE, APELLIDO)
+@extend_schema(tags=['users'])
+class UserProfileUpdateView(generics.UpdateAPIView):
+    serializer_class = UserProfileUpdateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user.profile
 
 @extend_schema(tags=['modules'])
 class ModuleViewSet(viewsets.ModelViewSet):

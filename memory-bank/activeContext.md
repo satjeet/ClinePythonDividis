@@ -1,204 +1,89 @@
-# Dividis Active Context
+## Active Development Context
 
-## Current Development Focus
+### Current Focus Areas
 
-### Nota sobre migración FSM
+#### 1. Frontend Development
+- Implementación de la carga y edición del perfil de usuario
+- Manejo de estados globales con Pinia
+- Navegación y rutas protegidas
+- Componentes reactivos para el dashboard
+- Integración con el backend a través de servicios API
 
-La migración de django-fsm a viewflow.fsm no es posible actualmente porque viewflow.fsm no está disponible como paquete estable en PyPI. El proyecto sigue usando django-fsm==3.0.0. Se recomienda revisar periódicamente la documentación oficial para futuras migraciones.
+#### 2. Backend Development
+- Endpoints REST para gestión de perfil y datos de usuario
+- Serializers específicos para diferentes casos de uso
+- Autenticación JWT y manejo de sesiones
+- Sistema de misiones y progreso
 
-### Phase: Constellations & Declarations Management
-We are currently focusing on:
-1. Implementación de la funcionalidad de constelaciones interactivas y gestión de declaraciones.
-2. Refactorización de ConstellationsMap para áreas reactivas y navegación.
-3. Integración de DeclarationInput, DeclarationList, ConstellationNavBar, UnlockedTools, PillarTabs y ConstellationView.
-4. Nuevas rutas protegidas para vistas de constelaciones.
-5. Sincronización de declaraciones y módulos entre frontend y backend vía nuevo API.
+#### 3. Data Management
+- PostgreSQL para almacenamiento persistente
+- Modelos Django para usuarios y progreso
+- Caché y optimización de consultas
 
-## Recent Changes
-- Implemented constellations feature with declarations management and interactive navigation.
-- Refactored ConstellationsMap to use reactive areas and router links.
-- Added DeclarationInput, DeclarationList, ConstellationNavBar, UnlockedTools, PillarTabs, and ConstellationView components.
-- Introduced declaration API and expanded modules store for backend synchronization.
-- Added new protected routes for constellation views with authentication.
-- Updated docker-compose version and documented technical decisions in README.md.
-- **EXPERIENCE SYSTEM REAL:** El sistema de experiencia y nivel ahora refleja el progreso real del usuario, no es mock. Declaraciones solo otorgan XP la primera vez por pilar/módulo, con XP incremental por constelación. Salud siempre aparece desbloqueada en el dashboard/menu. El streak diario se actualiza correctamente al realizar actividades.
-- **INTEGRACIÓN SERPIENTE DE HÁBITOS EN SALUD:** Se implementaron los componentes HabitSnake, HabitList, GrowthRoom, IncubationRoom, RankStars, AttackButton, stores/habitStore.ts y wallStore.ts. La visualización tipo serpiente motiva la constancia y hace tangible el progreso. El streak diario y los logros visuales aumentan la retención. Separar la lógica de hábitos en Pinia stores facilita la escalabilidad y testeo. La integración con misiones y XP refuerza la gamificación.
+### Recent Implementations (2025-06-11)
 
-## Separation: Module Unlock vs. Constellation Access
+#### Edición de Perfil de Usuario
+- Se implementó un endpoint dedicado `/api/auth/me/update/` con serializer específico
+- El frontend ahora permite editar y visualizar email, nombre y apellido
+- Sincronización bidireccional entre frontend y backend
+- Los cambios se reflejan correctamente en Django admin
+- Se mejoró el manejo de datos anidados vs planos en las respuestas del API
 
-- **Desbloqueo de módulos:** Lógica en backend, basada en XP, misiones y otros requisitos futuros. El estado funcional del módulo depende de estos criterios.
-- **Acceso a constelaciones:** Lógica visual separada en frontend. La constelación de salud siempre aparece activa, independiente del estado del módulo. Otras constelaciones pueden seguir reglas visuales distintas.
+#### Nueva Funcionalidad de Usuario
+- Endpoint dedicado para actualización de perfil
+- UserProfileUpdateSerializer para manejo específico
+- Mejora en la UI de edición de perfil
+- Sistema robusto de normalización de datos
+- Compatibilidad con serializers existentes
 
-Esta separación permite evolucionar los requisitos de desbloqueo de módulos sin afectar la navegación ni la experiencia visual de las constelaciones.
+#### Estado del Stack Técnico
+- Frontend (Vue/Pinia): Componentes actualizados ✓
+- Backend (Django/DRF): Endpoints optimizados ✓
+- Base de datos: Persistencia verificada ✓
+- Tests: Validación manual completa ✓
 
-## Aprendizajes y Desafíos de la Serpiente de Hábitos
+#### Aprendizajes Clave
+- Los endpoints de perfil deben mantener consistencia en la estructura de datos
+- El frontend debe ser resiliente a diferentes formatos de respuesta
+- La separación de serializers por caso de uso mejora la mantenibilidad
+- El manejo de estado global requiere normalización de datos consistente
 
-- El feedback visual inmediato (serpiente y estrellas) es clave para la motivación.
-- El streak diario requiere validaciones robustas para evitar inconsistencias.
-- Separar lógica de hábitos en stores centralizados permite escalar y testear fácilmente.
-- Las animaciones GSAP mejoran el engagement pero requieren optimización en móviles.
-- UX: Se debe informar claramente cuando un hábito falla o se rompe el streak.
-- La integración con el sistema de misiones y XP refuerza la gamificación y el sentido de progreso.
+### Next Steps
+1. Validar exhaustivamente el flujo de perfil en diferentes escenarios
+2. Documentar el nuevo endpoint en la API
+3. Considerar implementar validaciones adicionales de correo
+4. Revisar la experiencia móvil del formulario de perfil
 
-## Active Decisions
+### Technical Debt
+- Optimizar consultas al backend para reducir latencia
+- Implementar manejo de errores más detallado
+- Considerar cacheo de datos de perfil
+- Evaluar necesidad de websockets para actualizaciones en tiempo real
 
-### Architecture Decisions
-1. Cosmic UI theme with Tailwind CSS and GSAP animations
-2. Progressive module unlocking system
-3. Mission-based user motivation
-4. Galactic Dashboard as central navigation
-5. Mobile-first responsive design
+### Active Issues
+- None at the moment - recent profile editing implementation working as expected
 
-### Implementation Preferences
-1. User Experience:
-   - Welcoming and intuitive onboarding
-   - Space-themed visual elements
-   - Smooth animations and transitions
-   - Clear progression path
+### Documentation Needed
+- Actualizar API docs con nuevo endpoint de perfil
+- Documentar patrones de manejo de datos anidados
+- Guía de mejores prácticas para actualización de perfil
 
-2. Development Workflow:
-   - Component-driven development
-   - Mobile-first approach
-   - Progressive enhancement
-   - Performance optimization
+### Estado de Módulos en Desarrollo
 
-3. Testing Strategy:
-   - End-to-end onboarding flow tests
-   - Module unlocking system tests
-   - Responsive design tests
-   - Animation performance tests
+#### Módulo Salud
+- Sistema de hábitos funcional y en uso
+- Integración con serpiente visual completada
+- Sistema de rachas funcionando correctamente
+- Pendiente: optimizaciones de rendimiento
 
-## Next Steps
+#### Sistema de Constelaciones
+- Navegación entre módulos implementada
+- Estado de desbloqueo sincronizado con backend
+- Visualización de progreso funcionando
+- Próximo: mejoras en las transiciones visuales
 
-### Immediate Tasks
-1. Landing Page Development:
-   - Design welcoming cosmic interface
-   - Implement login/register flow
-   - Create engaging animations
-   - Optimize for mobile devices
-
-2. Galactic Dashboard:
-   - Build constellation map interface
-   - Implement Salud module stub
-   - Create initial mission system
-   - Design progress visualization
-
-3. Implement user authentication flow
-4. Implement initial mission system
-5. Migrar VitalRadarChart a ECharts
-   - Se corrigieron los colores y estilos para que coincidan con el resto del dashboard
-   - Se refactorizó el componente para cumplir con los principios SOLID (script y estilo en archivos separados)
-
-4. Setup Docker environment:
-   - Dockerfiles for backend y frontend creados
-   - docker-compose.yml configurado para desarrollo local
-   - Probada la construcción y levantamiento de servicios con Docker
-
-5. Configure deployment:
-   - Create fly.toml files
-   - Set up environment variables
-   - Configure domains
-
-### Pending Decisions
-1. UI/UX framework selection
-2. Testing framework specific configuration
-3. CI/CD pipeline detailed steps
-4. Monitoring and logging solutions
-
-## Active Patterns and Preferences
-
-### Code Style
-1. Backend:
-   - Black formatter for Python
-   - Django REST framework viewsets
-   - Service layer pattern
-   - State machine for module unlocking
-
-2. Frontend:
-   - Tailwind CSS for styling
-   - GSAP for animations
-   - Composition API with TypeScript
-   - Reusable cosmic UI components
-
-### API Design
-1. RESTful endpoints
-2. JWT authentication
-3. Mission management endpoints
-4. Module state tracking
-5. Progress monitoring
-
-## Project Insights
-
-### Key Learnings
-1. Cosmic theme enhances user engagement
-2. Progressive unlocking maintains interest
-3. Initial motivation crucial for retention
-4. Mobile-first ensures wider accessibility
-
-### Challenges Identified
-1. Animation performance on mobile
-2. Complex state management for unlocks
-3. Mission progression balance
-4. Intuitive cosmic navigation
-
-### Risk Mitigation
-1. Performance monitoring
-2. State machine testing
-3. User feedback collection
-4. Progressive enhancement
-
-## Reference Information
-
-### Important Commands
-```bash
-# Backend Development
-python manage.py runserver
-python manage.py loaddata initial_missions
-python manage.py create_cosmic_superuser
-
-# Frontend Development
-npm run dev
-npm run build
-npm run test:e2e  # Test onboarding flow
-
-# Docker Commands
-docker-compose up
-docker-compose build
-
-# Deployment
-flyctl deploy
-```
-
-### Key Endpoints
-1. Backend API: https://dividis-backend.fly.dev
-2. Frontend: https://dividis-frontend.fly.dev
-3. API Documentation: /api/schema/swagger-ui/
-
-### Local Development URLs
-1. Backend: http://localhost:8000
-2. Frontend: http://localhost:3000
-3. API Docs: http://localhost:8000/api/schema/swagger-ui/
-
-## Progress Tracking
-
-### Completed
-- Memory Bank structure
-- Architecture documentation
-- Technical requirements
-- Development environment specs
-
-### In Progress
-- Project initialization
-- Infrastructure setup
-- Deployment configuration
-
-### Completed (último commit)
-- Docker configuration (backend y frontend)
-- Vite + Vue 3 + TypeScript + Tailwind en frontend
-- Vite config files y scripts de build
-- docker-compose.yml funcional para desarrollo local
-
-### Upcoming
-- Backend implementation
-- Frontend implementation
-- Initial deployment
+#### Sistema de Declaraciones
+- Integración con módulos activa
+- Persistencia y sincronización funcionando
+- Editor de declaraciones optimizado
+- Pendiente: sistema de tags y búsqueda

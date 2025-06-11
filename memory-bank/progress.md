@@ -50,6 +50,7 @@
 ✅ Sincronización de declaraciones y módulos con backend vía API
 ✅ Local frontend server con cosmic theme
 ✅ Vite + TypeScript + configuración inicial de build
+✅ Sistema de edición de perfil de usuario implementado (edición y visualización de correo, nombre y apellido desde el frontend, sincronizado con backend y Django admin)
 🔄 Testing pending
 
 ### Deployment

@@ -22,6 +22,7 @@ urlpatterns = [
     # Auth endpoints
     path('auth/register/', views.UserRegistrationView.as_view(), name='register'),
     path('auth/me/', views.UserProfileView.as_view(), name='me'),
+    path('auth/me/update/', views.UserProfileUpdateView.as_view(), name='profile-update'),
 
     # Module specific endpoints
     path('modules/<str:module_id>/unlock/', views.ModuleUnlockView.as_view(), name='module-unlock'),
