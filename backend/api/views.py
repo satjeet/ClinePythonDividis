@@ -78,6 +78,18 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return Profile.objects.get(user=self.request.user)
 
+    def partial_update(self, request, *args, **kwargs):
+        print("PATCH /auth/me/ request.data:", request.data)
+        profile = self.get_object()
+        user = profile.user
+        print("Email antes de guardar:", user.email)
+        email = request.data.get('email')
+        if email:
+            user.email = email
+            user.save()
+        print("Email después de guardar:", user.email)
+        return super().partial_update(request, *args, **kwargs)
+
 @extend_schema(tags=['modules'])
 class ModuleViewSet(viewsets.ModelViewSet):
     queryset = Module.objects.all()

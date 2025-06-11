@@ -8,6 +8,39 @@
     @apply bg-slate-950 text-slate-100 font-sans leading-relaxed;
   }
 
+  /* Galactic Themes */
+  .theme-nebula-red {
+    --theme-bg: #0a0a23;
+    --theme-accent: #ff1744;
+    --theme-border: #ff1744;
+    --theme-border-glow: 0 0 8px #ff1744, 0 0 16px #ff1744;
+  }
+  .theme-solar-flare {
+    --theme-bg: #1a0a00;
+    --theme-accent: #ff9100;
+    --theme-border: #ff9100;
+    --theme-border-glow: 0 0 8px #ff9100, 0 0 16px #ff9100;
+  }
+  .theme-stellar-gold {
+    --theme-bg: #181818;
+    --theme-accent: #ffd700;
+    --theme-border: #ffd700;
+    --theme-border-glow: 0 0 8px #ffd700, 0 0 16px #ffd700;
+  }
+  .theme-cosmic-silver {
+    --theme-bg: #111;
+    --theme-accent: #e0e0e0;
+    --theme-border: #e0e0e0;
+    --theme-border-glow: 0 0 8px #e0e0e0, 0 0 16px #e0e0e0;
+  }
+
+  /* Neon border utility */
+  .neon-border {
+    border: 2px solid var(--theme-border);
+    box-shadow: var(--theme-border-glow);
+    transition: box-shadow 0.3s, border-color 0.3s;
+  }
+
   /* Scroll bar */
   ::-webkit-scrollbar {
     @apply w-2;
