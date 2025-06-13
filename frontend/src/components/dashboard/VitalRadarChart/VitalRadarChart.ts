@@ -41,12 +41,12 @@ export function useChartOptions(props: { values?: number[] }) {
       center: ['50%', '50%'], // Centra el radar
       axisName: {
         color: '#fff', // Color blanco para los labels de los ejes
-        fontSize: 12,
-        fontFamily: 'Orbitron, sans-serif',
+        fontSize: 24, // 1.5rem equivalent
+        fontFamily: 'var(--theme-font)',
         formatter: function (value: string) {
           // Ajuste manual para "Emocionalidad" si es necesario, o para todos los labels
           if (value === 'Emocionalidad') {
-            return '{a|' + value + '}';
+            return   value  ;  // Usa rich text para aplicar estilos específicos
           }
           return value;
         },
