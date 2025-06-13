@@ -14,6 +14,7 @@
     --theme-accent: #ff1744;
     --theme-border: #ff1744;
     --theme-border-glow: 0 0 8px #ff1744, 0 0 16px #ff1744;
+    font-family: 'Orbitron', sans-serif;
   }
   .theme-solar-flare {
     --theme-bg: #1a0a00;

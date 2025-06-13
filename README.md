@@ -72,6 +72,7 @@ cd dividis
 - Reconstruir si cambias dependencias:
   ```bash
   docker-compose build
+  docker-compose up --build
   ```
 
 > **Nota:** No necesitas instalar Python, Node.js ni PostgreSQL localmente si usas Docker.
