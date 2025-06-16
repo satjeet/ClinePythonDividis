@@ -1,7 +1,24 @@
 import { defineStore } from 'pinia';
 
+interface Question {
+  category: string;
+  questions: string[];
+}
+
+interface Answers {
+  [key: string]: number;
+}
+
+interface WellnessSurveyState {
+  questions: Question[];
+  answers: Answers;
+  currentStep: number;
+  isCompleted: boolean;
+  session: any;
+}
+
 export const useWellnessSurveyStore = defineStore('wellnessSurvey', {
-  state: () => ({
+  state: (): WellnessSurveyState => ({
     questions: [],
     answers: {},
     currentStep: 1,
@@ -9,10 +26,10 @@ export const useWellnessSurveyStore = defineStore('wellnessSurvey', {
     session: null,
   }),
   actions: {
-    setQuestions(questions: any[]) {
+    setQuestions(questions: Question[]) {
       this.questions = questions;
     },
-    setAnswers(answers: Record<string, any>) {
+    setAnswers(answers: Answers) {
       this.answers = answers;
     },
     setCurrentStep(step: number) {

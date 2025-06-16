@@ -19,7 +19,7 @@ const categoryAverages = computed(() => {
   return props.questions.map(cat => {
     const values = cat.questions.map((q: string) => props.answers[cat.category + ':' + q]).filter((v: number) => typeof v === 'number');
     if (!values.length) return 0;
-    return Number((values.reduce((a, b) => a + b, 0) / values.length).toFixed(2));
+    return Number((values.reduce((a: number, b: number) => a + b, 0) / values.length).toFixed(2));
   });
 });
 </script>

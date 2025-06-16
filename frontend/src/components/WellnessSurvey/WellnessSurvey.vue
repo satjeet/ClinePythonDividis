@@ -18,18 +18,22 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { onMounted, computed } from 'vue';
 import { useWellnessSurveyStore } from '@/stores/wellnessSurvey';
 import SurveyCategory from './SurveyCategory.vue';
 import SurveyProgressBar from './SurveyProgressBar.vue';
 import SurveySummary from './SurveySummary.vue';
-import { getSurveyQuestions, getSurveyAnswers, saveSurveyAnswers } from '@/services/wellnessSurveyApi';
+import { getSurveyQuestions, saveSurveyAnswers } from '@/services/wellnessSurveyApi';
+
+interface Answers {
+  [key: string]: number;
+}
 
 const store = useWellnessSurveyStore();
 const currentStep = computed(() => store.currentStep);
 const totalSteps = computed(() => store.questions.length);
 const questions = computed(() => store.questions);
-const answers = computed(() => store.answers);
+const answers = computed<Answers>(() => store.answers);
 const isCompleted = computed(() => store.isCompleted);
 
 onMounted(async () => {
@@ -41,7 +45,7 @@ onMounted(async () => {
 });
 
 function updateAnswer({ category, question, value }: { category: string; question: string; value: number }) {
-  store.answers[`${category}:${question}`] = value;
+  (store.answers as Answers)[`${category}:${question}`] = value;
 }
 function nextStep() {
   if (store.currentStep < store.questions.length) store.setCurrentStep(store.currentStep + 1);

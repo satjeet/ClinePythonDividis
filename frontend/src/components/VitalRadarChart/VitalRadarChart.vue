@@ -14,7 +14,7 @@ import { useChartOptions } from '@/components/dashboard/VitalRadarChart/VitalRad
 import WellnessSurveyButton from './WellnessSurveyButton.vue';
 import { useRouter } from 'vue-router';
 import { useVitalRadarStore } from '@/stores/vitalRadar';
-import { onMounted, computed } from 'vue';
+import { onMounted } from 'vue';
 const router = useRouter();
 const vitalRadar = useVitalRadarStore();
 function goToSurvey() {

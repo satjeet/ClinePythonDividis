@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{ currentStep: number; totalSteps: number }>();
+defineProps<{ currentStep: number; totalSteps: number }>();
 </script>
 
 <style scoped>
