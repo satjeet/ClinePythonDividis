@@ -1,0 +1,29 @@
+[
+  {
+    "category": "Salud",
+    "type": "satisfaction",
+    "questions": [
+      "Higiene, descanso y alimentación",
+      "Enfermedades y dolencias (si no tiene, evalúe 10)",
+      "Estado de ánimo",
+      "Salud mental y estrés",
+      "Ejercicio y deporte",
+      "Recuperación (me repongo con rapidez)",
+      "Cuento y aplico estrategias para manejar estrés y estado de ánimo"
+    ]
+  },
+  {
+    "category": "Relaciones",
+    "type": "agreement",
+    "questions": [
+      "Mantengo relaciones afectivas sanas con mi familia.",
+      "Tengo amistades que me brindan apoyo emocional.",
+      "Me siento amado/a y valorado/a por los demás.",
+      "Mis relaciones son fuente de alegría y crecimiento personal.",
+      "Escucho activamente y me interesa el bienestar de otros.",
+      "Me comunico de forma abierta y honesta con quienes me rodean.",
+      "Dedico tiempo y energía a fortalecer mis relaciones."
+    ]
+  }
+  // ...agregar el resto de categorías siguiendo el mismo formato...
+]

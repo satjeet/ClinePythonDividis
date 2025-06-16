@@ -9,7 +9,7 @@
       :longest-streak="userProgress.longestStreak.value"
     />
     <MotivationalMessage />
-    <VitalRadarChart />
+    <VitalRadarChart :values="vitalRadar.values" />
     <ConstellationsMap />
     <UserLog />
   </section>
@@ -19,6 +19,7 @@
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserProgressStore } from '../../stores/userProgress'
+import { useVitalRadarStore } from '../../stores/vitalRadar'
 import UserProgress from './UserProgress/UserProgress.vue'
 import MotivationalMessage from './MotivationalMessage/MotivationalMessage.vue'
 import VitalRadarChart from './VitalRadarChart/VitalRadarChart.vue'
@@ -27,9 +28,11 @@ import UserLog from './UserLog/UserLog.vue'
 
 const userProgressStore = useUserProgressStore()
 const userProgress = storeToRefs(userProgressStore)
+const vitalRadar = useVitalRadarStore()
 
 onMounted(() => {
   userProgressStore.fetchProgress()
+  vitalRadar.fetchRadarValues()
 })
 </script>
 <style scoped src="./Dashboard.css"></style>
