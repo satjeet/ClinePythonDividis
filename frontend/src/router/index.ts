@@ -61,6 +61,11 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/wellness-survey',
+      name: 'WellnessSurvey',
+      component: () => import('@/components/WellnessSurvey/WellnessSurvey.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: () => import('@/views/NotFound.vue'),
