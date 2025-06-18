@@ -11,7 +11,7 @@ export const useVitalRadarStore = defineStore('vitalRadar', () => {
     loading.value = true;
     error.value = null;
     try {
-      const res = await api.get('/api/wellness-survey/results/');
+      const res = await api.get('/wellness-survey/results/');
       // Espera un array de 8 promedios (0-100)
       values.value = res.data.values;
     } catch (e: any) {
