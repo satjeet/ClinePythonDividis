@@ -1,10 +1,34 @@
 <template>
   <!-- Resumen visual de resultados -->
   <div class="survey-summary">
-    <h2 class="text-xl font-bold mb-4">¡Encuesta completada!</h2>
-    <SurveySummaryChart :averages="categoryAverages" :labels="categoryLabels" />
-    <div class="mt-6">
-      <button class="bg-sky-500 text-white px-4 py-2 rounded" @click="$emit('close')">Cerrar</button>
+    <div class="mb-8 text-center">
+      <div class="text-cosmic-400 text-sm mb-2">Tu progreso vital</div>
+      <h2 class="text-2xl font-bold text-cosmic-100">Vista general de resultados</h2>
+    </div>
+
+    <!-- Gráfico radar -->
+    <div class="bg-cosmic-800 p-6 rounded-lg mb-8">
+      <SurveySummaryChart :averages="categoryAverages" :labels="categoryLabels" />
+    </div>
+
+    <!-- Resumen por categoría -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      <div 
+        v-for="(average, idx) in categoryAverages" 
+        :key="categoryLabels[idx]"
+        class="bg-cosmic-800 p-4 rounded-lg"
+      >
+        <div class="text-lg font-semibold text-cosmic-100">{{ categoryLabels[idx] }}</div>
+        <div class="flex items-center mt-2">
+          <div class="flex-grow bg-cosmic-700 h-2 rounded-full overflow-hidden">
+            <div 
+              class="h-full bg-cosmic-400 transition-all duration-500"
+              :style="{ width: `${average * 10}%` }"
+            ></div>
+          </div>
+          <div class="ml-3 text-cosmic-300 font-mono">{{ average }}/10</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -12,18 +36,35 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import SurveySummaryChart from './SurveySummaryChart.vue';
-const props = defineProps<{ answers: Record<string, number>; questions: any[] }>();
+import { type SurveyCategory } from '@/stores/wellnessSurvey';
 
-const categoryLabels = computed(() => props.questions.map(q => q.category));
+interface Props {
+  answers: Record<string, number>;
+  questions: SurveyCategory[];
+}
+
+const props = defineProps<Props>();
+
+const categoryLabels = computed(() => props.questions.map(cat => cat.category));
+
 const categoryAverages = computed(() => {
   return props.questions.map(cat => {
-    const values = cat.questions.map((q: string) => props.answers[cat.category + ':' + q]).filter((v: number) => typeof v === 'number');
+    const values = cat.questions
+      .map((question: string) => props.answers[`${cat.category}:${question}`])
+      .filter((value: number | undefined): value is number => 
+        typeof value === 'number' && !isNaN(value)
+      );
+    
     if (!values.length) return 0;
-    return Number((values.reduce((a: number, b: number) => a + b, 0) / values.length).toFixed(2));
+    
+    const sum = values.reduce((acc: number, val: number) => acc + val, 0);
+    return Number((sum / values.length).toFixed(2));
   });
 });
 </script>
 
 <style scoped>
-.survey-summary { text-align: center; padding: 2rem 0; }
+.survey-summary {
+  position: relative;
+}
 </style>
