@@ -13,6 +13,83 @@
     ]
   },
   {
+    "category": "Personalidad",
+    "type": "agreement",
+    "questions": [
+      "Me gusta mi forma de ser.",
+      "Me conozco bien y soy consciente de mis emociones.",
+      "Identifico mis fortalezas y debilidades.",
+      "Estoy en proceso de mejorar aspectos de mi personalidad.",
+      "Reconozco y gestiono mis emociones adecuadamente.",
+      "Soy empático y trato bien a los demás.",
+      "Me esfuerzo por crecer como persona."
+    ]
+  },
+  {
+    "category": "Intelecto",
+    "type": "agreement",
+    "questions": [
+      "Me intereso por aprender cosas nuevas de forma constante.",
+      "Tengo facilidad para concentrarme en lo que hago.",
+      "Disfruto el aprendizaje como parte de mi vida diaria.",
+      "Leo, investigo o realizo actividades que estimulan mi mente.",
+      "Soy curioso/a y exploro nuevas ideas o conocimientos.",
+      "Me esfuerzo por desarrollar nuevas habilidades.",
+      "Llevo registro de mis objetivos y estrategias."
+    ]
+  },
+  {
+    "category": "Carrera profesional",
+    "type": "agreement",
+    "questions": [
+      "Me siento motivado con mi trabajo o actividad profesional.",
+      "Tengo oportunidades de crecimiento o desarrollo profesional.",
+      "Estoy satisfecho/a con mi situación laboral actual.",
+      "Siento que mi trabajo es justamente remunerado.",
+      "Trabajo en un ambiente que favorece mi crecimiento.",
+      "Mi trabajo no perjudica otros aspectos de mi vida.",
+      "Mi carrera está alineada con mis intereses y valores."
+    ]
+  },
+  {
+    "category": "Finanzas",
+    "type": "agreement",
+    "questions": [
+      "Mis ingresos me permiten cubrir mis necesidades básicas.",
+      "Tengo control sobre mis gastos e ingresos.",
+      "Puedo ahorrar regularmente aunque sea una cantidad pequeña.",
+      "No tengo deudas o las manejo sin afectar mi bienestar.",
+      "Me siento tranquilo respecto a mi situación financiera.",
+      "Tengo metas financieras claras y un plan para lograrlas."
+    ]
+  },
+  {
+    "category": "Calidad de vida",
+    "type": "agreement",
+    "questions": [
+      "Dedico tiempo a actividades que disfruto.",
+      "Me siento satisfecho con mi entorno y mi hogar.",
+      "Tengo un buen equilibrio entre vida laboral y personal.",
+      "Disfruto de momentos de descanso sin sentir culpa.",
+      "Hago cosas que me hacen sentir libre y feliz.",
+      "Me rodeo de personas y cosas que me inspiran bienestar.",
+      "Siento que vivo una vida con significado y disfrute."
+    ]
+  },
+  {
+    "category": "Vida emocional",
+    "type": "agreement",
+    "questions": [
+      "Disfruto la vida, me divierto y me siento feliz.",
+      "Sé expresar mis emociones de forma sana y asertiva.",
+      "Manejo adecuadamente el estrés en situaciones difíciles.",
+      "Cuento con estrategias para regular mis emociones cuando es necesario.",
+      "Disfruto de momentos de alegría y gratitud con plenitud.",
+      "Me siento emocionalmente estable en general.",
+      "Soy agradecido."
+    ]
+  },
+  {
     "category": "Relaciones",
     "type": "agreement",
     "questions": [
@@ -25,5 +102,4 @@
       "Dedico tiempo y energía a fortalecer mis relaciones."
     ]
   }
-  // ...agregar el resto de categorías siguiendo el mismo formato...
 ]
