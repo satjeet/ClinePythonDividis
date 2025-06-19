@@ -70,27 +70,80 @@ django-fsm==2.8.1  # For module unlock state machine
 }
 ```
 
-## Environment Variables
+## Environment Variables y Configuración de Autenticación
 
-### Backend (.env)
+### Archivos de Configuración Críticos
+
+#### Backend (.env)
 ```env
-DJANGO_SECRET_KEY=your-secret-key
-DEBUG=False
-ALLOWED_HOSTS=dividis-backend.fly.dev
-CORS_ALLOWED_ORIGINS=https://dividis-frontend.fly.dev
-DATABASE_URL=postgres://user:pass@host:5432/dividis
+# Configuración básica
+DJANGO_SECRET_KEY=django-insecure-development-key-change-in-production
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+
+# Configuración CORS (crítica para autenticación)
+CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+
+# Base de datos
+DATABASE_URL=postgres://postgres:postgres@db:5432/dividis
+DB_HOST=db
+DB_USER=postgres
+DB_PASSWORD=postgres
+
+# Configuración del módulo
 INITIAL_MODULE=salud
 DEFAULT_MISSION_POINTS=100
-MODULE_UNLOCK_THRESHOLDS={"personalidad":500,"intelecto":1000}
 ```
 
-### Frontend (.env)
+#### Frontend (.env)
 ```env
-VITE_API_URL=https://dividis-backend.fly.dev
-VITE_DEFAULT_THEME=cosmic
-VITE_ANIMATION_ENABLED=true
-NODE_ENV=production
+# Configuración del servidor
+VITE_PORT=3000
+VITE_HOST=0.0.0.0
+
+# URL de la API (crítica para autenticación)
+VITE_API_URL=http://localhost:8000
+
+# Configuración de desarrollo
+NODE_ENV=development
+VITE_ENABLE_DEVTOOLS=true
+VITE_ENABLE_DEBUG=true
+
+# Configuración de la API
+VITE_API_TIMEOUT=30000
+VITE_ENABLE_API_CACHE=true
 ```
+
+### Consideraciones Importantes para Autenticación
+
+1. **Configuración del Frontend**:
+   - La URL de la API (`VITE_API_URL`) DEBE usar `localhost` cuando se accede desde el navegador
+   - NO usar `http://backend:8000` ya que este nombre solo funciona dentro de la red Docker
+   - Configurar los timeouts y caché según necesidades
+
+2. **Configuración del Backend**:
+   - CORS_ALLOWED_ORIGINS debe incluir TODAS las URLs desde donde se accederá al frontend
+   - Incluir tanto `http://localhost:3000` como `http://127.0.0.1:3000`
+   - DEBUG=True en desarrollo para ver errores detallados
+
+3. **Solución de Problemas Comunes**:
+   - Error "ERR_NAME_NOT_RESOLVED": Verificar que la URL de la API usa `localhost`
+   - Error CORS: Verificar que la URL del frontend está en CORS_ALLOWED_ORIGINS
+   - Error de conexión: Asegurar que los servicios están corriendo (`docker-compose ps`)
+   - Error de autenticación: Verificar token JWT y su almacenamiento en localStorage
+
+4. **Pasos de Verificación**:
+   ```bash
+   # 1. Verificar servicios activos
+   docker-compose ps
+   
+   # 2. Reiniciar servicios si hay problemas
+   docker-compose restart backend frontend
+   
+   # 3. Verificar logs
+   docker-compose logs backend
+   docker-compose logs frontend
+   ```
 
 ## Docker Configuration
 

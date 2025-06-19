@@ -13,6 +13,13 @@ export default defineConfig({
         postcss: './postcss.config.cjs'
     },
     server: {
-        port: Number(process.env.VITE_PORT) || 3000
+        port: Number(process.env.VITE_PORT) || 3000,
+        proxy: {
+            '/api': {
+                target: 'http://localhost:8000',
+                changeOrigin: true,
+                secure: false
+            }
+        }
     }
 });
