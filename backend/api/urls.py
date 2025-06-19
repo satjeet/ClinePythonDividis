@@ -35,6 +35,9 @@ urlpatterns = [
     path('progress/overview/', views.ProgressOverviewView.as_view(), name='progress-overview'),
     path('progress/module/<str:module_id>/', views.ModuleProgressView.as_view(), name='module-progress'),
 
+# Wellness Survey URLs
+    path('wellness-survey/', include('api.wellness_survey.urls')),
+
     # Router URLs (dejar al final)
     path('', include(router.urls)),
 ]

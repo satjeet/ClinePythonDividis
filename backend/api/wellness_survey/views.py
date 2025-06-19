@@ -9,7 +9,7 @@ class WellnessSurveyQuestionsView(APIView):
     def get(self, request):
         # Leer preguntas desde el JSON (ajustar ruta según despliegue)
         import os, json
-        path = os.path.join(os.path.dirname(__file__), '../../fixtures/wellnessSurveyQuestions.json')
+        path = os.path.join(os.path.dirname(__file__), 'fixtures', 'wellnessSurveyQuestions.json')
         with open(path, 'r', encoding='utf-8') as f:
             questions = json.load(f)
         return Response(questions)
