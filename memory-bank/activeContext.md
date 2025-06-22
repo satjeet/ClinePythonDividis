@@ -29,6 +29,10 @@
 - Los cambios se reflejan correctamente en Django admin
 - Se mejoró el manejo de datos anidados vs planos en las respuestas del API
 
+### Recent Implementations (2025-06-22)
+- [SurveySummaryChart.vue] Nuevo componente para visualizar el resumen gráfico de encuestas de bienestar.
+- [wellnessSurveyApi.ts] Servicio API para obtener y enviar respuestas de encuestas.
+
 #### Nueva Funcionalidad de Usuario
 - Endpoint dedicado para actualización de perfil
 - UserProfileUpdateSerializer para manejo específico
