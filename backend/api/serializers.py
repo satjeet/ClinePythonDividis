@@ -150,13 +150,15 @@ class UserProfileDetailSerializer(serializers.ModelSerializer):
     achievements = UserAchievementSerializer(many=True, read_only=True, source='userachievement_set')
     streaks = StreakSerializer(many=True, read_only=True, source='streak_set')
     active_missions = serializers.SerializerMethodField()
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
         fields = (
             'user', 'user_write', 'experience_points', 'current_level', 'created_at',
             'updated_at', 'module_progress', 'achievements', 'streaks',
-            'active_missions'
+            'active_missions', 'first_name', 'last_name'
         )
         read_only_fields = ('created_at', 'updated_at')
 
@@ -170,6 +172,12 @@ class UserProfileDetailSerializer(serializers.ModelSerializer):
             state='active'
         ).select_related('mission')
         return MissionProgressSerializer(active_missions, many=True).data
+
+    def get_first_name(self, obj):
+        return obj.user.first_name
+
+    def get_last_name(self, obj):
+        return obj.user.last_name
 
     def update(self, instance, validated_data):
         user_data = validated_data.pop('user_write', None)

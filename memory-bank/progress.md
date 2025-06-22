@@ -3,13 +3,17 @@
 ## Project Status Overview
 
 ### Current Phase: Initial Setup
+
 - **Start Date**: January 6, 2025
 - **Current Focus**: Project scaffolding and documentation
 - **Status**: In progress
 
 ## What Works
 
+✅ El perfil de usuario retorna correctamente first_name y last_name tras la actualización del serializer, permitiendo su visualización y edición desde el frontend.
+
 ### Documentation
+
 ✅ Memory Bank structure established
 ✅ Project architecture defined
 ✅ Technical requirements documented
@@ -20,12 +24,14 @@
 ✅ Sistema de experiencia real: XP y nivel reflejan progreso real, declaraciones solo otorgan XP la primera vez por pilar/módulo, XP incremental por constelación, salud siempre desbloqueada, streak diario funcional.
 
 ### Infrastructure
+
 ✅ Development database configured
 ✅ Development server running
 🔄 PostgreSQL setup pending
 ✅ Docker setup (backend y frontend, docker-compose funcional)
 
 ### Backend
+
 ✅ Django project initialized
 ✅ API app created
 ✅ Models and migrations defined
@@ -35,6 +41,7 @@
 🔄 Testing pending
 
 ### Frontend
+
 ✅ Vue.js project initialized
 ✅ Tailwind CSS configured
 ✅ Cosmic UI theme implemented
@@ -59,6 +66,7 @@
 ## What's Left to Build
 
 ### Phase 1: Onboarding Experience
+
 - [x] Welcoming landing page
   - [x] Cosmic theme implementation
   - [x] Responsive design
@@ -77,6 +85,7 @@
   - [ ] Accessibility validation
 
 ### Phase 2: Galactic Dashboard
+
 - [x] Constellation map interface
   - [x] Interactive star map
   - [x] Module state visualization
@@ -90,6 +99,7 @@
   - [ ] Motivation system
 
 ### Phase 3: Core Infrastructure
+
 - [ ] Backend setup
   - [ ] Django project structure
   - [ ] PostgreSQL configuration
@@ -103,6 +113,7 @@
   - [ ] Animation system
 
 ### Phase 4: Module System
+
 1. **Salud (Serpiente de Hábitos)** - PRIORITY
    - [x] Habit tracking interface
    - [x] Visual progress snake
@@ -158,6 +169,7 @@
 - Es necesario optimizar las animaciones para móviles y mejorar la UX cuando se rompe el streak.
 
 ## Known Issues
+
 - Ensure smooth mobile animations
 - Balance initial mission difficulty
 - Clear unlock progression path
@@ -169,6 +181,7 @@
 ### Key Decisions Log
 
 #### January 6, 2025
+
 1. Established Memory Bank structure
 2. Defined technical stack and cosmic theme:
    - Backend: Django + DRF with mission system
@@ -180,17 +193,20 @@
 ## Testing Status
 
 ### Backend Tests
+
 - [ ] User authentication
 - [ ] API endpoints
 - [ ] Database operations
 
 ### Frontend Tests
+
 - [ ] Component rendering
 - [ ] State management
 - [ ] Route protection
 - [ ] API integration
 
 ### E2E Tests
+
 - [ ] User registration flow
 - [ ] Authentication flow
 - [ ] Module navigation
@@ -199,12 +215,14 @@
 ## Deployment Status
 
 ### Development Environment
+
 - [x] Local backend server with mission system
 - [x] Local frontend server with cosmic theme
 - [x] Local database with initial missions
 - [x] Docker containers con backend y frontend (docker-compose)
 
 ### Production Environment
+
 - [ ] Backend deployment with SSL
 - [ ] Frontend deployment with CDN
 - [ ] Database setup with backups
@@ -214,6 +232,7 @@
 ## Next Actions
 
 ### Immediate
+
 1. Pulir detalles visuales y microinteracciones en la landing page
 2. Validar exhaustivamente el flujo de autenticación (errores, edge cases, mobile)
 3. [x] Desarrollar el Galactic Dashboard: mapa de constelaciones, barra de experiencia, radar chart y mensajes motivacionales
@@ -227,11 +246,13 @@
 8. [ ] Recoger feedback de usuarios sobre la experiencia de hábitos
 
 ### Short Term
+
 1. Pruebas de accesibilidad y responsividad en landing y autenticación
 2. Documentar endpoints y flujos clave para onboarding de nuevos desarrolladores
 3. Validar el sistema de desbloqueo de módulos y progresión
 
 ### Long Term
+
 1. Implementar módulos restantes y funcionalidades sociales
 2. Mejorar y expandir la temática cósmica y animaciones
 3. Optimizar performance y experiencia mobile
@@ -240,19 +261,23 @@
 ## References
 
 ### Documentation Links
+
 - Backend API: (pending)
 - Frontend App: (pending)
 - API Documentation: (pending)
 
 ### Local Development
+
 - Backend: http://localhost:8000
 - Frontend: http://localhost:3000
 
 ### Production
+
 - Backend API: https://dividis-backend.fly.dev
 - Frontend: https://dividis-frontend.fly.dev
 
 ### Experiencia Global y Accesibilidad
+
 - [ ] Mobile-first UI en todos los componentes principales
 - [ ] Pruebas de responsividad en dispositivos reales y emuladores
 - [ ] Accesibilidad AA: navegación por teclado, contraste, etiquetas ARIA
@@ -260,11 +285,13 @@
 - [ ] Pruebas con screen readers y feedback de usuarios con discapacidad
 
 ### Sincronización en Tiempo Real
+
 - [ ] Implementar WebSockets o polling eficiente para misiones y progreso
 - [ ] Actualización instantánea de XP, nivel y radar chart
 - [ ] Notificaciones en tiempo real de logros y mensajes motivacionales
 
 ### Comunidad y Pertenencia
+
 - [ ] Sistema de reacciones a declaraciones y misiones
 - [ ] Visualización de progresos de otros usuarios (galería pública, leaderboard)
 - [ ] Mensajes motivacionales personalizados y compartibles
