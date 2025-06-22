@@ -1,3 +1,9 @@
+{
+  "_comentario": "Este archivo al parecer ya no se usa, deberia borrarlo.",
+  "nombre": "Arturo",
+  "edad": 30
+}
+
 [
   {
     "category": "Salud",
@@ -59,6 +65,7 @@
       "Tengo control sobre mis gastos e ingresos.",
       "Puedo ahorrar regularmente aunque sea una cantidad pequeña.",
       "No tengo deudas o las manejo sin afectar mi bienestar.",
+      "Tengo un fondo de emergencia o un plan para enfrentar gastos inesperados.",
       "Me siento tranquilo respecto a mi situación financiera.",
       "Tengo metas financieras claras y un plan para lograrlas."
     ]

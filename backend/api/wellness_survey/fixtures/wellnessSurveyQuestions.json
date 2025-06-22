@@ -59,6 +59,7 @@
       "Tengo control sobre mis gastos e ingresos.",
       "Puedo ahorrar regularmente aunque sea una cantidad pequeña.",
       "No tengo deudas o las manejo sin afectar mi bienestar.",
+      "Tengo un fondo de emergencia o un plan para enfrentar gastos inesperados.",
       "Me siento tranquilo respecto a mi situación financiera.",
       "Tengo metas financieras claras y un plan para lograrlas."
     ]
@@ -97,7 +98,9 @@
       "Tengo amistades que me brindan apoyo emocional.",
       "Me siento amado/a y valorado/a por los demás.",
       "Mis relaciones son fuente de alegría y crecimiento personal.",
-      "Escucho activamente y me interesa el bienestar de otros."
+      "Escucho activamente y me interesa el bienestar de otros.",
+      "Me comunico de forma abierta y honesta con quienes me rodean.",
+      "Dedico tiempo y energía a fortalecer mis relaciones."
     ]
   }
 ]

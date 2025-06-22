@@ -9,16 +9,17 @@
           type="range"
           min="0"
           max="10"
-          :value="answers[category.category + ':' + question] ?? 5"
+          :value="answers[category.category + ':' + question] ?? 0"
           @input="onInput($event, question)"
+          :style="getThumbStyle(answers[category.category + ':' + question] ?? 0)"
           class="flex-grow h-2 rounded-lg appearance-none bg-cosmic-700 accent-cosmic-400"
           aria-valuemin="0"
           aria-valuemax="10"
-          :aria-valuenow="answers[category.category + ':' + question] ?? 5"
+          :aria-valuenow="answers[category.category + ':' + question] ?? 1"
           :aria-label="question"
         />
         <div class="text-xl font-semibold text-cosmic-300 w-8 text-center">
-          {{ answers[category.category + ':' + question] ?? 5 }}
+          {{ answers[category.category + ':' + question] ?? 0 }}
         </div>
       </div>
     </div>
@@ -38,6 +39,14 @@ function onInput(event: Event, question: string) {
     value
   });
 }
+
+// Devuelve el estilo dinámico para el thumb del slider
+function getThumbStyle(value: number) {
+  // Rojo si está en 0, celeste si es distinto de 0
+  return {
+    '--slider-thumb-color': value === 0 ? '#ef4444' : '#38bdf8'
+  };
+}
 </script>
 
 <style scoped>
@@ -52,7 +61,7 @@ input[type='range']::-webkit-slider-thumb {
   appearance: none;
   width: 24px;
   height: 24px;
-  background: #38bdf8;
+  background: var(--slider-thumb-color, #ef4444);
   border: 2px solid #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   border-radius: 50%;
@@ -61,6 +70,28 @@ input[type='range']::-webkit-slider-thumb {
 }
 input[type='range']::-webkit-slider-thumb:hover {
   transform: scale(1.1);
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background: var(--slider-thumb-color, #ef4444);
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+input[type='range']::-ms-thumb {
+  width: 24px;
+  height: 24px;
+  background: var(--slider-thumb-color, #ef4444);
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.1s;
 }
 input[type='range']::-webkit-slider-runnable-track {
   height: 8px;
