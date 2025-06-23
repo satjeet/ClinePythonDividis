@@ -362,7 +362,13 @@ class UnlockedPillarViewSet(viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        dificultad = serializer.validated_data.get('dificultad')
+        ataque = 1
+        if dificultad == 'media':
+            ataque = 3
+        elif dificultad == 'difícil':
+            ataque = 9
+        serializer.save(user=self.request.user, ataque=ataque)
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()

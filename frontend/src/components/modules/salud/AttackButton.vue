@@ -36,7 +36,7 @@
 import { ref, computed } from 'vue'
 import { useWallStore } from './stores/wallStore'
 import { useHabitStore } from './stores/habitStore'
-import axios from 'axios'
+import api from '@/services/api'
 
 const wallStore = useWallStore()
 const habitStore = useHabitStore()
@@ -58,19 +58,19 @@ const lastAttackText = computed(() => {
   return lastAttackDate.value
 })
 
-// Lógica de daño: cada hábito activo suma 5 + días_activos*1
 const habitContribs = computed(() =>
   habitStore.habits
     .filter(h => h.estado === 'activo' || h.estado === 'incubando')
     .map(h => ({
       id: h.id,
       nombre: h.nombre,
-      daño: 5 + (h.dias_activos || 0)
+      daño: Number(h.ataque ?? 1)
     }))
 )
-const damage = computed(() =>
-  habitContribs.value.reduce((sum, h) => sum + h.daño, 0)
-)
+const damage = computed(() => {
+  const total = habitContribs.value.reduce((sum, h) => sum + Number(h.daño), 0)
+  return Number(total.toFixed(2))
+})
 
 async function attack() {
   errorMsg.value = ''
@@ -78,7 +78,7 @@ async function attack() {
   lastDamage.value = damage.value
   try {
     if (!wallStore.wall) throw new Error('No hay muro cargado')
-    await axios.patch(`/api/comfortwall/${wallStore.wall.id}/`, {
+    await api.patch(`/comfortwall/${wallStore.wall.id}/`, {
       fecha_ultimo_ataque: today,
       hp_actual: Math.max(0, wallStore.wall.hp_actual - damage.value)
     })

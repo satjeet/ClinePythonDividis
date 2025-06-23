@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { onMounted, computed, ref, watch } from 'vue'
 import { useWallStore } from './stores/wallStore'
-import axios from 'axios'
+import api from '@/services/api'
 
 const wallStore = useWallStore()
 const wallLoaded = computed(() => !!wallStore.wall)
@@ -90,7 +90,7 @@ async function levelUpWall() {
   levelUpError.value = ''
   try {
     if (!wallStore.wall) throw new Error('No hay muro cargado')
-    await axios.patch(`/api/comfortwall/${wallId.value}/`, {
+    await api.patch(`/comfortwall/${wallId.value}/`, {
       hp_actual: 0,
       hp_max: hpMax.value,
       nivel_muro: nivelMuro.value,

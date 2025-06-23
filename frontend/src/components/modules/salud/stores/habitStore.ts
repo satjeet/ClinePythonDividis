@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import axios from 'axios'
+import api from '@/services/api'
 
 export interface Habit {
   id: number
@@ -12,6 +12,7 @@ export interface Habit {
   estrellas?: number
   nivel?: number
   estado?: string
+  ataque: number
 }
 
 export const useHabitStore = defineStore('habit', () => {
@@ -23,7 +24,7 @@ export const useHabitStore = defineStore('habit', () => {
     loading.value = true
     error.value = null
     try {
-      const res = await axios.get('/api/habits/')
+      const res = await api.get('/habits/')
       habits.value = res.data
     } catch (e: any) {
       error.value = e?.message || 'Error al cargar hábitos'
@@ -36,7 +37,7 @@ export const useHabitStore = defineStore('habit', () => {
     loading.value = true
     error.value = null
     try {
-      await axios.post('/api/habits/', data)
+      await api.post('/habits/', data)
       // Refrescar la lista completa para mantener la reactividad y evitar sobrescribir
       await fetchHabits()
     } catch (e: any) {
@@ -50,7 +51,7 @@ export const useHabitStore = defineStore('habit', () => {
     loading.value = true
     error.value = null
     try {
-      await axios.patch(`/api/habits/${id}/`, data)
+      await api.patch(`/habits/${id}/`, data)
       await fetchHabits()
     } catch (e: any) {
       error.value = e?.message || 'Error al actualizar hábito'

@@ -218,7 +218,7 @@ class HabitSerializer(serializers.ModelSerializer):
         model = __import__('api.models').models.Habit
         fields = (
             'id', 'user', 'nombre', 'dificultad', 'horario_sugerido',
-            'fecha_creacion', 'dias_activos', 'estrellas', 'nivel', 'estado'
+            'fecha_creacion', 'dias_activos', 'estrellas', 'nivel', 'estado', 'ataque'
         )
         read_only_fields = ('id', 'user', 'fecha_creacion', 'dias_activos', 'estrellas', 'nivel', 'estado')
 
