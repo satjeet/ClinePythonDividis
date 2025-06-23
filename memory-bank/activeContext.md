@@ -97,10 +97,13 @@
 
 #### Módulo Salud
 
-- Sistema de hábitos funcional y en uso
-- Integración con serpiente visual completada
-- Sistema de rachas funcionando correctamente
-- Pendiente: optimizaciones de rendimiento
+##### Actualización 2025-06-23
+
+- Sistema de hábitos funcional y en uso, con integración visual tipo serpiente y sistema de rachas activo.
+- Se completó la integración visual y la sincronización de progreso con el dashboard.
+- El feedback visual inmediato y la gamificación están activos y validados.
+- Pendiente: optimización de rendimiento en carga de datos y mejora de feedback visual/UX ante streak roto o hábitos fallidos.
+- [Reemplaza: estado previo a 2025-06-23]
 
 #### Sistema de Constelaciones
 
