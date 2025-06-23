@@ -1,9 +1,4 @@
-.vital-radar-chart-root {
-  @apply w-full flex items-center justify-center bg-slate-900/50 backdrop-blur-sm border border-cosmic-700/30 rounded-lg p-6;
-  height: 350px; /* Ajusta la altura del contenedor para el gráfico */
-}
-
+/* Solo mantener si el gráfico lo requiere y Tailwind no lo cubre */
 .chart {
-  width: 100%;
-  height: 300px; /* Ajusta la altura del gráfico ECharts */
+  aspect-ratio: 1/1;
 }

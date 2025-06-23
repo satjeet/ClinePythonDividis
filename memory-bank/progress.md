@@ -10,6 +10,11 @@
 
 ## What Works
 
+### What Works (2025-06-23)
+- [VitalRadarChart.vue] El gráfico de radar es completamente responsive, los labels son legibles en todos los dispositivos y el módulo mantiene la coherencia visual con el dashboard.
+- [VitalRadarChart.ts] El ajuste dinámico de radius, center y fontSize asegura la mejor experiencia visual posible en mobile y desktop.
+- [VitalRadarChart.css] Solo mantiene reglas esenciales, sin restricciones innecesarias.
+
 ✅ El perfil de usuario retorna correctamente first_name y last_name tras la actualización del serializer, permitiendo su visualización y edición desde el frontend.
 
 ### Documentation
