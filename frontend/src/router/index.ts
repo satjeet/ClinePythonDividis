@@ -81,6 +81,18 @@ router.beforeEach(async (to) => {
   // Set page title
   document.title = `${to.meta.title ? `${to.meta.title} | ` : ''}Dividis`
 
+  // Esperar a que termine la validación de sesión tras refresh
+  if (authStore.isAuthLoading) {
+    await new Promise(resolve => {
+      const stop = authStore.$subscribe(() => {
+        if (!authStore.isAuthLoading) {
+          stop()
+          resolve(true)
+        }
+      })
+    })
+  }
+
   // Check if route requires auth
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     return { name: 'login', query: { redirect: to.fullPath } }

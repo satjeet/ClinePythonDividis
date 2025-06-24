@@ -69,6 +69,11 @@
 - La separación de serializers por caso de uso mejora la mantenibilidad
 - El manejo de estado global requiere normalización de datos consistente
 
+##### Decisión sobre precarga global vs modular (2025-06-24)
+- Se implementó infraestructura para precarga global tras login/refresh, pero se optó por mantener la carga de datos en cada módulo.
+- La experiencia actual es estable y los módulos gestionan correctamente su propio estado y carga.
+- La precarga global queda documentada y disponible para futuras necesidades, pero no se fuerza su uso para evitar riesgos en el flujo actual.
+
 ### Next Steps
 
 1. Validar exhaustivamente el flujo de perfil en diferentes escenarios
@@ -92,6 +97,7 @@
 - Actualizar API docs con nuevo endpoint de perfil
 - Documentar patrones de manejo de datos anidados
 - Guía de mejores prácticas para actualización de perfil
+- Documentar decisión de mantener carga modular y dejar la precarga global como infraestructura opcional.
 
 ### Estado de Módulos en Desarrollo
 

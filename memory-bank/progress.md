@@ -187,6 +187,10 @@
 
 ### Key Decisions Log
 
+#### 2025-06-24: Precarga global vs modular
+- Se implementó infraestructura para precarga global tras login/refresh, pero se decidió mantener la carga de datos en cada módulo.
+- La precarga global queda documentada y disponible para futuras necesidades, pero no se fuerza su uso para evitar riesgos en el flujo actual.
+
 #### January 6, 2025
 
 1. Established Memory Bank structure

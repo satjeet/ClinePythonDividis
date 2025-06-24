@@ -12,24 +12,51 @@
     </RouterView>
 
     <!-- Loading overlay -->
-    <div v-if="loading" 
+    <div v-if="loading"
          class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-sm">
       <div class="text-center space-y-4">
         <div class="animate-cosmic-spin w-12 h-12 border-2 border-cosmic-500 rounded-full border-t-transparent mx-auto"></div>
-        <p class="text-cosmic-400">Cargando...</p>
+        <p class="text-cosmic-400">
+          Cargando...
+          <span v-if="authStore.isAuthLoading">(validando sesión)</span>
+          <span v-else-if="globalLoader && globalLoader.isGlobalLoading">(precargando datos)</span>
+        </p>
+        <p v-if="globalLoader && globalLoader.error" class="text-red-400 text-sm">{{ globalLoader.error }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useGlobalLoader } from '@/stores/globalLoader'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const globalLoader = useGlobalLoader()
 const loading = ref(false)
+
+// Overlay de carga global: activo si autenticando o precargando
+watch(
+  [() => authStore.isAuthLoading, () => globalLoader.isGlobalLoading],
+  ([isAuthLoading, isGlobalLoading]) => {
+    loading.value = isAuthLoading || isGlobalLoading
+  },
+  { immediate: true }
+)
+
+// Precarga global tras login o refresh
+watch(
+  [() => authStore.isAuthenticated, () => authStore.isAuthLoading],
+  async ([isAuth, isAuthLoading]) => {
+    if (isAuth && !isAuthLoading) {
+      await globalLoader.preloadAll()
+    }
+  },
+  { immediate: true }
+)
 
 // Global navigation guard for loading state
 router.beforeEach(() => {

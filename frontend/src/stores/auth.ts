@@ -12,6 +12,7 @@ export const useAuthStore = defineStore('auth', () => {
   const token = ref<string | null>(localStorage.getItem('token'))
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const isAuthLoading = ref(!!token.value)
 
   // Getters
   const isAuthenticated = computed(() => !!token.value && !!user.value)
@@ -33,6 +34,10 @@ export const useAuthStore = defineStore('auth', () => {
       
       // Get user profile
       await fetchUserProfile()
+
+      // Precarga global tras login
+      const { useGlobalLoader } = await import('@/stores/globalLoader')
+      await useGlobalLoader().preloadAll()
       
       router.push('/dashboard')
     } catch (err: any) {
@@ -67,8 +72,10 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function fetchUserProfile() {
+    isAuthLoading.value = true
     if (!token.value) {
       user.value = null
+      isAuthLoading.value = false
       return
     }
     try {
@@ -95,6 +102,8 @@ export const useAuthStore = defineStore('auth', () => {
     } catch (err) {
       user.value = null
       logout()
+    } finally {
+      isAuthLoading.value = false
     }
   }
 
@@ -139,6 +148,8 @@ export const useAuthStore = defineStore('auth', () => {
   // Initialize
   if (token.value) {
     fetchUserProfile()
+  } else {
+    isAuthLoading.value = false
   }
 
   return {
@@ -159,6 +170,9 @@ export const useAuthStore = defineStore('auth', () => {
     register,
     logout,
     fetchUserProfile,
-    updateProfile
+    updateProfile,
+
+    // Auth loading
+    isAuthLoading
   }
 })
