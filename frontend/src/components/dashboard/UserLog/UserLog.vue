@@ -6,24 +6,26 @@
       <div class="flex-1">
         <h4 class="text-cosmic-300 font-semibold mb-2">Últimas declaraciones</h4>
         <ul class="space-y-1 text-cosmic-100 text-sm">
-          <li>
-            <span class="font-bold">Salud:</span> “Me comprometo a caminar 30 minutos diarios.”
-            <span class="ml-2 text-xs text-cosmic-400">hace 2 días</span>
-          </li>
-          <li>
-            <span class="font-bold">Intelecto:</span> “Dedicaré 20 minutos a la lectura cada noche.”
-            <span class="ml-2 text-xs text-cosmic-400">ayer</span>
-          </li>
+          <li v-if="declarationsLoading">Cargando declaraciones...</li>
+          <li v-else-if="declarationsError">{{ declarationsError }}</li>
+          <li v-else-if="recentDeclarations.length === 0">No hay declaraciones recientes.</li>
+          <template v-else v-for="declaration in recentDeclarations" :key="declaration.id">
+            <li>
+              <span class="font-bold">{{ declaration.pillar }}:</span>
+              “{{ declaration.text }}”
+              <span class="ml-2 text-xs text-cosmic-400">{{ timeAgo(declaration.created_at) }}</span>
+            </li>
+          </template>
         </ul>
       </div>
       <!-- Misiones activas y completadas -->
       <div class="flex-1">
-        <h4 class="text-cosmic-300 font-semibold mb-2">Misiones globales</h4>
+        <h4 class="text-cosmic-300 font-semibold mb-2">Misiones Activas</h4>
         <ul class="space-y-1 text-cosmic-100 text-sm">
           <li v-if="loading">Cargando misiones...</li>
           <li v-else-if="error">{{ error }}</li>
-          <li v-else-if="globalMissions.length === 0">No tienes misiones globales.</li>
-          <template v-for="mission in globalMissions" :key="mission.id">
+          <li v-else-if="activeMissions.length === 0">No tienes misiones activas.</li>
+          <template v-for="mission in activeMissions" :key="mission.id">
             <li
               :class="{
                 'opacity-60 line-through': mission.state === 'completed',
@@ -62,41 +64,59 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import api from '@/services/api'
+// Cambios para usar el store de misiones y evitar error 404
+import { ref, onMounted, computed } from 'vue'
+import { useMissionsStore } from '@/stores/missions'
+// Cambios para evitar error TS6133: 'api' is declared but its value is never read.
+import { declarationApi } from '@/services/api'
 
-interface MissionGlobal {
+// Declaraciones recientes
+interface Declaration {
   id: string
-  title: string
-  description: string
-  xp_reward: number
-  state: string
-  frequency?: string
-  progress?: {
-    current: number
-    target: number
-    label: string
-  }
+  pillar: string
+  text: string
+  created_at: string
 }
 
-const globalMissions = ref<MissionGlobal[]>([])
-const loading = ref(false)
-const error = ref<string | null>(null)
+const recentDeclarations = ref<Declaration[]>([])
+const declarationsLoading = ref(false)
+const declarationsError = ref<string | null>(null)
+
+function timeAgo(dateString: string): string {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diff = Math.floor((now.getTime() - date.getTime()) / 1000)
+  if (diff < 60) return 'justo ahora'
+  if (diff < 3600) return `${Math.floor(diff / 60)} min`
+  if (diff < 86400) return `${Math.floor(diff / 3600)} h`
+  if (diff < 172800) return 'ayer'
+  return `hace ${Math.floor(diff / 86400)} días`
+}
+
+// Misiones activas desde el store Pinia
+const missionsStore = useMissionsStore()
+const loading = computed(() => missionsStore.loading)
+const error = computed(() => missionsStore.error)
+const activeMissions = computed(() => missionsStore.activeMissions.slice(0, 3))
 
 onMounted(async () => {
-  loading.value = true
+  // Declaraciones recientes
+  declarationsLoading.value = true
   try {
-    const res = await api.get('/missions/global/')
-    // Mostrar todas las misiones, activas primero, luego completadas
-    globalMissions.value = res.data.sort((a: MissionGlobal, b: MissionGlobal) => {
-      if (a.state === b.state) return 0
-      if (a.state === 'active') return -1
-      return 1
-    })
+    const res = await declarationApi.getAll()
+    // Ordenar por fecha descendente y tomar las 2 más recientes
+    recentDeclarations.value = (res.data as Declaration[])
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .slice(0, 2)
   } catch (e: any) {
-    error.value = e.message || 'Error al cargar misiones globales'
+    declarationsError.value = e.message || 'Error al cargar declaraciones'
   } finally {
-    loading.value = false
+    declarationsLoading.value = false
+  }
+
+  // Asegurar que las misiones estén cargadas
+  if (missionsStore.missions.length === 0) {
+    await missionsStore.fetchMissions()
   }
 })
 </script>

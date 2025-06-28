@@ -5,6 +5,7 @@ URL patterns for the API app.
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
+from .views import UserMissionsAPIView
 
 # Create a router and register our viewsets
 router = DefaultRouter()
@@ -28,8 +29,8 @@ urlpatterns = [
     path('modules/<str:module_id>/unlock/', views.ModuleUnlockView.as_view(), name='module-unlock'),
     path('missions/<uuid:mission_id>/complete/', views.MissionCompleteView.as_view(), name='mission-complete'),
 
-    # Global missions endpoint
-    path('missions/global/', views.GlobalMissionListView.as_view(), name='global-missions'),
+    # User missions endpoint (unificado)
+    path('user-missions/', UserMissionsAPIView.as_view(), name='user-missions'),
 
     # Progress endpoints
     path('progress/overview/', views.ProgressOverviewView.as_view(), name='progress-overview'),

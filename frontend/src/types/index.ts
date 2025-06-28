@@ -32,7 +32,14 @@ export interface Mission {
   xp_reward: number
   required_level: number
   created_at: string
+  frequency?: 'diaria' | 'semanal' | 'global' | 'daily' | 'weekly'
+  requirements?: Array<{ type: 'module' | 'mission', id: string, name: string }>
   state?: 'active' | 'completed' | 'failed'
+  module_id?: string
+  type?: string
+  progress?: any
+  started_at?: string
+  completed_at?: string
 }
 
 export interface ModuleProgress {

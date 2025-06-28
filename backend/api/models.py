@@ -33,6 +33,7 @@ def create_user_profile(sender, instance, created, **kwargs):
             progress, _ = ModuleProgress.objects.get_or_create(user=instance, module=first_module)
             if progress.state == 'locked':
                 progress.unlock()
+                progress.auto_unlocked = True
                 progress.save()
 
 class Module(models.Model):
@@ -66,6 +67,8 @@ class ModuleProgress(models.Model):
     state = FSMField(default='locked', choices=Module.STATES)
     experience_points = models.IntegerField(default=0)
     last_activity = models.DateTimeField(auto_now=True)
+    auto_unlocked = models.BooleanField(default=False)  # Nuevo campo
+
     class Meta:
         unique_together = ['user', 'module']
     def __str__(self):
@@ -77,6 +80,8 @@ class ModuleProgress(models.Model):
     @transition(field=state, source='unlocked', target='completed')
     def complete(self):
         pass
+
+from django.db.models import JSONField
 
 class Mission(models.Model):
     STATES = (
@@ -98,6 +103,7 @@ class Mission(models.Model):
     required_level = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     frequency = models.CharField(max_length=20, choices=FREQUENCY_CHOICES, null=True, blank=True, default=None)
+    requirements = JSONField(default=list, blank=True)  # Nuevo campo para requisitos
     def __str__(self):
         return self.title
 

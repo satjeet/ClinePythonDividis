@@ -1,120 +1,307 @@
 [
-    {
-        "model": "api.mission",
-        "pk": "46e39fc7-8a77-4e39-9559-283a73655d12",
-        "fields": {
-            "module": "salud",
-            "title": "Bienvenido a tu Viaje de Salud",
-            "description": "¡Bienvenido, Navegante Cósmico! Has llegado a la Constelación de la Salud, tu punto de partida en este viaje de transformación. Tu primera misión es simple pero poderosa: reflexiona sobre un hábito que te gustaría desarrollar para mejorar tu salud. Puede ser caminar más, beber más agua, o cualquier otro hábito que consideres beneficioso. Al completar esta misión, desbloquearás la Serpiente de Hábitos, tu primera Reliquia Cósmica.",
-            "xp_reward": 100,
-            "required_level": 1,
-            "created_at": "2025-01-06T00:00:00Z"
-        }
-    },
-    {
-        "model": "api.mission",
-        "pk": "7d9a7e23-c48e-4bd1-a65c-e638f32c3012",
-        "fields": {
-            "module": "salud",
-            "title": "Diseña tu Primer Hábito",
-            "description": "Ahora que has identificado el hábito que deseas desarrollar, es momento de diseñar su implementación. Define:\n1. ¿A qué hora específica lo realizarás?\n2. ¿Qué duración tendrá?\n3. ¿Qué necesitas para comenzar?\n4. ¿Cómo medirás tu progreso?\n\nAl completar esta misión, recibirás tu primera estrella en la Constelación de la Salud.",
-            "xp_reward": 150,
-            "required_level": 1,
-            "created_at": "2025-01-06T00:00:00Z"
-        }
-    },
-    {
-        "model": "api.mission",
-        "pk": "9c8b4e56-d231-4f67-8a39-2e5d7c8f4123",
-        "fields": {
-            "module": "salud",
-            "title": "Inicia tu Racha Estelar",
-            "description": "Es hora de poner en práctica tu hábito. Realízalo durante tres días consecutivos y registra tu experiencia:\n1. ¿Cómo te sientes después de completarlo?\n2. ¿Qué obstáculos encontraste?\n3. ¿Qué te motivó a mantener la constancia?\n\nAl completar esta racha inicial, tu Serpiente de Hábitos comenzará a brillar con mayor intensidad.",
-            "xp_reward": 200,
-            "required_level": 1,
-            "created_at": "2025-01-06T00:00:00Z"
-        }
-    },
-    {
-        "model": "api.mission",
-        "pk": "b1e2c3d4-1111-4a22-8b33-1234567890ab",
-        "fields": {
-            "module": null,
-            "title": "¡Alcanza tu primera racha!",
-            "description": "Consigue una racha de al menos 1 día en cualquier módulo. Las rachas se logran realizando actividades en días consecutivos.",
-            "xp_reward": 50,
-            "required_level": 1,
-            "created_at": "2025-01-06T00:00:00Z",
-            "frequency": "global"
-        }
-    },
-    {
-        "model": "api.mission",
-        "pk": "c2f3e4a5-2222-4b33-9c44-abcdefabcdef",
-        "fields": {
-            "module": null,
-            "title": "Haz una declaración hoy",
-            "description": "Completa al menos una declaración en cualquier área durante el día.",
-            "xp_reward": 25,
-            "required_level": 1,
-            "created_at": "2025-01-06T00:00:00Z",
-            "frequency": "daily"
-        }
-    },
-    {
-        "model": "api.mission",
-        "pk": "d3a4b5c6-3333-4c44-8d55-fedcba987654",
-        "fields": {
-            "module": null,
-            "title": "Mantén tu racha semanal",
-            "description": "Realiza al menos una declaración diaria durante 5 días de la semana.",
-            "xp_reward": 100,
-            "required_level": 1,
-            "created_at": "2025-01-06T00:00:00Z",
-            "frequency": "weekly"
-        }
-    },
-    {
-        "model": "api.mission",
-        "pk": "e4b5c6d7-4444-4d55-9e66-1234abcdef12",
-        "fields": {
-            "module": null,
-            "title": "Desbloquea un módulo esta semana",
-            "description": "Desbloquea cualquier módulo durante la semana.",
-            "xp_reward": 75,
-            "required_level": 1,
-            "created_at": "2025-01-06T00:00:00Z",
-            "frequency": "weekly"
-        }
-    },
-    {
-        "model": "api.achievement",
-        "pk": 1,
-        "fields": {
-            "name": "Primer Paso en el Cosmos",
-            "description": "Completaste tu primera misión en la Constelación de la Salud",
-            "icon": "first-step",
-            "xp_reward": 50
-        }
-    },
-    {
-        "model": "api.achievement",
-        "pk": 2,
-        "fields": {
-            "name": "Arquitecto de Hábitos",
-            "description": "Diseñaste tu primer hábito saludable",
-            "icon": "architect",
-            "xp_reward": 75
-        }
-    },
-    {
-        "model": "api.achievement",
-        "pk": 3,
-        "fields": {
-            "name": "Racha Estelar",
-            "description": "Mantuviste tu primer hábito durante tres días consecutivos",
-            "icon": "streak",
-            "xp_reward": 100
-        }
+   {
+    "model": "api.mission",
+    "pk": "11111111-1111-1111-1111-111111111111",
+    "fields": {
+      "module": "salud",
+      "title": "Muévete hoy",
+      "description": "Registra 15 minutos de actividad física, como caminar, estirarte o hacer ejercicio.",
+      "xp_reward": 20,
+      "required_level": 1,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": "daily",
+      "requirements": []
     }
+  },
+  {
+    "model": "api.mission",
+    "pk": "11111111-1111-1111-1111-111111111112",
+    "fields": {
+      "module": "personalidad",
+      "title": "Afirmación positiva",
+      "description": "Escribe o di una afirmación positiva sobre ti mismo para reforzar tu autoestima.",
+      "xp_reward": 15,
+      "required_level": 1,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": "daily",
+      "requirements": []
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "11111111-1111-1111-1111-111111111113",
+    "fields": {
+      "module": "intelecto",
+      "title": "Aprende algo nuevo",
+      "description": "Lee un artículo, mira un video educativo o aprende una palabra nueva hoy.",
+      "xp_reward": 20,
+      "required_level": 1,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": "daily",
+      "requirements": []
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "11111111-1111-1111-1111-111111111114",
+    "fields": {
+      "module": "carrera",
+      "title": "Organiza tu día laboral",
+      "description": "Crea una lista de tareas laborales o revisa tu agenda para hoy.",
+      "xp_reward": 15,
+      "required_level": 1,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": "daily",
+      "requirements": []
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "11111111-1111-1111-1111-111111111115",
+    "fields": {
+      "module": "finanzas",
+      "title": "Controla tus gastos",
+      "description": "Registra un gasto de hoy o revisa tu presupuesto diario.",
+      "xp_reward": 15,
+      "required_level": 1,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": "daily",
+      "requirements": []
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "11111111-1111-1111-1111-111111111116",
+    "fields": {
+      "module": "calidad-vida",
+      "title": "Momento de calma",
+      "description": "Dedica 5 minutos a una actividad relajante, como leer o escuchar música.",
+      "xp_reward": 20,
+      "required_level": 1,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": "daily",
+      "requirements": []
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "11111111-1111-1111-1111-111111111117",
+    "fields": {
+      "module": "emocionalidad",
+      "title": "Reflexión emocional",
+      "description": "Escribe o piensa en una emoción que sentiste hoy y qué la causó.",
+      "xp_reward": 15,
+      "required_level": 1,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": "daily",
+      "requirements": []
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "11111111-1111-1111-1111-111111111118",
+    "fields": {
+      "module": "relaciones",
+      "title": "Conecta con alguien",
+      "description": "Envía un mensaje o habla con un amigo, familiar o colega hoy.",
+      "xp_reward": 20,
+      "required_level": 1,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": "daily",
+      "requirements": []
+    }
+  },
+
+  {
+    "model": "api.mission",
+    "pk": "22222222-2222-2222-2222-222222222221",
+    "fields": {
+      "module": null,
+      "title": "Equilibrio semanal",
+      "description": "Completa al menos 3 acciones en 3 categorías diferentes esta semana.",
+      "xp_reward": 100,
+      "required_level": 2,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": "weekly",
+      "requirements": []
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "22222222-2222-2222-2222-222222222222",
+    "fields": {
+      "module": "salud",
+      "title": "Semana activa",
+      "description": "Registra 5 sesiones de ejercicio de al menos 15 minutos esta semana.",
+      "xp_reward": 120,
+      "required_level": 2,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": "weekly",
+      "requirements": [
+        { "type": "mission", "id": "11111111-1111-1111-1111-111111111111", "name": "Muévete hoy" }
+      ]
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "22222222-2222-2222-2222-222222222223",
+    "fields": {
+      "module": null,
+      "title": "Crecimiento personal",
+      "description": "Completa 3 acciones en Personalidad y 3 en Intelecto esta semana.",
+      "xp_reward": 130,
+      "required_level": 3,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": "weekly",
+      "requirements": [
+        { "type": "module", "id": "personalidad", "name": "Personalidad" },
+        { "type": "module", "id": "intelecto", "name": "Intelecto" }
+      ]
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "22222222-2222-2222-2222-222222222224",
+    "fields": {
+      "module": "finanzas",
+      "title": "Plan financiero semanal",
+      "description": "Revisa tu presupuesto semanal y registra todos tus gastos durante 5 días.",
+      "xp_reward": 110,
+      "required_level": 2,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": "weekly",
+      "requirements": [
+        { "type": "mission", "id": "11111111-1111-1111-1111-111111111115", "name": "Controla tus gastos" }
+      ]
+    }
+  },
+
+  {
+    "model": "api.mission",
+    "pk": "33333333-3333-3333-3333-333333333331",
+    "fields": {
+      "module": "salud",
+      "title": "Hábito saludable formado",
+      "description": "Completa 10 sesiones de ejercicio registradas para consolidar un hábito saludable.",
+      "xp_reward": 150,
+      "required_level": 3,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": null,
+      "requirements": [
+        { "type": "mission", "id": "22222222-2222-2222-2222-222222222222", "name": "Semana activa" }
+      ]
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "33333333-3333-3333-3333-333333333332",
+    "fields": {
+      "module": "personalidad",
+      "title": "Autoconocimiento profundo",
+      "description": "Escribe 5 afirmaciones positivas sobre ti mismo en una semana.",
+      "xp_reward": 100,
+      "required_level": 2,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": null,
+      "requirements": [
+        { "type": "mission", "id": "11111111-1111-1111-1111-111111111112", "name": "Afirmación positiva" }
+      ]
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "33333333-3333-3333-3333-333333333333",
+    "fields": {
+      "module": "intelecto",
+      "title": "Maestro del aprendizaje",
+      "description": "Completa 5 actividades de aprendizaje (lecturas, videos o cursos) en una semana.",
+      "xp_reward": 120,
+      "required_level": 3,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": null,
+      "requirements": [
+        { "type": "mission", "id": "11111111-1111-1111-1111-111111111113", "name": "Aprende algo nuevo" }
+      ]
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "33333333-3333-3333-3333-333333333334",
+    "fields": {
+      "module": "carrera",
+      "title": "Actualiza tu perfil profesional",
+      "description": "Actualiza tu currículum o perfil de LinkedIn para destacar tus logros.",
+      "xp_reward": 150,
+      "required_level": 4,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": null,
+      "requirements": [
+        { "type": "mission", "id": "11111111-1111-1111-1111-111111111114", "name": "Organiza tu día laboral" }
+      ]
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "33333333-3333-3333-3333-333333333335",
+    "fields": {
+      "module": "finanzas",
+      "title": "Ahorro inicial",
+      "description": "Ahorra una cantidad específica de dinero esta semana (define la cantidad según tu presupuesto).",
+      "xp_reward": 100,
+      "required_level": 3,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": null,
+      "requirements": [
+        { "type": "mission", "id": "22222222-2222-2222-2222-222222222224", "name": "Plan financiero semanal" }
+      ]
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "33333333-3333-3333-3333-333333333336",
+    "fields": {
+      "module": "calidad-vida",
+      "title": "Rutina de bienestar",
+      "description": "Crea una rutina diaria de 10 minutos para mejorar tu calidad de vida (por ejemplo, meditación o lectura).",
+      "xp_reward": 120,
+      "required_level": 3,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": null,
+      "requirements": [
+        { "type": "mission", "id": "11111111-1111-1111-1111-111111111116", "name": "Momento de calma" }
+      ]
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "33333333-3333-3333-3333-333333333337",
+    "fields": {
+      "module": "emocionalidad",
+      "title": "Diario emocional",
+      "description": "Lleva un diario emocional durante 5 días, registrando tus emociones diarias.",
+      "xp_reward": 100,
+      "required_level": 2,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": null,
+      "requirements": [
+        { "type": "mission", "id": "11111111-1111-1111-1111-111111111117", "name": "Reflexión emocional" }
+      ]
+    }
+  },
+  {
+    "model": "api.mission",
+    "pk": "33333333-3333-3333-3333-333333333338",
+    "fields": {
+      "module": "relaciones",
+      "title": "Fortalecer lazos",
+      "description": "Organiza un encuentro o una llamada significativa con alguien importante para ti.",
+      "xp_reward": 150,
+      "required_level": 3,
+      "created_at": "2025-06-27T00:00:00Z",
+      "frequency": null,
+      "requirements": [
+        { "type": "mission", "id": "11111111-1111-1111-1111-111111111118", "name": "Conecta con alguien" }
+      ]
+    }
+  }
 ]

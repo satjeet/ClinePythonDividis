@@ -24,10 +24,12 @@
         <p v-if="globalLoader && globalLoader.error" class="text-red-400 text-sm">{{ globalLoader.error }}</p>
       </div>
     </div>
+    <Toast />
   </div>
 </template>
 
 <script setup lang="ts">
+import Toast from '@/components/ui/Toast.vue'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'

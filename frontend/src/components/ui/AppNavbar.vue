@@ -12,6 +12,13 @@
       <!-- Menú usuario -->
       <div class="flex items-center space-x-6">
         <RouterLink 
+          :to="{ name: 'missions' }"
+          class="text-slate-400 hover:text-cosmic-400 transition-colors"
+        >
+          <i class="fas fa-flag-checkered"></i>
+          <span class="ml-1">Misiones</span>
+        </RouterLink>
+        <RouterLink 
           :to="{ name: 'profile' }"
           class="text-slate-400 hover:text-cosmic-400 transition-colors"
         >

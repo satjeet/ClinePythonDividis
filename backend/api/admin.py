@@ -26,9 +26,15 @@ class ModuleProgressAdmin(admin.ModelAdmin):
 
 @admin.register(Mission)
 class MissionAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'module', 'xp_reward']
-    list_filter = ['module']
-    search_fields = ['title']
+    list_display = ['id', 'title', 'module', 'xp_reward', 'required_level', 'frequency']
+    list_filter = ['module', 'frequency']
+    search_fields = ['title', 'description']
+    readonly_fields = ['id']
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'description', 'module', 'xp_reward', 'required_level', 'frequency', 'requirements', 'id')
+        }),
+    )
 
 @admin.register(MissionProgress)
 class MissionProgressAdmin(admin.ModelAdmin):

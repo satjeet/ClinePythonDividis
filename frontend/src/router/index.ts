@@ -61,6 +61,15 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/missions',
+      name: 'missions',
+      component: () => import('@/views/Missions.vue'),
+      meta: {
+        requiresAuth: true,
+        title: 'Misiones'
+      }
+    },
+    {
       path: '/wellness-survey',
       name: 'WellnessSurvey',
       component: () => import('@/components/WellnessSurvey/WellnessSurvey.vue'),

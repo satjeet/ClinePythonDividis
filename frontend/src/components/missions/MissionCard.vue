@@ -49,21 +49,36 @@
 
     <!-- Mission actions -->
     <template #footer>
-      <div class="flex justify-end">
-        <Button 
-          v-if="mission.state !== 'completed'"
-          @click="$emit('complete', mission.id)"
-          :disabled="
-            loading || 
-            userLevel < mission.required_level ||
-            mission.state === 'failed'
-          ">
-          {{ mission.state === 'active' ? 'Completar' : 'Iniciar' }}
+      <div class="flex justify-end gap-2">
+        <!-- Botón para requisitos si la misión está bloqueada o tiene requisitos pendientes -->
+        <Button
+          v-if="mission.blocked || (mission.requirements && mission.requirements.length > 0)"
+          variant="outline"
+          @click="$emit('show-requirements', mission)"
+        >
+          Requisitos
         </Button>
+        <!-- Botón para activar misión solo si no está bloqueada y no tiene requisitos pendientes -->
+        <Button
+          v-else-if="mission.state !== 'active' && mission.state !== 'completed'"
+          @click="$emit('activate', mission)"
+        >
+          Activar
+        </Button>
+        <!-- Botón para completar misión activa -->
         <Button 
-          v-else
+          v-else-if="mission.state === 'active'"
+          @click="$emit('complete', mission.id)"
+          :disabled="loading || userLevel < mission.required_level"
+        >
+          Completar
+        </Button>
+        <!-- Botón para volver a intentar misión completada o fallida -->
+        <Button 
+          v-else-if="mission.state === 'completed' || mission.state === 'failed'"
           variant="ghost"
-          @click="$emit('retry', mission.id)">
+          @click="$emit('retry', mission.id)"
+        >
           Volver a intentar
         </Button>
       </div>
@@ -76,8 +91,9 @@ import type { Mission } from '@/types'
 import Card from '@/components/ui/Card.vue'
 import Button from '@/components/ui/Button.vue'
 
+
 interface Props {
-  mission: Mission
+  mission: any
   userLevel: number
   loading?: boolean
 }
@@ -89,6 +105,8 @@ withDefaults(defineProps<Props>(), {
 defineEmits<{
   (e: 'complete', missionId: string): void
   (e: 'retry', missionId: string): void
+  (e: 'show-requirements', mission: Mission): void
+  (e: 'activate', mission: Mission): void
 }>()
 </script>
 

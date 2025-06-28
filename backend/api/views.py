@@ -362,13 +362,20 @@ class UnlockedPillarViewSet(viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        dificultad = serializer.validated_data.get('dificultad')
-        ataque = 1
-        if dificultad == 'media':
-            ataque = 3
-        elif dificultad == 'difícil':
-            ataque = 9
-        serializer.save(user=self.request.user, ataque=ataque)
+        try:
+            dificultad = serializer.validated_data.get('dificultad')
+            ataque = 1
+            if dificultad == 'media':
+                ataque = 3
+            elif dificultad == 'difícil':
+                ataque = 9
+            serializer.save(user=self.request.user)
+        except Exception as e:
+            from django.db import IntegrityError
+            if isinstance(e, IntegrityError):
+                from rest_framework.exceptions import ValidationError
+                raise ValidationError({'detail': 'Este pilar ya está desbloqueado para este usuario y módulo.'})
+            raise
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -435,6 +442,10 @@ class DeclarationViewSet(viewsets.ModelViewSet):
         streak, _ = Streak.objects.get_or_create(user=user, module=module)
         streak.update_streak()
 
+        # --- Lógica de misiones delegada a utils ---
+        from api.utils.mission_logic import check_and_complete_missions
+        check_and_complete_missions(user, module, pillar)
+
 # --- Hábitos (serpiente) ---
 @extend_schema(tags=['habits'])
 class HabitViewSet(viewsets.ModelViewSet):
@@ -491,22 +502,30 @@ class AchievementViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = AchievementSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-# --- Global Missions APIView ---
-class GlobalMissionListView(APIView):
+# --- User Missions APIView ---
+class UserMissionsAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request):
         user = request.user
         from .models import Mission, MissionProgress, Declaration, ModuleProgress
         from datetime import timedelta
 
-        global_missions = Mission.objects.filter(module__isnull=True)
-        result = []
         now = timezone.now()
         today = now.date()
-        week_start = today - timedelta(days=today.weekday())  # lunes
+        week_start = today - timedelta(days=today.weekday())
         week_end = week_start + timedelta(days=6)
 
-        # Precalcular datos de usuario
+        # Misiones globales
+        global_missions = Mission.objects.filter(module__isnull=True)
+        # Todas las misiones de módulos (desbloqueados o no)
+        module_missions = Mission.objects.filter(module__isnull=False)
+        # Módulos desbloqueados por el usuario
+        unlocked_modules = set(ModuleProgress.objects.filter(
+            user=user,
+            state='unlocked'
+        ).values_list('module_id', flat=True))
+
+        # Progreso de usuario
         declarations_today = Declaration.objects.filter(user=user, created_at__date=today).count()
         declarations_this_week = Declaration.objects.filter(user=user, created_at__date__gte=week_start, created_at__date__lte=week_end)
         days_with_declaration = declarations_this_week.values_list('created_at__date', flat=True).distinct()
@@ -514,15 +533,18 @@ class GlobalMissionListView(APIView):
             user=user,
             state='unlocked',
             last_activity__date__gte=week_start,
-            last_activity__date__lte=week_end
+            last_activity__date__lte=week_end,
+            auto_unlocked=False
         ).count()
 
+        result = []
+
+        # Global missions
         for mission in global_missions:
             mp = MissionProgress.objects.filter(user=user, mission=mission).first()
             state = mp.state if mp else "active"
             progress = None
             frequency = getattr(mission, "frequency", None)
-            # Progreso personalizado para misiones diarias/semanales
             if hasattr(mission, "frequency"):
                 frequency = mission.frequency
             elif hasattr(mission, "fields") and "frequency" in mission.fields:
@@ -538,12 +560,16 @@ class GlobalMissionListView(APIView):
                     state = "completed"
             # Weekly streak
             elif frequency == "weekly" and "racha" in mission.title.lower():
+                # Usar la racha real del usuario (Streak)
+                from .models import Streak
+                streak = Streak.objects.filter(user=user, module__isnull=True).first()
+                current_streak = streak.current_streak if streak else 0
                 progress = {
-                    "current": len(days_with_declaration),
+                    "current": current_streak,
                     "target": 5,
-                    "label": f"{len(days_with_declaration)}/5 días con declaración esta semana"
+                    "label": f"{current_streak}/5 días de racha consecutiva"
                 }
-                if len(days_with_declaration) >= 5:
+                if current_streak >= 5:
                     state = "completed"
             # Weekly unlock
             elif frequency == "weekly" and "desbloquea" in mission.title.lower():
@@ -559,8 +585,36 @@ class GlobalMissionListView(APIView):
                 "title": mission.title,
                 "description": mission.description,
                 "xp_reward": mission.xp_reward,
-                "state": state,
                 "frequency": frequency,
+                "requirements": getattr(mission, "requirements", []),
+                "type": "global",
+                "state": state,
                 "progress": progress,
+                "started_at": mp.started_at if mp else None,
+                "completed_at": mp.completed_at if mp else None,
             })
+
+        # Module missions
+        for mission in module_missions:
+            mp = MissionProgress.objects.filter(user=user, mission=mission).first()
+            # Si el módulo está desbloqueado, usar el estado real; si no, marcar como "blocked"
+            if mission.module and str(mission.module.id) in unlocked_modules:
+                state = mp.state if mp else "active"
+            else:
+                state = "blocked"
+            result.append({
+                "id": str(mission.id),
+                "title": mission.title,
+                "description": mission.description,
+                "xp_reward": mission.xp_reward,
+                "frequency": getattr(mission, "frequency", None),
+                "requirements": getattr(mission, "requirements", []),
+                "type": "module",
+                "module_id": str(mission.module.id) if mission.module else None,
+                "state": state,
+                "progress": None,
+                "started_at": mp.started_at if mp else None,
+                "completed_at": mp.completed_at if mp else None,
+            })
+
         return Response(result)

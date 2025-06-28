@@ -248,6 +248,21 @@ export const useModulesStore = defineStore('modules', () => {
       }
       // Refrescar módulos y declaraciones tras sincronizar (para reflejar desbloqueos)
       await Promise.all([fetchModules(), fetchDeclarations()])
+      // --- Mejorado: Detectar misiones completadas y disparar toast inmediatamente ---
+      try {
+        const { useMissionsStore } = await import('./missions')
+        const missionsStore = useMissionsStore()
+        const prevCompletedIds = new Set(missionsStore.missions.filter(m => m.state === 'completed').map(m => m.id))
+        await missionsStore.fetchMissions()
+        const newCompleted = missionsStore.missions.filter(m => m.state === 'completed' && !prevCompletedIds.has(m.id))
+        for (const mission of newCompleted) {
+          // Disparar el toast aquí mismo
+          const { useGlobalToastStore } = await import('./globalToast')
+          useGlobalToastStore().showToast(`¡Felicidades! Completaste la misión "${mission.title}" (+${mission.xp_reward} XP)`, 'success')
+        }
+      } catch (e) {
+        // No hacer nada si falla
+      }
     } finally {
       loading.value = false
     }
