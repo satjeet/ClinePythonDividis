@@ -5,10 +5,12 @@
         v-for="toast in toasts"
         :key="toast.id"
         :class="[
-          'px-4 py-2 rounded shadow-lg text-white min-w-[220px] max-w-xs',
+          'px-4 py-2 rounded shadow-lg text-white min-w-[220px] max-w-xs cursor-pointer',
           toast.type === 'success' ? 'bg-green-600' :
           toast.type === 'error' ? 'bg-red-600' : 'bg-cosmic-400'
         ]"
+        @click="toastStore.removeToast(toast.id)"
+        title="Cerrar"
       >
         {{ toast.message }}
       </div>

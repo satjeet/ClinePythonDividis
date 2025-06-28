@@ -11,7 +11,11 @@ export interface ToastMessage {
 export const useGlobalToastStore = defineStore('globalToast', () => {
   const toasts = ref<ToastMessage[]>([])
 
-  function showToast(message: string, type: 'success' | 'info' | 'error' = 'success', duration = 3500) {
+  function showToast(message: string, type: 'success' | 'info' | 'error' = 'success', duration = 6000) {
+    // Evitar duplicados: si ya existe un toast igual, no agregarlo
+    if (toasts.value.some(t => t.message === message && t.type === type)) {
+      return
+    }
     const id = Date.now() + Math.random()
     toasts.value.push({ id, message, type, duration })
     setTimeout(() => {
