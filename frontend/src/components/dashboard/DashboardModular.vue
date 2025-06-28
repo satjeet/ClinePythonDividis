@@ -7,6 +7,7 @@
       :xp="userProgress.xp.value"
       :stats="userProgress.stats.value"
       :longest-streak="userProgress.longestStreak.value"
+      :title="userProgress.title.value"
     />
     <MotivationalMessage />
     <VitalRadarChart :values="vitalRadar.values" />

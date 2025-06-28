@@ -35,10 +35,14 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     """Serializer for user profiles."""
     user = UserSerializer(read_only=True)
+    title = serializers.SerializerMethodField()
+
+    def get_title(self, obj):
+        return obj.get_level_title()
     
     class Meta:
         model = Profile
-        fields = ('user', 'experience_points', 'current_level', 'created_at', 'updated_at')
+        fields = ('user', 'experience_points', 'current_level', 'created_at', 'updated_at', 'title')
         read_only_fields = ('created_at', 'updated_at')
 
 class ModuleSerializer(serializers.ModelSerializer):
@@ -152,13 +156,17 @@ class UserProfileDetailSerializer(serializers.ModelSerializer):
     active_missions = serializers.SerializerMethodField()
     first_name = serializers.SerializerMethodField()
     last_name = serializers.SerializerMethodField()
+    title = serializers.SerializerMethodField()
+
+    def get_title(self, obj):
+        return obj.get_level_title()
 
     class Meta:
         model = Profile
         fields = (
             'user', 'user_write', 'experience_points', 'current_level', 'created_at',
             'updated_at', 'module_progress', 'achievements', 'streaks',
-            'active_missions', 'first_name', 'last_name'
+            'active_missions', 'first_name', 'last_name', 'title'
         )
         read_only_fields = ('created_at', 'updated_at')
 

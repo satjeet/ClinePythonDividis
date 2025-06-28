@@ -7,6 +7,13 @@ echo "==> Esperando a que Postgres esté listo..."
 echo "==> Ejecutando migraciones de Django..."
 python manage.py migrate --noinput
 
+echo "==> Estado de migraciones Django:"
+python manage.py showmigrations
+
+# Cargar títulos de nivel desde el JSON usando management command (igual que misiones)
+echo " - Cargando títulos de nivel..."
+python manage.py load_level_titles || echo " [ERROR] Falló cargar títulos"
+
 # Cargar los fixtures en orden específico (solo si los necesitas)
 echo "==> Cargando fixtures iniciales en orden..."
 echo " - Cargando módulos..."

@@ -10,12 +10,39 @@ from django_fsm import FSMField, transition
 from django.conf import settings
 import uuid
 
+import json
+import os
+
+class LevelTitle(models.Model):
+    level = models.PositiveIntegerField(unique=True)
+    title = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"Nivel {self.level}: {self.title}"
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     experience_points = models.IntegerField(default=0)
     current_level = models.IntegerField(default=1)
+
+    # Cargar títulos de nivel una sola vez
+    _level_titles = None
+
+    @classmethod
+    def get_titles_dict(cls):
+        if cls._level_titles is None:
+            fixture_path = os.path.join(os.path.dirname(__file__), "fixtures", "level_titles.json")
+            with open(fixture_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                cls._level_titles = {item["level"]: item["title"] for item in data}
+        return cls._level_titles
+
+    def get_level_title(self):
+        titles = self.get_titles_dict()
+        return titles.get(self.current_level, "Aventurero")
+
     def __str__(self):
         return f"{self.user.username}'s profile"
     def calculate_level(self):

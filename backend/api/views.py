@@ -299,7 +299,8 @@ class ProgressOverviewView(APIView):
             'modules_unlocked': modules_unlocked,
             'missions_completed': missions_completed,
             'achievements_earned': achievements_earned,
-            'current_streaks': current_streaks
+            'current_streaks': current_streaks,
+            'title': profile.get_level_title()
         }
         return Response(
             ProgressOverviewSerializer(data).data,

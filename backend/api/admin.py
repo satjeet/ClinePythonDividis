@@ -4,7 +4,7 @@ Admin configuration for the API app.
 from django.contrib import admin
 from .models import (
     Profile, Module, ModuleProgress, Mission,
-    MissionProgress, Achievement, UserAchievement, Streak
+    MissionProgress, Achievement, UserAchievement, Streak, LevelTitle
 )
 
 @admin.register(Profile)
@@ -56,3 +56,8 @@ class UserAchievementAdmin(admin.ModelAdmin):
 class StreakAdmin(admin.ModelAdmin):
     list_display = ['user', 'module', 'current_streak', 'longest_streak', 'last_activity']
     search_fields = ['user__username', 'module__name']
+
+@admin.register(LevelTitle)
+class LevelTitleAdmin(admin.ModelAdmin):
+    list_display = ['level', 'title']
+    search_fields = ['title']

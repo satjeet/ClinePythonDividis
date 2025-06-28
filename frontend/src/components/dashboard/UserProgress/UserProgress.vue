@@ -31,7 +31,7 @@
       <div class="flex items-center justify-between mb-1">
         <span class="text-cosmic-300 font-bold text-lg">Nivel {{ level }}</span>
         <span class="text-cosmic-400 font-semibold">
-          {{ getTitle(level) }}
+          {{ title }}
         </span>
       </div>
       <div class="w-full bg-cosmic-700/30 rounded-full h-3 relative">
@@ -71,6 +71,7 @@ interface Props {
     achievements_earned: number
   }
   longestStreak: number
+  title: string
 }
 
 const props = defineProps<Props>()
@@ -83,13 +84,7 @@ const levelProgress = computed(() =>
   (xpProgress.value / (xpForNextLevel.value - xpForCurrentLevel.value)) * 100
 )
 
-// Título cósmico mock según nivel
-function getTitle(level: number): string {
-  if (level < 5) return 'Navegante Novato'
-  if (level < 10) return 'Explorador Estelar'
-  if (level < 20) return 'Guardián Cósmico'
-  return 'Maestro Estelar'
-}
+// El título ahora viene del backend vía prop "title"
 
 // Methods
 function getInitials(name: string): string {
