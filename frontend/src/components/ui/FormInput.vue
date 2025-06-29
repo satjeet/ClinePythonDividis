@@ -22,7 +22,7 @@
         :required="required"
         :disabled="disabled"
         :class="[
-          'input-cosmic w-full',
+          'input-theme w-full',
           error ? 'border-red-500 focus:border-red-500' : '',
           className
         ]"
@@ -111,12 +111,5 @@ defineExpose({
 <style scoped>
 .form-field {
   @apply space-y-1;
-}
-
-.input-cosmic {
-  @apply bg-slate-900 border border-cosmic-700/30 rounded-lg px-4 py-2 text-slate-200;
-  @apply focus:outline-none focus:ring-2 focus:ring-cosmic-500/50 focus:border-cosmic-500;
-  @apply disabled:opacity-50 disabled:cursor-not-allowed;
-  @apply placeholder:text-slate-500;
 }
 </style>

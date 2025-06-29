@@ -1,7 +1,7 @@
 <template>
   <Card variant="interactive" class="w-full max-w-2xl mx-auto">
     <template #header>
-      <h3 class="text-lg font-bold text-cosmic-300 text-center">Mapa de Progreso Vital</h3>
+<h3 class="text-lg font-bold text-center" :style="{ color: 'var(--theme-accent)' }">Mapa de Progreso Vital</h3>
     </template>
 <div class="flex flex-col items-center w-full">
 <v-chart class="w-full aspect-square mb-6" :option="chartOption" autoresize />

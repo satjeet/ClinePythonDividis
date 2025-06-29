@@ -4,5 +4,11 @@
 */
 
 .user-log-root {
-  @apply w-full bg-slate-900/50 backdrop-blur-sm border border-cosmic-700/30 rounded-lg p-6 mt-2;
+  @apply w-full rounded-lg p-6 mt-2;
+  background: var(--theme-bg-secondary, #fff);
+  border: 1.5px solid var(--theme-border, #e0e7ef);
+  box-shadow: var(--theme-shadow, 0 4px 24px 0 #3b82f610);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: box-shadow 0.3s, border-color 0.3s, background 0.3s;
 }

@@ -1,56 +1,67 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-[var(--theme-bg)] px-2 py-8">
-    <div class="w-full max-w-md mx-auto neon-border card-cosmic shadow-xl rounded-2xl p-8 flex flex-col items-center relative">
+  <div class="min-h-screen flex items-center justify-center px-2 py-8" :style="{ background: 'var(--theme-bg)' }">
+    <div class="w-full max-w-md mx-auto glass-card-profile shadow-xl rounded-2xl p-8 flex flex-col items-center relative animate-profile-fadein">
+      <!-- Logo Dividis -->
+      <svg style="width:56px;height:56px;margin-bottom:1.5rem;" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="28" cy="28" r="28" :fill="`var(--theme-accent, #fff)`" fill-opacity="0.08"/>
+        <path d="M20 16h8a8 8 0 1 1 0 24h-8V16z" :fill="`var(--theme-accent, #fff)`" fill-opacity="0.95"/>
+        <rect x="24" y="22" width="12" height="2.5" rx="1.25" :fill="`var(--theme-border, #3b82f6)`"/>
+      </svg>
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold mb-2" :style="{
+          background: 'linear-gradient(90deg, var(--theme-accent), var(--theme-border))',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent'
+        }">Perfil de Usuario</h1>
+      </div>
+      <form class="w-full flex flex-col gap-4" @submit.prevent="handleSubmit">
+        <input
+          class="input-theme"
+          v-model="firstName"
+          placeholder="Nombre"
+          type="text"
+        />
+        <input
+          class="input-theme"
+          v-model="lastName"
+          placeholder="Apellido"
+          type="text"
+        />
+        <input
+          class="input-theme"
+          v-model="email"
+          placeholder="Correo electrónico"
+          type="email"
+          autocomplete="email"
+        />
+        <select
+          class="input-theme"
+          v-model="selectedTheme"
+          @change="onThemeChange"
+        >
+          <option v-for="theme in themes" :key="theme.key" :value="theme.key">
+            {{ theme.label }}
+          </option>
+        </select>
+        <button :disabled="loading" type="submit" class="btn-theme w-full mt-4">
+          {{ loading ? 'Guardando...' : 'Guardar' }}
+        </button>
+        <transition name="fade">
+          <p v-if="success" class="mt-2 text-center" :style="{ color: 'var(--theme-accent)' }">{{ success }}</p>
+        </transition>
+        <p v-if="error" class="mt-2 text-center" :style="{ color: 'var(--theme-border)' }">{{ error }}</p>
+      </form>
       <router-link
         to="/dashboard"
-        class="absolute left-4 top-4 text-[var(--theme-accent)] hover:text-white transition-colors"
+        class="mt-6 block text-center"
+        :style="{ color: 'var(--theme-border)' }"
         aria-label="Volver al dashboard"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" class="inline h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
+        Volver al dashboard
       </router-link>
-      <h1 class="text-3xl font-bold cosmic-gradient-text mb-8 text-center">Perfil de Usuario</h1>
-      <div v-if="loading">
-        <div class="flex justify-center items-center py-12">
-          <div class="animate-cosmic-spin w-12 h-12 border-2 border-cosmic-500 rounded-full border-t-transparent"></div>
-        </div>
-      </div>
-      <div v-else>
-        <form class="w-full flex flex-col gap-4" @submit.prevent="handleSubmit">
-          <FormInput label="Nombre" v-model="firstName" class="input-cosmic" />
-          <FormInput label="Apellido" v-model="lastName" class="input-cosmic" />
-          <div>
-            <label class="block mb-1 font-semibold">Correo electrónico</label>
-            <input
-              type="email"
-              v-model="email"
-              class="input-cosmic neon-border w-full"
-              autocomplete="email"
-            />
-          </div>
-          <div>
-            <label for="theme-select" class="block mb-1 font-semibold">Theme galáctico</label>
-            <select
-              id="theme-select"
-              class="input-cosmic neon-border w-full"
-              v-model="selectedTheme"
-              @change="onThemeChange"
-            >
-              <option v-for="theme in themes" :key="theme.key" :value="theme.key">
-                {{ theme.label }}
-              </option>
-            </select>
-          </div>
-          <Button :disabled="loading" type="submit" class="btn-cosmic w-full mt-8">
-            Guardar
-          </Button>
-          <transition name="fade">
-            <p v-if="success" class="text-green-400 mt-4 text-center">{{ success }}</p>
-          </transition>
-          <p v-if="error" class="text-red-400 mt-4 text-center">{{ error }}</p>
-        </form>
-      </div>
     </div>
   </div>
 </template>
@@ -58,8 +69,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
-import FormInput from '@/components/ui/FormInput.vue';
-import Button from '@/components/ui/Button.vue';
 import { useTheme } from '@/utils/useTheme';
 import { useRouter } from 'vue-router';
 
@@ -86,10 +95,7 @@ const fetchProfile = async () => {
   loading.value = true;
   try {
     await authStore.fetchUserProfile();
-    console.log('Perfil recibido:', JSON.stringify(authStore.user, null, 2));
     if (authStore.user) {
-      console.log('user:', authStore.user);
-      // Si la respuesta tiene un campo "user", usar ese objeto para email y username
       if (authStore.user.user) {
         email.value = authStore.user.user.email || '';
         firstName.value = authStore.user.first_name || '';
@@ -100,7 +106,6 @@ const fetchProfile = async () => {
         email.value = authStore.user.email || getEmail();
       }
     } else {
-      console.warn('user es undefined');
       email.value = getEmail();
     }
     selectedTheme.value = currentTheme.value;
@@ -124,7 +129,6 @@ const handleSubmit = async (e) => {
   loading.value = true;
   error.value = null;
   success.value = '';
-  console.log('1. Submit iniciado');
 
   try {
     const data = {
@@ -132,10 +136,7 @@ const handleSubmit = async (e) => {
       first_name: firstName.value,
       last_name: lastName.value
     };
-    console.log('Payload enviado al guardar:', data);
-
     if (authStore.isAuthenticated && authStore.updateProfile) {
-      console.log("2. Llamando a authStore.updateProfile");
       await authStore.updateProfile(data);
       await fetchProfile();
       success.value = '¡Perfil guardado exitosamente!';

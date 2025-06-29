@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-slate-950">
+  <div class="min-h-screen" :style="{ background: 'var(--theme-bg)' }">
     <!-- Page transitions -->
     <RouterView v-slot="{ Component }">
       <Transition
@@ -34,6 +34,10 @@ import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useGlobalLoader } from '@/stores/globalLoader'
+import { useTheme } from '@/utils/useTheme'
+
+// Inicializar theme globalmente
+useTheme()
 
 const router = useRouter()
 const authStore = useAuthStore()

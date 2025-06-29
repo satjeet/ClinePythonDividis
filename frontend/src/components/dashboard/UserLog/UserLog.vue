@@ -4,8 +4,8 @@
     <div class="flex flex-col md:flex-row gap-6">
       <!-- Declaraciones recientes -->
       <div class="flex-1">
-        <h4 class="text-cosmic-300 font-semibold mb-2">Últimas declaraciones</h4>
-        <ul class="space-y-1 text-cosmic-100 text-sm">
+        <h4 class="font-semibold mb-2" :style="{ color: 'var(--theme-border)' }">Últimas declaraciones</h4>
+        <ul class="space-y-1 text-sm" :style="{ color: 'var(--theme-accent-contrast, #fff)' }">
           <li v-if="declarationsLoading">Cargando declaraciones...</li>
           <li v-else-if="declarationsError">{{ declarationsError }}</li>
           <li v-else-if="recentDeclarations.length === 0">No hay declaraciones recientes.</li>
@@ -13,45 +13,56 @@
             <li>
               <span class="font-bold">{{ declaration.pillar }}:</span>
               “{{ declaration.text }}”
-              <span class="ml-2 text-xs text-cosmic-400">{{ timeAgo(declaration.created_at) }}</span>
+              <span class="ml-2 text-xs" :style="{ color: 'var(--theme-border)' }">{{ timeAgo(declaration.created_at) }}</span>
             </li>
           </template>
         </ul>
       </div>
       <!-- Misiones activas y completadas -->
       <div class="flex-1">
-        <h4 class="text-cosmic-300 font-semibold mb-2">Misiones Activas</h4>
-        <ul class="space-y-1 text-cosmic-100 text-sm">
+        <h4 class="font-semibold mb-2" :style="{ color: 'var(--theme-border)' }">Misiones Activas</h4>
+        <ul class="space-y-1 text-sm" :style="{ color: 'var(--theme-accent-contrast, #fff)' }">
           <li v-if="loading">Cargando misiones...</li>
           <li v-else-if="error">{{ error }}</li>
           <li v-else-if="activeMissions.length === 0">No tienes misiones activas.</li>
           <template v-for="mission in activeMissions" :key="mission.id">
             <li
               :class="{
-                'opacity-60 line-through': mission.state === 'completed',
-                'bg-cosmic-800/40 border-l-4 border-cosmic-400': mission.state === 'active',
-                'bg-cosmic-900/40 border-l-4 border-cosmic-600': mission.state === 'completed'
+                'opacity-60 line-through': mission.state === 'completed'
               }"
               class="rounded px-2 py-1 mb-1 transition-all"
+              :style="mission.state === 'active'
+                ? {
+                    background: 'color-mix(in srgb, var(--theme-accent) 10%, transparent 90%)',
+                    borderLeft: '4px solid var(--theme-accent)'
+                  }
+                : mission.state === 'completed'
+                ? {
+                    background: 'color-mix(in srgb, var(--theme-border) 10%, transparent 90%)',
+                    borderLeft: '4px solid var(--theme-border)'
+                  }
+                : {}"
             >
               <div class="flex items-center justify-between">
                 <div>
                   <span class="font-bold">{{ mission.title }}:</span>
                   <span class="ml-1">{{ mission.description }}</span>
-                  <span v-if="mission.progress" class="ml-2 text-xs text-cosmic-400">
+                  <span v-if="mission.progress" class="ml-2 text-xs" :style="{ color: 'var(--theme-border)' }">
                     {{ mission.progress.label }}
                   </span>
                 </div>
                 <span
                   v-if="mission.state === 'completed'"
-                  class="ml-2 text-xs px-2 py-0.5 rounded bg-green-700 text-green-100"
+                  class="ml-2 text-xs px-2 py-0.5 rounded"
+                  :style="{ background: 'rgba(34,197,94,0.8)', color: '#fff' }"
                 >Completada</span>
                 <span
                   v-else
-                  class="ml-2 text-xs px-2 py-0.5 rounded bg-cosmic-700 text-cosmic-100"
+                  class="ml-2 text-xs px-2 py-0.5 rounded"
+                  :style="{ background: 'var(--theme-accent)', color: 'var(--theme-accent-contrast, #fff)' }"
                 >Activa</span>
               </div>
-              <div class="ml-2 text-xs text-cosmic-400">
+              <div class="ml-2 text-xs" :style="{ color: 'var(--theme-border)' }">
                 Recompensa: {{ mission.xp_reward }} XP
                 <span v-if="mission.frequency">| {{ mission.frequency === 'daily' ? 'Diaria' : mission.frequency === 'weekly' ? 'Semanal' : 'Global' }}</span>
               </div>

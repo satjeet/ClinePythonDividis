@@ -2,12 +2,11 @@
   <button
     :type="type"
     :class="[
-      'btn-cosmic inline-flex items-center justify-center px-4 py-2',
-      variant === 'outline' ? 'bg-transparent border border-cosmic-500 hover:bg-cosmic-500/20' : '',
-      variant === 'ghost' ? 'bg-transparent hover:bg-cosmic-500/10' : '',
-      variant === 'link' ? 'bg-transparent underline-offset-4 hover:underline' : '',
-      size === 'sm' ? 'text-sm' : '',
-      size === 'lg' ? 'text-lg' : '',
+      'btn-theme inline-flex items-center justify-center',
+      variant !== 'default' ? variant : '',
+      size === 'sm' ? 'text-sm px-3 py-1.5' : '',
+      size === 'lg' ? 'text-lg px-6 py-3' : '',
+      size === 'default' ? 'px-4 py-2' : '',
       fullWidth ? 'w-full' : '',
       loading ? 'opacity-50 cursor-not-allowed' : '',
       className

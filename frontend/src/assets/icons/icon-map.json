@@ -1,0 +1,10 @@
+{
+  "Salud":        "heartbeat.svg",
+  "Personalidad": "user-astronaut.svg",
+  "Intelecto":    "brain.svg",
+  "Carrera":      "rocket.svg",
+  "Finanzas":     "coins.svg",
+  "Calidad de Vida": "star.svg",
+  "Emocionalidad": "spa.svg",
+  "Relaciones":   "users.svg"
+}

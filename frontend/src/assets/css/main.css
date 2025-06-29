@@ -10,35 +10,59 @@
 
   /* Galactic Themes */
   .theme-nebula-red {
-    --theme-bg: #0a0a23;
+    --theme-bg: #1a0a1a;
+    --theme-bg-secondary: rgba(255,23,68,0.10);
     --theme-accent: #ff1744;
+    --theme-accent-contrast: #fff;
     --theme-border: #ff1744;
     --theme-border-glow: 0 0 8px #ff1744, 0 0 16px #ff1744;
+    --theme-radius: 18px;
     --theme-font: 'Orbitron', sans-serif;
+    --theme-shadow: 0 4px 24px 0 #ff174410;
+    --theme-navbar-bg: #2a0a1aee;
+    --theme-navbar-blur: blur(12px);
     font-family: var(--theme-font);
   }
   .theme-solar-flare {
     --theme-bg: #1a0a00;
+    --theme-bg-secondary: rgba(255,145,0,0.10);
     --theme-accent: #ff9100;
+    --theme-accent-contrast: #fff;
     --theme-border: #ff9100;
     --theme-border-glow: 0 0 8px #ff9100, 0 0 16px #ff9100;
+    --theme-radius: 18px;
     --theme-font: system-ui, sans-serif;
+    --theme-shadow: 0 4px 24px 0 #ff910010;
+    --theme-navbar-bg: #2a1500ee;
+    --theme-navbar-blur: blur(12px);
     font-family: var(--theme-font);
   }
   .theme-stellar-gold {
     --theme-bg: #181818;
+    --theme-bg-secondary: rgba(255,215,0,0.10);
     --theme-accent: #ffd700;
+    --theme-accent-contrast: #fff;
     --theme-border: #ffd700;
     --theme-border-glow: 0 0 8px #ffd700, 0 0 16px #ffd700;
+    --theme-radius: 18px;
     --theme-font: system-ui, sans-serif;
+    --theme-shadow: 0 4px 24px 0 #ffd70010;
+    --theme-navbar-bg: #232318ee;
+    --theme-navbar-blur: blur(12px);
     font-family: var(--theme-font);
   }
   .theme-cosmic-silver {
-    --theme-bg: #111;
-    --theme-accent: #e0e0e0;
+    --theme-bg: #111827;
+    --theme-bg-secondary: rgba(17,24,39,0.85);
+    --theme-accent: #b6b4b4;
+    --theme-accent-contrast: #fff;
     --theme-border: #e0e0e0;
     --theme-border-glow: 0 0 8px #e0e0e0, 0 0 16px #e0e0e0;
+    --theme-radius: 18px;
     --theme-font: system-ui, sans-serif;
+    --theme-shadow: 0 4px 24px 0 #e0e0e010;
+    --theme-navbar-bg: #232b38ee;
+    --theme-navbar-blur: blur(12px);
     font-family: var(--theme-font);
   }
 
@@ -71,10 +95,64 @@
     @apply disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
+  .btn-theme {
+    border-radius: var(--theme-radius, 12px);
+    background: var(--theme-accent, #3b82f6);
+    color: var(--theme-accent-contrast, #fff);
+    font-family: var(--theme-font, inherit);
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    box-shadow: var(--theme-shadow, none);
+    border: 1.5px solid var(--theme-accent, #3b82f6);
+    padding: 0.6em 1.2em;
+  }
+  .btn-theme:hover, .btn-theme:focus {
+    background: color-mix(in srgb, var(--theme-accent) 80%, #fff 20%);
+    color: var(--theme-accent-contrast, #fff);
+    box-shadow: var(--theme-border-glow, none);
+    outline: none;
+  }
+  .btn-theme:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .btn-theme.outline {
+    background: transparent;
+    color: var(--theme-accent, #3b82f6);
+    border: 1.5px solid var(--theme-accent, #3b82f6);
+  }
+  .btn-theme.ghost {
+    background: transparent;
+    color: var(--theme-accent, #3b82f6);
+    border: none;
+  }
+  .btn-theme.link {
+    background: transparent;
+    color: var(--theme-accent, #3b82f6);
+    border: none;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    padding: 0.6em 0.2em;
+  }
+
   /* Card styles */
   .card-cosmic {
     @apply bg-slate-900/50 backdrop-blur-sm border border-cosmic-700/30 rounded-lg p-6;
     @apply transition-all duration-300 hover:border-cosmic-500/50;
+  }
+
+  .card-theme {
+    background: var(--theme-bg-secondary, #fff);
+    border: 1.5px solid var(--theme-border, #e0e7ef);
+    border-radius: var(--theme-radius, 18px);
+    box-shadow: var(--theme-shadow, 0 4px 24px 0 #3b82f610);
+    padding: 1.5rem;
+    transition: box-shadow 0.3s, border-color 0.3s, background 0.3s;
+    backdrop-filter: blur(6px);
+  }
+  .card-theme.interactive:hover {
+    box-shadow: var(--theme-border-glow, 0 0 8px #3b82f6, 0 0 16px #60a5fa);
+    border-color: var(--theme-accent, #3b82f6);
   }
 
   /* Input styles */
@@ -83,6 +161,32 @@
     @apply text-slate-200 placeholder-slate-500;
     @apply focus:outline-none focus:ring-2 focus:ring-cosmic-500/50 focus:border-cosmic-500;
     @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .input-theme {
+    background: var(--theme-bg-secondary, #fff);
+    border: 1.5px solid var(--theme-border, #e0e7ef);
+    border-radius: var(--theme-radius, 18px);
+    color: var(--theme-accent, #3b82f6);
+    font-family: var(--theme-font, inherit);
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    box-shadow: none;
+  }
+  .input-theme:focus {
+    outline: none;
+    border-color: var(--theme-accent, #3b82f6);
+    box-shadow: var(--theme-border-glow, 0 0 8px #3b82f6, 0 0 16px #60a5fa);
+    background: var(--theme-bg-secondary, #fff);
+  }
+  .input-theme:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .input-theme::placeholder {
+    color: var(--theme-border, #e0e7ef);
+    opacity: 1;
   }
 
   /* Navigation styles */
@@ -149,3 +253,125 @@
   @apply bg-slate-900/50 backdrop-blur-sm;
   @apply border border-cosmic-700/30;
 }
+
+/* --- Phone Modern Theme --- */
+.theme-phone-modern {
+  --theme-bg: linear-gradient(135deg, #233347 0%, #0a1a2f 100%);
+  --theme-bg-secondary: rgba(20, 30, 50, 0.85);
+  --theme-card-bg: rgba(20, 30, 50, 0.85);
+  --theme-card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  --theme-accent: #3b82f6;
+  --theme-border: #3b82f6;
+  --theme-border-glow: 0 0 16px #3b82f6, 0 0 32px #60a5fa, 0 0 8px #3b82f6;
+  --theme-input-bg: #2c3a4d;
+  --theme-input-border: #4a5a6e;
+  --theme-input-text: #fff;
+  --theme-input-placeholder: #b0b8c1;
+  --theme-btn-bg: #3b82f6;
+  --theme-btn-text: #fff;
+  --theme-btn-hover-bg: #2563eb;
+  --theme-accent-contrast: #fff;
+  --theme-radius: 2rem;
+  --theme-font: 'Inter', 'SF Pro', 'Roboto', sans-serif;
+  --theme-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  --theme-navbar-bg: rgba(20, 30, 50, 0.95);
+  --theme-navbar-blur: blur(12px);
+  --theme-chart-bg: #18283c;
+  font-family: var(--theme-font);
+}
+
+.theme-phone-modern .navbar, .theme-phone-modern .navbar-bg {
+  background: var(--theme-navbar-bg) !important;
+  -webkit-backdrop-filter: var(--theme-navbar-blur);
+  backdrop-filter: var(--theme-navbar-blur);
+}
+.theme-phone-modern .vitalradarchart-bg, .theme-phone-modern .radar-chart-bg {
+  background: var(--theme-chart-bg) !important;
+}
+
+.iphone-theme-bg {
+  min-height: 100vh;
+  background: var(--theme-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.iphone-theme-card {
+  background: var(--theme-card-bg);
+  box-shadow: var(--theme-card-shadow);
+  border-radius: var(--theme-radius, 2rem);
+  padding: 2.5rem 2rem 2rem 2rem;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.iphone-theme-logo {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 1.5rem;
+}
+.iphone-theme-title {
+  color: var(--theme-accent);
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.iphone-theme-subtitle {
+  color: #b0b8c1;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+.iphone-theme-input {
+  width: 100%;
+  background: var(--theme-input-bg);
+  border: 1px solid var(--theme-input-border);
+  color: var(--theme-input-text);
+  border-radius: 1rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+.iphone-theme-input::placeholder {
+  color: var(--theme-input-placeholder);
+}
+.iphone-theme-btn {
+  width: 100%;
+  background: var(--theme-btn-bg);
+  color: var(--theme-btn-text);
+  border: none;
+  border-radius: 1rem;
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.iphone-theme-btn:hover {
+  background: var(--theme-btn-hover-bg);
+}
+.iphone-theme-link {
+  color: #b0b8c1;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+.iphone-theme-link a {
+  color: #fff;
+  text-decoration: underline;
+  margin-left: 0.25rem;
+}
+.iphone-theme-error {
+  color: #ff6b6b;
+  text-align: center;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Elimina la importación de iphone-theme.css en tus componentes y usa solo main.css */

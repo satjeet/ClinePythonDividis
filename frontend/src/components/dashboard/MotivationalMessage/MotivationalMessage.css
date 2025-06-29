@@ -4,5 +4,12 @@
 */
 
 .motivational-message-root {
-  @apply w-full text-center text-cosmic-300 text-lg font-semibold py-4 bg-slate-900/50 backdrop-blur-sm border border-cosmic-700/30 rounded-lg p-6;
+  @apply w-full text-center text-lg font-semibold py-4 rounded-lg p-6;
+  background: var(--theme-bg-secondary, #fff);
+  color: var(--theme-accent, #3b82f6);
+  border: 1.5px solid var(--theme-border, #e0e7ef);
+  box-shadow: var(--theme-shadow, 0 4px 24px 0 #3b82f610);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: box-shadow 0.3s, border-color 0.3s, background 0.3s;
 }

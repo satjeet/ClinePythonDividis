@@ -5,12 +5,13 @@ const themes = [
   { key: 'theme-solar-flare', label: 'Solar Flare' },
   { key: 'theme-stellar-gold', label: 'Stellar Gold' },
   { key: 'theme-cosmic-silver', label: 'Cosmic Silver' },
+  { key: 'theme-phone-modern', label: 'Phone Modern' },
 ];
 
 const THEME_KEY = 'galactic-theme';
 
 export function useTheme() {
-  const currentTheme = ref<string>(themes[0].key);
+const currentTheme = ref<string>(themes[0].key);
 
   // Apply theme class to body
   const applyTheme = (themeKey: string) => {

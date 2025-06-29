@@ -1,13 +1,13 @@
 <template>
   <div 
     :class="[
-      'card-cosmic relative',
-      variant === 'interactive' ? 'transform transition-transform duration-300 hover:-translate-y-1' : '',
+      'card-theme relative',
+      variant === 'interactive' ? 'interactive transform transition-transform duration-300 hover:-translate-y-1' : '',
       className
     ]"
   >
     <!-- Header -->
-    <div v-if="$slots.header" class="border-b border-cosmic-700/30 pb-4 mb-4">
+    <div v-if="$slots.header" class="border-b pb-4 mb-4" :style="{ borderColor: 'var(--theme-border, #e0e7ef)' }">
       <slot name="header"></slot>
     </div>
 
@@ -17,17 +17,23 @@
     </div>
 
     <!-- Footer -->
-    <div v-if="$slots.footer" class="border-t border-cosmic-700/30 pt-4 mt-4">
+    <div v-if="$slots.footer" class="border-t pt-4 mt-4" :style="{ borderColor: 'var(--theme-border, #e0e7ef)' }">
       <slot name="footer"></slot>
     </div>
 
     <!-- Overlay for locked state -->
     <div 
       v-if="locked"
-      class="absolute inset-0 bg-slate-950/50 backdrop-blur-sm rounded-lg flex items-center justify-center">
+      class="absolute inset-0 flex items-center justify-center"
+      :style="{
+        background: 'rgba(0,0,0,0.35)',
+        backdropFilter: 'blur(4px)',
+        borderRadius: 'var(--theme-radius, 18px)'
+      }">
       <div class="text-center">
         <svg 
-          class="w-8 h-8 text-slate-500 mx-auto mb-2" 
+          class="w-8 h-8 mx-auto mb-2" 
+          :style="{ color: 'var(--theme-border, #e0e7ef)' }"
           fill="none" 
           viewBox="0 0 24 24" 
           stroke="currentColor">
@@ -37,17 +43,26 @@
             stroke-width="2" 
             d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
         </svg>
-        <span class="text-sm text-slate-400">{{ lockedMessage }}</span>
+        <span class="text-sm" :style="{ color: 'var(--theme-border, #e0e7ef)' }">{{ lockedMessage }}</span>
       </div>
     </div>
 
     <!-- Loading overlay -->
     <div 
       v-if="loading"
-      class="absolute inset-0 bg-slate-950/50 backdrop-blur-sm rounded-lg flex items-center justify-center">
+      class="absolute inset-0 flex items-center justify-center"
+      :style="{
+        background: 'rgba(0,0,0,0.35)',
+        backdropFilter: 'blur(4px)',
+        borderRadius: 'var(--theme-radius, 18px)'
+      }">
       <div class="text-center">
-        <div class="animate-cosmic-spin w-8 h-8 border-2 border-cosmic-500 rounded-full border-t-transparent mb-2 mx-auto"></div>
-        <span class="text-sm text-slate-400">{{ loadingMessage || 'Cargando...' }}</span>
+        <div class="animate-cosmic-spin w-8 h-8 border-2 mb-2 mx-auto"
+          :style="{
+            borderColor: 'var(--theme-accent, #3b82f6)',
+            borderTopColor: 'transparent'
+          }"></div>
+        <span class="text-sm" :style="{ color: 'var(--theme-border, #e0e7ef)' }">{{ loadingMessage || 'Cargando...' }}</span>
       </div>
     </div>
   </div>

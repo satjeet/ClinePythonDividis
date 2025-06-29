@@ -2,7 +2,7 @@
   <!-- Mapa de constelaciones vitales -->
   <div class="constellations-map-root">
     <div class="flex flex-col items-center w-full">
-      <h3 class="text-cosmic-300 font-bold mb-2">Constelaciones Vitales</h3>
+      <h3 class="font-bold mb-2" :style="{ color: 'var(--theme-border)' }">Constelaciones Vitales</h3>
       <div class="flex flex-wrap gap-4 justify-center">
         <div v-for="area in areas" :key="area.name" class="flex flex-col items-center">
           <template v-if="area.active">
@@ -11,9 +11,20 @@
               :class="[
                 'w-14 h-14 flex items-center justify-center rounded-full border-4 text-2xl mb-1 cursor-pointer',
                 area.active
-                  ? 'bg-cosmic-400 border-cosmic-300 text-slate-950 shadow-lg animate-pulse'
-                  : 'bg-slate-800 border-slate-600 text-slate-500 opacity-60'
+                  ? 'shadow-lg animate-pulse'
+                  : 'opacity-60'
               ]"
+              :style="area.active
+                ? {
+                    background: 'var(--theme-accent)',
+                    borderColor: 'var(--theme-border)',
+                    color: 'var(--theme-accent-contrast, #181818)'
+                  }
+                : {
+                    background: 'color-mix(in srgb, var(--theme-border) 10%, transparent 90%)',
+                    borderColor: 'var(--theme-border)',
+                    color: 'var(--theme-border)'
+                  }"
             >
               <i :class="area.icon"></i>
             </router-link>
@@ -23,15 +34,26 @@
               :class="[
                 'w-14 h-14 flex items-center justify-center rounded-full border-4 text-2xl mb-1',
                 area.active
-                  ? 'bg-cosmic-400 border-cosmic-300 text-slate-950 shadow-lg animate-pulse'
-                  : 'bg-slate-800 border-slate-600 text-slate-500 opacity-60'
+                  ? 'shadow-lg animate-pulse'
+                  : 'opacity-60'
               ]"
+              :style="area.active
+                ? {
+                    background: 'var(--theme-accent)',
+                    borderColor: 'var(--theme-border)',
+                    color: 'var(--theme-accent-contrast, #181818)'
+                  }
+                : {
+                    background: 'color-mix(in srgb, var(--theme-border) 10%, transparent 90%)',
+                    borderColor: 'var(--theme-border)',
+                    color: 'var(--theme-border)'
+                  }"
             >
               <i :class="area.icon"></i>
             </div>
           </template>
-          <span class="text-xs text-cosmic-200">{{ area.name }}</span>
-          <span v-if="!area.active" class="text-xs text-slate-500"><i class="fas fa-lock"></i></span>
+          <span class="text-xs" :style="{ color: 'var(--theme-border)' }">{{ area.name }}</span>
+          <span v-if="!area.active" class="text-xs" :style="{ color: 'var(--theme-border)' }"><i class="fas fa-lock"></i></span>
         </div>
       </div>
     </div>

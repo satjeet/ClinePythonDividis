@@ -3,7 +3,7 @@
   <div class="motivational-message-root">
     <blockquote>
       “Tu constelación de Salud brilla con intensidad. Has completado 3 declaraciones esta semana. ¡Continúa tu viaje y descubre nuevas estrategias para fortalecer tu bienestar!”
-      <footer class="mt-2 text-cosmic-400">— Guía Cósmico</footer>
+      <footer class="mt-2" :style="{ color: 'var(--theme-border)' }">— Guía Cósmico</footer>
     </blockquote>
   </div>
 </template>

@@ -1,83 +1,51 @@
 <template>
-  <div class="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-    <Card class="w-full max-w-md">
-      <template #header>
-        <div class="text-center">
-          <h1 class="text-2xl font-bold text-cosmic-100">Bienvenido de nuevo</h1>
-          <p class="text-slate-400 mt-2">Inicia sesión para continuar tu viaje</p>
-        </div>
-      </template>
-
-      <!-- Login form -->
-      <form @submit.prevent="handleSubmit" class="space-y-6">
-        <FormInput
+  <div class="min-h-screen flex items-center justify-center px-2 py-8" :style="{ background: 'var(--theme-bg)' }">
+    <div class="w-full max-w-md mx-auto glass-card-profile shadow-xl rounded-2xl p-8 flex flex-col items-center relative animate-profile-fadein">
+      <!-- Logo Dividis: D estilizada y línea divisoria -->
+      <svg style="width:56px;height:56px;margin-bottom:1.5rem;" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="28" cy="28" r="28" :fill="`var(--theme-accent, #fff)`" fill-opacity="0.08"/>
+        <path d="M20 16h8a8 8 0 1 1 0 24h-8V16z" :fill="`var(--theme-accent, #fff)`" fill-opacity="0.95"/>
+        <rect x="24" y="22" width="12" height="2.5" rx="1.25" :fill="`var(--theme-border, #3b82f6)`"/>
+      </svg>
+      <div class="text-center">
+        <h1 class="text-2xl font-bold mb-2" :style="{
+          background: 'linear-gradient(90deg, var(--theme-accent), var(--theme-border))',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent'
+        }">Login.</h1>
+        <p class="mb-4" :style="{ color: 'var(--theme-border)' }">Inicia sesión para continuar tu viaje</p>
+      </div>
+      <form @submit.prevent="handleSubmit" class="w-full flex flex-col gap-4">
+        <input
+          class="input-theme"
           id="username"
           v-model="form.username"
-          label="Usuario"
+          placeholder="Usuario"
           type="text"
           required
-          :error="errors.username"
           @blur="validateUsername"
         />
-
-        <FormInput
+        <input
+          class="input-theme"
           id="password"
           v-model="form.password"
-          label="Contraseña"
+          placeholder="Contraseña"
           type="password"
           required
-          :error="errors.password"
           @blur="validatePassword"
-        >
-          <template #help>
-            <span class="text-xs text-slate-400">Mínimo 8 caracteres</span>
-          </template>
-        </FormInput>
-
-        <!-- Error message -->
-        <div v-if="error" class="text-red-500 text-sm text-center">
+        />
+        <div v-if="error" class="mt-2 text-center" :style="{ color: 'var(--theme-border)' }">
           {{ error }}
         </div>
-
-        <!-- Submit button -->
-        <Button 
-          type="submit"
-          :loading="loading"
-          fullWidth>
-          Iniciar sesión
-        </Button>
-
-        <!-- Register link -->
-        <p class="text-center text-slate-400">
+        <button type="submit" class="btn-theme w-full mt-4" :disabled="loading">
+          {{ loading ? 'Cargando...' : 'Login' }}
+        </button>
+        <div class="text-center mt-2" :style="{ color: 'var(--theme-border)' }">
           ¿No tienes una cuenta?
-          <RouterLink 
-            :to="{ name: 'register' }"
-            class="text-cosmic-400 hover:underline">
-            Regístrate
-          </RouterLink>
-        </p>
+          <RouterLink :to="{ name: 'register' }" :style="{ color: 'var(--theme-accent)' }">Regístrate</RouterLink>
+        </div>
       </form>
-
-      <!-- Divider -->
-      <div class="relative my-8">
-        <div class="absolute inset-0 flex items-center">
-          <div class="w-full border-t border-cosmic-700/30"></div>
-        </div>
-        <div class="relative flex justify-center text-sm">
-          <span class="px-2 bg-slate-900 text-slate-400">O</span>
-        </div>
-      </div>
-
-      <!-- Back to home -->
-      <div class="text-center">
-        <RouterLink 
-          to="/"
-          class="text-slate-400 hover:text-cosmic-400 transition-colors inline-flex items-center">
-          <i class="fas fa-arrow-left mr-2"></i>
-          Volver al inicio
-        </RouterLink>
-      </div>
-    </Card>
+    </div>
   </div>
 </template>
 
@@ -85,9 +53,6 @@
 import { ref, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import Card from '@/components/ui/Card.vue'
-import Button from '@/components/ui/Button.vue'
-import FormInput from '@/components/ui/FormInput.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -155,4 +120,6 @@ async function handleSubmit() {
     loading.value = false
   }
 }
+
+/* No forzar ningún theme, el theme activo se maneja globalmente */
 </script>
