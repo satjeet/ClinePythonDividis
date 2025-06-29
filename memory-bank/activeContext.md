@@ -24,6 +24,7 @@
 - Caché y optimización de consultas
 
 ### Recent Implementations (2025-06-23)
+
 - [VitalRadarChart.vue] Refactorización visual y responsiva, unificación de estilos con el dashboard, eliminación de restricciones de ancho y padding en mobile.
 - [VitalRadarChart.ts] Ajuste dinámico de radius, center y fontSize para mejorar legibilidad de labels en todos los dispositivos.
 - [VitalRadarChart.css] Limpieza de reglas, solo mantiene lo esencial para el gráfico.
@@ -73,6 +74,14 @@
 - Se implementó infraestructura para precarga global tras login/refresh, pero se optó por mantener la carga de datos en cada módulo.
 - La experiencia actual es estable y los módulos gestionan correctamente su propio estado y carga.
 - La precarga global queda documentada y disponible para futuras necesidades, pero no se fuerza su uso para evitar riesgos en el flujo actual.
+
+---
+
+## Mejoras recientes en feedback de usuario y UI reactiva a theme
+
+- Se implementó persistencia local (localStorage) para evitar mostrar mensajes emergentes de felicitación por misiones más de una vez por usuario, incluso tras cerrar sesión.
+- Los mensajes emergentes (toasts) ahora adaptan su estilo visual dinámicamente según el theme global seleccionado por el usuario.
+- Este patrón mejora la experiencia de usuario, evita duplicidad de feedback y refuerza la coherencia visual de la plataforma.
 
 ### Next Steps
 

@@ -30,13 +30,19 @@ export const useMissionsStore = defineStore('missions', () => {
       const data = await response.json()
       console.log('Misiones recibidas:', data)
 
-      // Detectar misiones recién completadas
+      // Persistencia de felicitaciones para evitar duplicados
+      const FELICITADAS_KEY = 'missions-felicitadas'
+      const felicitadas: string[] = JSON.parse(localStorage.getItem(FELICITADAS_KEY) || '[]')
       const prevCompletedIds = new Set(missions.value.filter(m => m.state === 'completed').map(m => m.id))
       missions.value = data
       const newCompleted = missions.value.filter(m => m.state === 'completed' && !prevCompletedIds.has(m.id))
       for (const mission of newCompleted) {
-        toastStore.showToast(`¡Felicidades! Completaste la misión "${mission.title}" (+${mission.xp_reward} XP)`, 'success')
+        if (!felicitadas.includes(mission.id)) {
+          toastStore.showToast(`¡Felicidades! Completaste la misión "${mission.title}" (+${mission.xp_reward} XP)`, 'success')
+          felicitadas.push(mission.id)
+        }
       }
+      localStorage.setItem(FELICITADAS_KEY, JSON.stringify(felicitadas))
     } catch (err: any) {
       error.value = err.message || 'Error al cargar misiones'
     } finally {
