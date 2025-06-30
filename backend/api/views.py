@@ -384,7 +384,7 @@ class UnlockedPillarViewSet(viewsets.ModelViewSet):
         updated = False
         if hp_actual is not None:
             try:
-                hp_actual = int(hp_actual)
+                hp_actual = float(hp_actual)
             except Exception:
                 pass
             if hp_actual <= 0:
@@ -481,7 +481,7 @@ class ComfortWallViewSet(viewsets.ModelViewSet):
         updated = False
         if hp_actual is not None:
             try:
-                hp_actual = int(hp_actual)
+                hp_actual = float(hp_actual)
             except Exception:
                 pass
             if hp_actual <= 0:

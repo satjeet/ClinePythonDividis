@@ -261,8 +261,8 @@ class Habit(models.Model):
 
 class ComfortWall(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    hp_actual = models.PositiveIntegerField(default=100)
-    hp_max = models.PositiveIntegerField(default=100)
+    hp_actual = models.FloatField(default=100)
+    hp_max = models.FloatField(default=100)
     nivel_muro = models.PositiveIntegerField(default=1)
     fecha_ultimo_ataque = models.DateField(null=True, blank=True)
     def __str__(self):
