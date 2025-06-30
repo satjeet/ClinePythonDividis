@@ -24,9 +24,9 @@
                 class="text-slate-400 hover:text-cosmic-400 transition-colors">
                 Iniciar Sesión
               </button>
-              <Button @click="openRegisterModal">
-                Registrarse
-              </Button>
+<Button @click="goToRegister">
+  Registrarse
+</Button>
             </template>
           </div>
         </div>
@@ -34,10 +34,10 @@
     </nav>
 
     <!-- Hero section -->
-    <HeroSection 
-      @register="openRegisterModal"
-      @login="openLoginModal"
-    />
+<HeroSection 
+  @register="goToRegister"
+  @login="openLoginModal"
+/>
 
     <!-- Auth Modals -->
     <Teleport to="body">
@@ -196,6 +196,10 @@ const registerForm = ref({
 // Modal state
 const showLoginModal = ref(false)
 const showRegisterModal = ref(false)
+
+const goToRegister = () => {
+  router.push('/register')
+}
 
 // Modal actions
 const openLoginModal = () => {
