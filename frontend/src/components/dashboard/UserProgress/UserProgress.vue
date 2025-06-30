@@ -1,5 +1,5 @@
 <template>
-  <div class="card-theme">
+  <Card variant="interactive">
     <div class="flex items-center justify-between mb-6">
       <!-- User info -->
       <div class="flex items-center space-x-4">
@@ -56,10 +56,11 @@
         <p class="text-2xl font-bold" :style="{ color: 'var(--theme-accent)' }">{{ stats.achievements_earned }}</p>
       </div>
     </div>
-  </div>
+  </Card>
 </template>
 
 <script setup lang="ts">
+import Card from '@/components/ui/Card.vue'
 import { computed } from 'vue'
 
 interface Props {

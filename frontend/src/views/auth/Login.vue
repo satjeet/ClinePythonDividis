@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen flex items-center justify-center px-2 py-8" :style="{ background: 'var(--theme-bg)' }">
-    <div class="w-full max-w-md mx-auto glass-card-profile shadow-xl rounded-2xl p-8 flex flex-col items-center relative animate-profile-fadein">
+    <Card variant="interactive" className="w-full max-w-md mx-auto flex flex-col items-center relative animate-profile-fadein">
       <!-- Logo Dividis: D estilizada y línea divisoria -->
       <svg style="width:56px;height:56px;margin-bottom:1.5rem;" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="28" cy="28" r="28" :fill="`var(--theme-accent, #fff)`" fill-opacity="0.08"/>
@@ -45,11 +45,12 @@
           <RouterLink :to="{ name: 'register' }" :style="{ color: 'var(--theme-accent)' }">Regístrate</RouterLink>
         </div>
       </form>
-    </div>
+    </Card>
   </div>
 </template>
 
 <script setup lang="ts">
+import Card from '@/components/ui/Card.vue'
 import { ref, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'

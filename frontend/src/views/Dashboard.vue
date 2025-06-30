@@ -12,12 +12,10 @@
 
       <template v-else>
         <!-- Galactic Dashboard modular (nuevo) -->
-        <div class="w-full max-w-4xl neon-border card-theme shadow-xl rounded-2xl p-8 mb-12">
-          <DashboardModular />
-        </div>
+          <DashboardModular class="mb-8" />
 
         <!-- Available modules -->
-        <section class="w-full max-w-6xl neon-border card-theme shadow-xl rounded-2xl p-8">
+        <Card variant="interactive" class="w-full max-w-6xl p-8">
           <div class="flex flex-col md:flex-row md:items-baseline md:justify-between mb-6 gap-2">
             <h2 class="text-2xl font-bold mb-2" :style="{
               background: 'linear-gradient(90deg, var(--theme-accent), var(--theme-border))',
@@ -44,7 +42,7 @@
               @select="handleSelectModule"
             />
           </div>
-        </section>
+        </Card>
       </template>
     </main>
   </div>
@@ -58,6 +56,7 @@ import { useModulesStore } from '@/stores/modules'
 import ModuleCard from '@/components/modules/ModuleCard.vue'
 import DashboardModular from '@/components/dashboard/DashboardModular.vue'
 import AppNavbar from '@/components/ui/AppNavbar.vue'
+import Card from '@/components/ui/Card.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()

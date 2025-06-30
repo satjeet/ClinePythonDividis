@@ -1,22 +1,30 @@
 <template>
-  <!-- Galactic Dashboard Layout -->
-  <section class="dashboard-root">
-    <UserProgress
-      :username="userProgress.username.value"
-      :level="userProgress.level.value"
-      :xp="userProgress.xp.value"
-      :stats="userProgress.stats.value"
-      :longest-streak="userProgress.longestStreak.value"
-      :title="userProgress.title.value"
-    />
-    <MotivationalMessage />
-    <VitalRadarChart :values="vitalRadar.values" />
-    <ConstellationsMap />
+  <Card variant="interactive" class="dashboard-root">
+    <div class="mb-6">
+      <UserProgress
+        :username="userProgress.username.value"
+        :level="userProgress.level.value"
+        :xp="userProgress.xp.value"
+        :stats="userProgress.stats.value"
+        :longest-streak="userProgress.longestStreak.value"
+        :title="userProgress.title.value"
+      />
+    </div>
+    <div class="mb-6">
+      <MotivationalMessage />
+    </div>
+    <div class="mb-6">
+      <VitalRadarChart :values="vitalRadar.values" />
+    </div>
+    <div class="mb-6">
+      <ConstellationsMap />
+    </div>
     <UserLog />
-  </section>
+  </Card>
 </template>
 
 <script setup lang="ts">
+import Card from '@/components/ui/Card.vue'
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserProgressStore } from '../../stores/userProgress'
