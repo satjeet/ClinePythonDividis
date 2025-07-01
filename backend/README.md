@@ -44,3 +44,11 @@ Sigue las instrucciones en consola para definir usuario, email y contraseña.
   Esto borrará la base de datos y recargará los datos iniciales.
 
 - Si agregas nuevos fixtures `.json` en `api/fixtures`, se cargarán automáticamente la próxima vez que la base esté vacía.
+
+## Lecciones de refactorización y buenas prácticas
+
+- **Modularización:** Separar los serializers por dominio (usuario, perfil, módulos, etc.) facilita el mantenimiento y la escalabilidad.
+- **Evitar relaciones inversas inexistentes:** Siempre verifica la relación real entre modelos antes de usar `obj.x_set.all()`. Prefiere filtrar explícitamente por usuario.
+- **Compatibilidad legacy:** Mantener un `serializers.py` que reexporta desde el paquete permite migraciones progresivas y evita romper endpoints existentes.
+- **Pruebas tras refactor:** Cada cambio estructural debe ir acompañado de pruebas manuales y automáticas de los endpoints críticos (login, perfil, módulos).
+- **Documentación:** Toda decisión de arquitectura y lección aprendida debe quedar registrada en este README para futuros desarrolladores.
